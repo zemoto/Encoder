@@ -8,9 +8,9 @@ namespace VideoInterpolator.Utils
    {
       public event PropertyChangedEventHandler PropertyChanged;
 
-      protected bool SetProperty( ref object property, object value, [CallerMemberName] string propertyName = null )
+      protected bool SetProperty<T>( ref T property, T value, [CallerMemberName] string propertyName = null )
       {
-         if ( property.Equals( value ) )
+         if ( property == null && value == null || property != null && property.Equals( value ) )
          {
             return false;
          }

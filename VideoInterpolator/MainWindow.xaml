@@ -3,13 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VideoInterpolator"
+        xmlns:converters="clr-namespace:VideoInterpolator.Converters"
+        xmlns:videoInterpolator="clr-namespace:VideoInterpolator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-   <Window.DataContext>
-      <local:MainViewModel />
-   </Window.DataContext>
+        Title="MainWindow"
+        Height="350"
+        Width="525"
+        d:DataContext="{d:DesignInstance videoInterpolator:MainViewModel}">
+   <Window.Resources>
+      <converters:BitmapConverter x:Key="BitmapConverter" />
+   </Window.Resources>
    <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="*" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
 
+      <Image Grid.Row="0"
+             Source="{Binding Frame, Converter={StaticResource BitmapConverter}}"
+             Stretch="UniformToFill"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Margin="8" />
+      <Button Grid.Row="1"
+              Command="{Binding SelectVideoCommand}"
+              Content="Select Video..."
+              Height="24"
+              Width="90"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="8" />
+      <RepeatButton Grid.Row="1"
+                    Command="{Binding NextFrameCommand}"
+                    Content="Next Frame"
+                    Height="24"
+                    Width="90"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Margin="8" />
    </Grid>
 </Window>
