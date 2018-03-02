@@ -1,19 +1,18 @@
-﻿using System.Drawing;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using VideoInterpolator.Utils;
 
 namespace VideoInterpolator
 {
    internal sealed class MainViewModel : NotifyPropertyChanged
    {
-      private Bitmap _frame;
-      public Bitmap Frame
+      private double _percentDone;
+      public double PercentDone
       {
-         get => _frame;
-         set => SetProperty( ref _frame, value );
+         get => _percentDone;
+         set => SetProperty( ref _percentDone, value );
       }
 
       public ICommand SelectVideoCommand { get; set; }
-      public ICommand NextFrameCommand { get; set; }
+      public ICommand DoInterpolationCommand { get; set; }
    }
 }
