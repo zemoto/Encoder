@@ -1,10 +1,25 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using VideoInterpolator.Utils;
 
 namespace VideoInterpolator
 {
    internal sealed class MainViewModel : NotifyPropertyChanged
    {
+      private int _framesDone;
+
+      public int FramesDone
+      {
+         get => _framesDone;
+         set
+         {
+            _framesDone = value;
+            PercentDone = Math.Round( FramesDone / (double)TotalFrames * 100, 2 );
+         }
+      }
+
+      public long TotalFrames { get; set; }
+
       private double _percentDone;
       public double PercentDone
       {

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using Accord.Video.FFMPEG;
 using VideoInterpolator.Utils;
 
@@ -16,15 +15,17 @@ namespace VideoInterpolator
       private VideoFileReader _videoReader;
       private VideoFileWriter _videoWriter;
 
-      private int _framesDone;
-      private Bitmap _currentFrame;
+      private int _newFramesPerFrame;
+      private int _partialFramesPerFrame;
+
+      private const int TargetFrameRate = 60;
 
       public Main()
       {
          _model = new MainViewModel
          {
             SelectVideoCommand = new RelayCommand( SelectVideo ),
-            DoInterpolationCommand = new RelayCommand( DoInterpolation, () => _videoReader != null )
+            DoInterpolationCommand = new RelayCommand( () => Task.Run( () => DoInterpolation() ), () => _videoReader != null )
          };
 
          _window = new MainWindow
@@ -44,19 +45,29 @@ namespace VideoInterpolator
          {
             return;
          }
+
+         var fileName = Path.GetFileNameWithoutExtension( videoFilePath );
+         var fileNameInterpolated = fileName + "-doubledfps";
+
          try
          {
             _videoReader = new VideoFileReader();
             _videoReader.Open( videoFilePath );
-            _currentFrame = _videoReader.ReadVideoFrame();
+            _model.TotalFrames = _videoReader.FrameCount - 1;
+
+            _newFramesPerFrame = (int)Math.Ceiling( TargetFrameRate / (double)_videoReader.FrameRate ) - 1;
 
             _videoWriter = new VideoFileWriter();
-            var fileName = Path.GetFileNameWithoutExtension( videoFilePath );
-            var fileNameInterpolated = fileName + "-doubledfps";
             videoFilePath = videoFilePath.Replace( fileName, fileNameInterpolated );
-            _videoWriter.Open( videoFilePath, _videoReader.Width, _videoReader.Height, _videoReader.FrameRate * 2, VideoCodec.H264, _videoReader.BitRate * 2 );
+            _videoWriter.Open( videoFilePath, _videoReader.Width, _videoReader.Height, _videoReader.FrameRate * ( _newFramesPerFrame + 1 ), VideoCodec.H264, GetNewBitRate() );
          }
          catch { /*file invalid*/ }
+      }
+
+      private int GetNewBitRate()
+      {
+         var newFrameRate = (double)_videoReader.FrameRate * ( _newFramesPerFrame + 1 );
+         return (int)( _videoReader.Width * _videoReader.Height * newFrameRate * 0.28 );
       }
 
       private static bool SelectFile( out string filePath )
@@ -74,26 +85,41 @@ namespace VideoInterpolator
       private async void DoInterpolation()
       {
          _model.PercentDone = 0;
-         try
+
+         var index = 0;
+         var currentFrame = _videoReader.ReadVideoFrame();
+         for ( int i = 0; i < _videoReader.FrameCount; i++ )
          {
-            for ( int i = 0; i < _videoReader.FrameCount; i++ )
+            if ( currentFrame != null )
             {
-               await Task.Run( () =>
+               var first = (Bitmap)currentFrame.Clone();
+               currentFrame = _videoReader.ReadVideoFrame();
+               if ( currentFrame != null )
                {
-                  WriteFrame( _currentFrame );
-                  var first = _currentFrame;
-                  var second = _currentFrame = _videoReader.ReadVideoFrame();
-                  var interpolated = InterpolateFrames( first, second );
-                  WriteFrame( interpolated );
-               } );
+                  var second = currentFrame;
+                  InterpolateAndBufferFrames( first, second );
+                  index += 2;
+               }
             }
-            _videoWriter.Flush();
-            _videoWriter.Close();
          }
-         catch ( Exception ex )
+
+         _videoWriter.Flush();
+         _videoWriter.Close();
+      }
+
+      private void InterpolateAndBufferFrames( Bitmap first, Bitmap second )
+      {
+         var leftFrame = (Bitmap)first.Clone();
+         WriteFrame( first );
+
+         for ( int i = 0; i < _newFramesPerFrame; i++ )
          {
-            MessageBox.Show( ex.Message );
+            var interpolated = InterpolateFrames( leftFrame, second );
+            leftFrame = (Bitmap)interpolated.Clone();
+            WriteFrame( interpolated );
          }
+
+         _model.FramesDone += 1;
       }
 
       private void WriteFrame( Bitmap frame )
@@ -101,6 +127,7 @@ namespace VideoInterpolator
          if ( frame != null )
          {
             _videoWriter.WriteVideoFrame( frame );
+            frame.Dispose();
          }
       }
 
@@ -112,9 +139,7 @@ namespace VideoInterpolator
          }
          try
          {
-            var interpolator = new BitmapInterpolator( first, second );
-            var interpolatedFrame = interpolator.GetInterpolatedBitmap();
-            _model.PercentDone = Math.Round( ++_framesDone / (double)_videoReader.FrameCount * 100, 2 );
+            var interpolatedFrame = BitmapInterpolator.InterpolateBitmaps( first, second );
             return interpolatedFrame;
          }
          catch

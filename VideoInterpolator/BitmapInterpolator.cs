@@ -1,48 +1,34 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace VideoInterpolator
 {
-   internal sealed class BitmapInterpolator
+   internal static class BitmapInterpolator
    {
-      private readonly byte[] _firstBytes;
-      private readonly byte[] _secondBytes;
-
-      private readonly Bitmap _interpolateBitmap;
-      private readonly BitmapData _interpolatedBitmapData;
-
-      public BitmapInterpolator( Bitmap first, Bitmap second )
+      public static Bitmap InterpolateBitmaps( Bitmap first, Bitmap second )
       {
-         Debug.Assert( first.Height == second.Height &&
-                       first.Width == second.Width &&
-                       first.PixelFormat == second.PixelFormat );
+         var interpolateBitmap = new Bitmap( first.Width, first.Height, first.PixelFormat );
+         var interpolatedBitmapData = interpolateBitmap.LockBits( new Rectangle( 0, 0, first.Width, first.Height ), ImageLockMode.ReadWrite, first.PixelFormat );
 
-         _interpolateBitmap = new Bitmap( first.Width, first.Height, first.PixelFormat );
-         _interpolatedBitmapData = _interpolateBitmap.LockBits( new Rectangle( 0, 0, first.Width, first.Height ), ImageLockMode.ReadWrite, first.PixelFormat );
+         var firstBytes = GetByteArray( first );
+         var secondBytes = GetByteArray( second );
 
-         _firstBytes = GetByteArray( first );
-         _secondBytes = GetByteArray( second );
-      }
-
-      private void DoInterpolation()
-      {
-         var interpolatedPixelPtr = _interpolatedBitmapData.Scan0;
-
-         var numBytes = Math.Abs( _interpolatedBitmapData.Stride ) * _interpolateBitmap.Height;
+         var numBytes = Math.Abs( interpolatedBitmapData.Stride ) * interpolateBitmap.Height;
          var interpolatedBytes = new byte[numBytes];
 
-         Marshal.Copy( interpolatedPixelPtr, interpolatedBytes, 0, numBytes );
+         Marshal.Copy( interpolatedBitmapData.Scan0, interpolatedBytes, 0, numBytes );
 
-         for ( int i = 0; i < _firstBytes.Length; i++ )
+         for ( int i = 0; i < firstBytes.Length; i++ )
          {
-            interpolatedBytes[i] = InterpolateValues( _firstBytes[i], _secondBytes[i] );
+            interpolatedBytes[i] = InterpolateValues( firstBytes[i], secondBytes[i] );
          }
 
-         Marshal.Copy( interpolatedBytes, 0, interpolatedPixelPtr, numBytes );
+         Marshal.Copy( interpolatedBytes, 0, interpolatedBitmapData.Scan0, numBytes );
+         interpolateBitmap.UnlockBits( interpolatedBitmapData );
+
+         return interpolateBitmap;
       }
 
       private static byte InterpolateValues( byte first, byte second )
@@ -61,13 +47,6 @@ namespace VideoInterpolator
          bitmap.UnlockBits( data );
 
          return bytes;
-      }
-
-      public Bitmap GetInterpolatedBitmap()
-      {
-         DoInterpolation();
-         _interpolateBitmap.UnlockBits( _interpolatedBitmapData );
-         return _interpolateBitmap;
       }
    }
 }
