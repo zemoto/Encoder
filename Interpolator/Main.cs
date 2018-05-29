@@ -18,7 +18,7 @@ namespace Interpolator
          _model = new MainWindowViewModel
          {
             SelectFilesCommand = new RelayCommand( SelectFiles ),
-            StartTaskCommand = new RelayCommand( StartEncodingTask, () => _model.SelectedFiles?.Any() == true )
+            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles?.Any() == true )
          };
       }
 
@@ -31,7 +31,7 @@ namespace Interpolator
 
       private void OnMainWindowClosing( object sender, CancelEventArgs e )
       {
-         if ( _model.EncodingTasks.Any() )
+         if ( _model.EncodingJobs.Any() )
          {
             e.Cancel = true;
          }
@@ -49,7 +49,7 @@ namespace Interpolator
          {
             foreach( var file in dlg.FileNames )
             {
-               if ( !_model.EncodingTasks.Any( x => x.Files.Contains( file ) ) )
+               if ( !_model.EncodingJobs.Any( x => x.Files.Contains( file ) ) )
                {
                   _model.SelectedFiles.Add( file );
                }
@@ -57,28 +57,28 @@ namespace Interpolator
          }
       }
 
-      private void StartEncodingTask()
+      private void StartEncodingJob()
       {
-         var encodingTask = new EncodingTask( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
+         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
 
          lock ( _taskLock )
          {
-            _model.EncodingTasks.Add( encodingTask.Model );
+            _model.EncodingJobs.Add( job.Model );
          }
 
-         Task.Run( () => encodingTask.Start() ).ContinueWith( _ => FinishTask( encodingTask ) );
+         Task.Run( () => job.Start() ).ContinueWith( _ => FinishJob( job ) );
 
          _model.SelectedFiles.Clear();
       }
 
-      private void FinishTask( EncodingTask encodingTask )
+      private void FinishJob( EncodingJob job )
       {
          lock ( _taskLock )
          {
-            Application.Current.Dispatcher.Invoke( () => _model.EncodingTasks.Remove( encodingTask.Model ) );
+            Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
          }
 
-         encodingTask?.Dispose();
+         job?.Dispose();
       }
    }
 }

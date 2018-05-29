@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 
 namespace Interpolator.Encoding
 {
-   internal sealed class EncodingTaskViewModel : ViewModelBase
+   internal sealed class EncodingJobViewModel : ViewModelBase
    {
-      public EncodingTaskViewModel( IEnumerable<string> files, int targetFrameRate )
+      public EncodingJobViewModel( IEnumerable<string> files, int targetFrameRate )
       {
          Files = new ObservableCollection<string>( files );
          TargetFrameRate = targetFrameRate;

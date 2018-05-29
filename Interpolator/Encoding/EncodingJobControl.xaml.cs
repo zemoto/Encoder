@@ -1,8 +1,8 @@
 ﻿namespace Interpolator.Encoding
 {
-   internal partial class EncodingTaskControl
+   internal partial class EncodingJobControl
    {
-      public EncodingTaskControl()
+      public EncodingJobControl()
       {
          InitializeComponent();
       }

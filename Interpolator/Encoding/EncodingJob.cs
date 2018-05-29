@@ -6,9 +6,9 @@ using System.Windows;
 
 namespace Interpolator.Encoding
 {
-   internal sealed class EncodingTask : IDisposable
+   internal sealed class EncodingJob : IDisposable
    {
-      public EncodingTaskViewModel Model { get; }
+      public EncodingJobViewModel Model { get; }
 
       private readonly CancellationTokenSource _cancelTokenSource;
 
@@ -16,9 +16,9 @@ namespace Interpolator.Encoding
       private bool _interpolationStarted;
       private FfmpegEncoder _currentEncoder;
 
-      public EncodingTask( List<string> files, int targetFrameRate )
+      public EncodingJob( List<string> files, int targetFrameRate )
       {
-         Model = new EncodingTaskViewModel( files, targetFrameRate )
+         Model = new EncodingJobViewModel( files, targetFrameRate )
          {
             StopInterpolatingCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _interpolationStarted )
          };

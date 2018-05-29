@@ -67,16 +67,16 @@
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"
-                 Command="{Binding StartTaskCommand}"
+                 Command="{Binding StartJobCommand}"
                  Content="Start Task" />
 
          <TabControl Grid.Row="2" 
                      Margin="0,8,0,0"
-                     ItemsSource="{Binding EncodingTasks}">
+                     ItemsSource="{Binding EncodingJobs}">
             <TabControl.Style>
                <Style TargetType="{x:Type TabControl}">
                   <Style.Triggers>
-                     <DataTrigger Binding="{Binding EncodingTasks.Count}"
+                     <DataTrigger Binding="{Binding EncodingJobs.Count}"
                                   Value="0">
                         <DataTrigger.Setters>
                            <Setter Property="Visibility"
@@ -87,13 +87,13 @@
                </Style>
             </TabControl.Style>
             <TabControl.ItemTemplate>
-               <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+               <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
                   <TextBlock Text="{Binding CurrentFile}" />
                </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-               <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
-                  <encoding:EncodingTaskControl DataContext="{Binding}" />
+               <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
+                  <encoding:EncodingJobControl DataContext="{Binding}" />
                </DataTemplate>
             </TabControl.ContentTemplate>
          </TabControl>

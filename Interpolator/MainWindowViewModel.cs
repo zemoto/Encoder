@@ -6,7 +6,7 @@ namespace Interpolator
    internal sealed class MainWindowViewModel : ViewModelBase
    {
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
-      public ObservableCollection<EncodingTaskViewModel> EncodingTasks { get; } = new ObservableCollection<EncodingTaskViewModel>();
+      public ObservableCollection<EncodingJobViewModel> EncodingJobs { get; } = new ObservableCollection<EncodingJobViewModel>();
 
       public int _targetFrameRate = 60;
       public int TargetFrameRate
@@ -16,6 +16,6 @@ namespace Interpolator
       }
 
       public RelayCommand SelectFilesCommand { get; set; }
-      public RelayCommand StartTaskCommand { get; set; }
+      public RelayCommand StartJobCommand { get; set; }
    }
 }
