@@ -1,0 +1,102 @@
+﻿<Window x:Class="Interpolator.MainWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Interpolator"
+        xmlns:encoding="clr-namespace:Interpolator.Encoding"
+        mc:Ignorable="d"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Height"
+        Title="Interpolator"
+        Width="400"
+        d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
+   
+   <Grid>
+      <Grid Margin="8,0,8,8">
+         <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+         </Grid.RowDefinitions>
+
+         <Border Grid.Row="0"
+                 Margin="0,8"
+                 BorderThickness="1"
+                 BorderBrush="Gray"
+                 Height="100">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+               <ItemsControl ItemsSource="{Binding SelectedFiles}">
+                  <ItemsControl.ItemTemplate>
+                     <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                     </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+               </ItemsControl>
+            </ScrollViewer>
+         </Border>
+
+         <Button Grid.Row="1"
+                 Height="24"
+                 Width="80"
+                 HorizontalAlignment="Left"
+                 Command="{Binding SelectFilesCommand}"
+                 Content="Select Files" />
+
+         <StackPanel Grid.Row="1"
+                     HorizontalAlignment="Center"
+                     Orientation="Horizontal">
+            <TextBlock Text="Target Frame Rate:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0" />
+            <TextBox Text="{Binding TargetFrameRate}"
+                     MinWidth="40"
+                     Height="24"
+                     IsEnabled="{Binding ElementName=StartButton, Path=IsEnabled}"
+                     VerticalContentAlignment="Center"
+                     HorizontalContentAlignment="Center" />
+         </StackPanel>
+
+         <Button x:Name="StartButton"
+                 Grid.Row="1"
+                 Height="24"
+                 Width="80"
+                 HorizontalAlignment="Right"
+                 Command="{Binding StartTaskCommand}"
+                 Content="Start Task" />
+
+         <TabControl Grid.Row="2" 
+                     Margin="0,8,0,0"
+                     ItemsSource="{Binding EncodingTasks}">
+            <TabControl.Style>
+               <Style TargetType="{x:Type TabControl}">
+                  <Style.Triggers>
+                     <DataTrigger Binding="{Binding EncodingTasks.Count}"
+                                  Value="0">
+                        <DataTrigger.Setters>
+                           <Setter Property="Visibility"
+                                   Value="Collapsed" />
+                        </DataTrigger.Setters>
+                     </DataTrigger>
+                  </Style.Triggers>
+               </Style>
+            </TabControl.Style>
+            <TabControl.ItemTemplate>
+               <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                  <TextBlock Text="{Binding CurrentFile}" />
+               </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+               <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                  <encoding:EncodingTaskControl DataContext="{Binding}" />
+               </DataTemplate>
+            </TabControl.ContentTemplate>
+         </TabControl>
+      </Grid>
+   </Grid>
+</Window>
