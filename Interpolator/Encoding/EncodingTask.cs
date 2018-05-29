@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Windows;
 using Timer = System.Timers.Timer;
 
 namespace Interpolator.Encoding
@@ -36,13 +37,19 @@ namespace Interpolator.Encoding
          Model.CurrentFileEllapsedEncodingTime = _interpolationTimer.Enabled ? ( DateTime.Now - _startTime ).ToString( @"hh\:mm\:ss" ) : "00:00:00";
       }
 
-      public void StartEncoding()
+      public void Start()
       {
          _interpolationStarted = true;
          var files = new List<string>( Model.Files );
 
          foreach ( var file in files )
          {
+            if ( !FfmpegEncoder.GetVideoInfo( file, out double frameRate, out TimeSpan duration ) )
+            {
+               MessageBox.Show( $"Could not read video file: {file}" );
+               continue;
+            }
+
             var targetDir = Path.Combine( Path.GetDirectoryName( file ), "interpolated" );
             if ( !Directory.Exists( targetDir ) )
             {
@@ -51,9 +58,10 @@ namespace Interpolator.Encoding
 
             var newFilename = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( file ) + ".mp4" );
 
-            _currentEncoder = new FfmpegEncoder( file, newFilename, Model.TargetFrameRate );
+            var encodingParams = new EncodingParameters( file, frameRate, duration, newFilename, Model.TargetFrameRate );
+            _currentEncoder = new FfmpegEncoder( encodingParams );
             _currentEncoder.OutputReceived += OnOutputReceived;
-            _currentEncoder.StartInterpolation( _cancelTokenSource.Token );
+            _currentEncoder.StartEncoding( _cancelTokenSource.Token );
 
             Model.CurrentFile = Path.GetFileName( file );
             _startTime = DateTime.Now;

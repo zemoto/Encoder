@@ -66,7 +66,7 @@ namespace Interpolator
             _model.EncodingTasks.Add( encodingTask.Model );
          }
 
-         Task.Run( () => encodingTask.StartEncoding() ).ContinueWith( _ => FinishTask( encodingTask ) );
+         Task.Run( () => encodingTask.Start() ).ContinueWith( _ => FinishTask( encodingTask ) );
 
          _model.SelectedFiles.Clear();
       }

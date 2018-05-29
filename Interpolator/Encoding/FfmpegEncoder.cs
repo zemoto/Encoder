@@ -9,13 +9,9 @@ namespace Interpolator.Encoding
 {
    internal sealed class FfmpegEncoder
    {
-      private const string FfmpegFileName = "ffmpeg.exe";
-
       private static readonly string _ffmpegExeLocation;
 
-      private readonly string _sourceFile;
-      private readonly string _targetFile;
-      private readonly int _targetFrameRate;
+      private readonly EncodingParameters _params;
 
       private Process _currentffmpegProcess = null;
 
@@ -24,30 +20,27 @@ namespace Interpolator.Encoding
       static FfmpegEncoder()
       {
          var executingDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-         _ffmpegExeLocation = Path.Combine( executingDir, FfmpegFileName );
+         _ffmpegExeLocation = Path.Combine( executingDir, "ffmpeg.exe" );
       }
 
-      public FfmpegEncoder( string sourceFile, string targetFile, int targetFrameRate )
+      public FfmpegEncoder( EncodingParameters encodingParams )
       {
-         _sourceFile = sourceFile;
-         _targetFile = targetFile;
-         _targetFrameRate = targetFrameRate;
+         _params = encodingParams;
       }
 
-      private string CommonArguments => $"-hide_banner -i \"{_sourceFile}\" -crf 18 -preset slow";
-      private string InterpolationArguments => $"{CommonArguments} -filter:v \"minterpolate='fps={_targetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\" \"{_targetFile}\"";
-      private string ReencodeArguments => $"{CommonArguments} -c:v libx264 \"{_targetFile}\"";
+      private static string BasicArgs( string file ) => $"-hide_banner -i \"{file}\"";
+      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_params.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
+      private const string ReencodeArgs = "-c:v libx264";
+      private string EncodingArgs => $"{BasicArgs( _params.SourceFile )} -crf 18 -preset slow {(_params.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_params.TargetFile}\"";
 
-      public void StartInterpolation( CancellationToken token )
+      public void StartEncoding( CancellationToken token )
       {
          if ( _currentffmpegProcess != null )
          {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException( "Interpolation already started" );
          }
 
-         string arguments = ShouldInterpolate() ? InterpolationArguments : ReencodeArguments;
-
-         _currentffmpegProcess = CreateFfmpegProcess( arguments );
+         _currentffmpegProcess = CreateFfmpegProcess( EncodingArgs );
 
          _currentffmpegProcess.ErrorDataReceived += OnErrorDataReceived;
          _currentffmpegProcess.Exited += CleanupProcessInfo;
@@ -56,25 +49,34 @@ namespace Interpolator.Encoding
          token.Register( () => _currentffmpegProcess?.Kill() );
       }
 
-      private bool ShouldInterpolate()
+      public static bool GetVideoInfo( string file, out double frameRate, out TimeSpan duration )
       {
-         bool shouldInterpolate = true;
-         var process = CreateFfmpegProcess( CommonArguments );
+         var process = CreateFfmpegProcess( BasicArgs( file ) );
 
          process.Start();
+         process.WaitForExit();
          var output = process.StandardError.ReadToEnd();
-         var match = Regex.Match( output, "[0-9]* fps" );
-         if ( match.Success )
-         {
-            var currentFrameRate = int.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
-            if ( Math.Abs( currentFrameRate - _targetFrameRate ) <= 5 )
-            {
-               shouldInterpolate = false;
-            }
-         }
 
-         process.Dispose();
-         return shouldInterpolate;
+         try
+         {
+            var match = Regex.Match( output, "[0-9]* fps" );
+            frameRate = double.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
+
+            match = Regex.Match( output, "Duration: [0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9]" );
+            duration = TimeSpan.Parse( match.Groups[0].Value.Substring( 10 ) );
+
+            return true;
+         }
+         catch
+         {
+            frameRate = 0;
+            duration = new TimeSpan();
+            return false;
+         }
+         finally
+         {
+            process.Dispose();
+         }
       }
 
       private void OnErrorDataReceived( object sender, DataReceivedEventArgs e )
@@ -99,7 +101,7 @@ namespace Interpolator.Encoding
          _currentffmpegProcess?.WaitForExit();
       }
 
-      private Process CreateFfmpegProcess( string arguments )
+      private static Process CreateFfmpegProcess( string arguments )
       {
          return new Process
          {
