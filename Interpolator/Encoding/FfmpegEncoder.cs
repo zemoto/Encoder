@@ -34,9 +34,9 @@ namespace Interpolator.Encoding
          _targetFrameRate = targetFrameRate;
       }
 
-      private string CommonArguments => $"-hide_banner -i \"{_sourceFile}\"";
-      private string InterpolationArguments => $"{CommonArguments} -filter:v minterpolate -r {_targetFrameRate} \"{_targetFile}\"";
-      private string ReencodeArguments => $"{CommonArguments} -c:v libx264 -crf 18 -preset slow -c:a copy \"{_targetFile}\"";
+      private string CommonArguments => $"-hide_banner -i \"{_sourceFile}\" -crf 18 -preset slow";
+      private string InterpolationArguments => $"{CommonArguments} -filter:v \"minterpolate='fps={_targetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\" \"{_targetFile}\"";
+      private string ReencodeArguments => $"{CommonArguments} -c:v libx264 \"{_targetFile}\"";
 
       public void StartInterpolation( CancellationToken token )
       {
