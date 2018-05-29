@@ -35,6 +35,10 @@ namespace Interpolator.Encoding
       {
          get
          {
+            if ( CurrentTask.HasNoDurationData )
+            {
+               return "N/A";
+            }
             if ( _timeRemaining == TimeSpan.Zero )
             {
                return "Estimating...";

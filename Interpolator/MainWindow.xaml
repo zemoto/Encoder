@@ -18,7 +18,7 @@
    <Window.Resources>
       <ResourceDictionary>
          <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="Styles.xaml" />
+            <ResourceDictionary Source="Resources.xaml" />
          </ResourceDictionary.MergedDictionaries>
       </ResourceDictionary>
    </Window.Resources>
@@ -101,7 +101,7 @@
             </TabControl.Style>
             <TabControl.ItemTemplate>
                <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
-                  <TextBlock Text="{Binding CurrentTask.SourceFile}" />
+                  <TextBlock Text="{Binding CurrentTask.FileName}" />
                </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>

@@ -62,8 +62,16 @@ namespace Interpolator.Encoding
             var match = Regex.Match( output, "[0-9]+ fps" );
             frameRate = double.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
 
-            match = Regex.Match( output, "Duration: [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}" );
-            duration = TimeSpan.Parse( match.Groups[0].Value.Substring( 10 ) );
+            var hasDuration = !Regex.IsMatch( output, "Duration:[ ]*N/A" );
+            if ( hasDuration )
+            {
+               match = Regex.Match( output, "Duration: [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}" );
+               duration = TimeSpan.Parse( match.Groups[0].Value.Substring( 10 ) );
+            }
+            else
+            {
+               duration = TimeSpan.Zero;
+            }
 
             return true;
          }
@@ -81,7 +89,7 @@ namespace Interpolator.Encoding
 
       private void OnErrorDataReceived( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data == null )
+         if ( e.Data == null || _encodingTask.HasNoDurationData )
          {
             return;
          }

@@ -12,11 +12,12 @@ namespace Interpolator
          PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
       }
 
-      protected void SetProperty<T>( ref T property, T newValue, [CallerMemberName] string propertyName = null )
+      protected bool SetProperty<T>( ref T property, T newValue, [CallerMemberName] string propertyName = null )
       {
-         if ( Equals( property, newValue ) ) return;
+         if ( Equals( property, newValue ) ) return false;
          property = newValue;
          OnPropertyChanged( propertyName );
+         return true;
       }
    }
 }

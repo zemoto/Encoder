@@ -11,7 +11,7 @@ namespace Interpolator
    {
       private MainWindowViewModel _model;
 
-      private readonly object _taskLock = new object();
+      private readonly object _jobLock = new object();
 
       public Main()
       {
@@ -42,11 +42,11 @@ namespace Interpolator
       {
          var dlg = new OpenFileDialog
          {
-            Filter = "Video Files (*.mp4;*.wmv;*.webm)|*.mp4;*.wmv;*.webm|All files (*.*)|*.*",
+            Filter = "Video Files (*.mp4;*.wmv;*.webm;*.swf;*.mkv)|*.mp4;*.wmv;*.webm;*.swf;*.mkv|All files (*.*)|*.*",
             Multiselect = true
          };
 
-         if ( dlg.ShowDialog() == true )
+         if ( dlg.ShowDialog( Application.Current.MainWindow ) == true )
          {
             foreach( var file in dlg.FileNames )
             {
@@ -61,26 +61,26 @@ namespace Interpolator
 
       private void StartEncodingJob()
       {
-         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
-
-         lock ( _taskLock )
+         Task.Run( () =>
          {
-            _model.EncodingJobs.Add( job.Model );
-         }
+            var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
+            Application.Current.Dispatcher.Invoke( () => _model.SelectedFiles.Clear() );
 
-         Task.Run( () => job.Start() ).ContinueWith( _ => FinishJob( job ) );
+            lock ( _jobLock )
+            {
+               Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Add( job.Model ) );
+            }
 
-         _model.SelectedFiles.Clear();
-      }
+            job.DoJob();
 
-      private void FinishJob( EncodingJob job )
-      {
-         lock ( _taskLock )
-         {
-            Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
-         }
+            lock ( _jobLock )
+            {
+               Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
+            }
 
-         job?.Dispose();
+            job.Dispose();
+         } );
+
       }
    }
 }

@@ -46,7 +46,7 @@ namespace Interpolator.Encoding
          _cancelTokenSource = new CancellationTokenSource();
       }
 
-      public void Start()
+      public void DoJob()
       {
          _jobStarted = true;
          var tasks = new List<EncodingTaskViewModel>( Model.Tasks );
@@ -64,6 +64,7 @@ namespace Interpolator.Encoding
             _currentEncoder.StartEncoding( _cancelTokenSource.Token );
 
             task.Progress = 0;
+            task.Started = true;
             Model.CurrentTask = task;
             _startTime = DateTime.Now;
 

@@ -10,7 +10,7 @@
    <UserControl.Resources>
       <ResourceDictionary>
          <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="../Styles.xaml" />
+            <ResourceDictionary Source="../Resources.xaml" />
          </ResourceDictionary.MergedDictionaries>
       </ResourceDictionary>
    </UserControl.Resources>
@@ -27,8 +27,12 @@
                   <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
                      <Grid>
                         <ProgressBar Value="{Binding Progress}"
-                                     Style="{StaticResource MinimalistProgressBar}" />
-                        <TextBlock Text="{Binding SourceFile}"
+                                     IsIndeterminate="{Binding HasNoDurationData}"
+                                     Style="{StaticResource MinimalistProgressBar}"
+                                     Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
+                        <Rectangle Fill="LightGreen" 
+                                   Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
+                        <TextBlock Text="{Binding FileName}"
                                    Margin="0,0,0,1" />
                      </Grid>
                   </DataTemplate>
