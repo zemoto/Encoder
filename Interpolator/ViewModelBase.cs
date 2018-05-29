@@ -7,11 +7,16 @@ namespace Interpolator
    {
       public event PropertyChangedEventHandler PropertyChanged;
 
+      protected void OnPropertyChanged( string propertyName )
+      {
+         PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
+      }
+
       protected void SetProperty<T>( ref T property, T newValue, [CallerMemberName] string propertyName = null )
       {
          if ( Equals( property, newValue ) ) return;
          property = newValue;
-         PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
+         OnPropertyChanged( propertyName );
       }
    }
 }

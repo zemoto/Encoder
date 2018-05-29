@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Timer = System.Timers.Timer;
 
 namespace Interpolator.Encoding
 {
@@ -12,7 +10,6 @@ namespace Interpolator.Encoding
    {
       public EncodingTaskViewModel Model { get; }
 
-      private readonly Timer _interpolationTimer;
       private readonly CancellationTokenSource _cancelTokenSource;
 
       private DateTime _startTime;
@@ -28,13 +25,6 @@ namespace Interpolator.Encoding
 
          _cancelTokenSource = new CancellationTokenSource();
 
-         _interpolationTimer = new Timer( 1000 );
-         _interpolationTimer.Elapsed += ( s, a ) => UpdateEllapsedTime();
-      }
-
-      private void UpdateEllapsedTime()
-      {
-         Model.CurrentFileEllapsedEncodingTime = _interpolationTimer.Enabled ? ( DateTime.Now - _startTime ).ToString( @"hh\:mm\:ss" ) : "00:00:00";
       }
 
       public void Start()
@@ -59,23 +49,27 @@ namespace Interpolator.Encoding
             var newFilename = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( file ) + ".mp4" );
 
             var encodingParams = new EncodingParameters( file, frameRate, duration, newFilename, Model.TargetFrameRate );
+            Model.IsInterpolating = encodingParams.ShouldInterpolate;
+            Model.Progress = 0;
+
             _currentEncoder = new FfmpegEncoder( encodingParams );
-            _currentEncoder.OutputReceived += OnOutputReceived;
+            _currentEncoder.EncodingProgress += OnEncodingProgress;
             _currentEncoder.StartEncoding( _cancelTokenSource.Token );
 
             Model.CurrentFile = Path.GetFileName( file );
             _startTime = DateTime.Now;
-            _interpolationTimer.Start();
 
             _currentEncoder.AwaitCompletion();
 
-            _interpolationTimer.Stop();
-            UpdateEllapsedTime();
-            _currentEncoder.OutputReceived -= OnOutputReceived;
+            Model.SetTimeRemaining( TimeSpan.Zero );
+            _currentEncoder.EncodingProgress -= OnEncodingProgress;
 
             if ( _cancelTokenSource.IsCancellationRequested )
             {
-               File.Delete( newFilename );
+               if ( File.Exists ( newFilename ) )
+               {
+                  File.Delete( newFilename );
+               }
                if ( Directory.GetFiles( targetDir ).Length == 0 )
                {
                   Directory.Delete( targetDir );
@@ -85,14 +79,24 @@ namespace Interpolator.Encoding
          }
       }
 
-      private void OnOutputReceived( object sender, DataReceivedEventArgs e )
+      private void OnEncodingProgress( object sender, EncodingProgressEventArgs e )
       {
-         Model.EncoderOutput = e.Data;
+         Model.Progress = e.Progress;
+
+         double progress = (int)e.Progress;
+         if ( progress == 0 )
+         {
+            return;
+         }
+
+         var ellapsed = DateTime.Now - _startTime;
+         var remaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / progress ) * ( 100 - progress ) );
+
+         Model.SetTimeRemaining( remaining );
       }
 
       public void Dispose()
       {
-         _interpolationTimer?.Dispose();
          _cancelTokenSource?.Dispose();
       }
    }

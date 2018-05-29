@@ -7,16 +7,9 @@
              xmlns:local="clr-namespace:Interpolator.Encoding"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:EncodingTaskViewModel}}">
-   <Grid>
-      <Grid.RowDefinitions>
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
+   <StackPanel>
 
-      <Border Grid.Row="0"
-              Margin="0,8"
+      <Border Margin="0,8"
               BorderThickness="1"
               BorderBrush="Gray"
               Height="50">
@@ -31,36 +24,35 @@
          </ScrollViewer>
       </Border>
 
-      <StackPanel Grid.Row="1"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Center">
-         <TextBlock>
-               <Run>File Name:</Run>
-               <Run Text="{Binding CurrentFile, Mode=OneWay}" />
-         </TextBlock>
-         <TextBlock>
-               <Run>Target Frame Rate:</Run>
-               <Run Text="{Binding TargetFrameRate, Mode=OneWay}" />
-         </TextBlock>
-         <TextBlock>
-               <Run>Ellapsed Time:</Run>
-               <Run Text="{Binding CurrentFileEllapsedEncodingTime, Mode=OneWay}" />
-         </TextBlock>
-      </StackPanel>
+      <TextBlock>
+            <Run>File Name:</Run>
+            <Run Text="{Binding CurrentFile, Mode=OneWay}" />
+      </TextBlock>
+      
+      <TextBlock>
+            <Run>Target Frame Rate:</Run>
+            <Run Text="{Binding TargetFrameRate, Mode=OneWay}" />
+      </TextBlock>
+      
+      <TextBlock>
+            <Run>Interpolating:</Run>
+            <Run Text="{Binding IsInterpolating, Mode=OneWay}" />
+      </TextBlock>
 
-      <Border Grid.Row="2"
-              BorderThickness="1"
-              BorderBrush="Gray"
-              Margin="0,8">
-         <TextBlock Text="{Binding EncoderOutput}" />
-      </Border>
+      <TextBlock>
+            <Run>Time Remaining:</Run>
+            <Run Text="{Binding TimeRemaining, Mode=OneWay}" />
+      </TextBlock>
 
-      <Button Grid.Row="3"
-              Height="24"
+      <ProgressBar Margin="0,8"
+                   Value="{Binding Progress}"
+                   Height="12" />
+
+      <Button Height="24"
               Width="80"
               HorizontalAlignment="Center"
               Command="{Binding StopInterpolatingCommand}"
               Content="Stop" />
 
-   </Grid>
+   </StackPanel>
 </UserControl>

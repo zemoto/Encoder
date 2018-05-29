@@ -15,7 +15,7 @@ namespace Interpolator.Encoding
 
       private Process _currentffmpegProcess = null;
 
-      public event DataReceivedEventHandler OutputReceived;
+      public event EventHandler<EncodingProgressEventArgs> EncodingProgress;
 
       static FfmpegEncoder()
       {
@@ -59,10 +59,10 @@ namespace Interpolator.Encoding
 
          try
          {
-            var match = Regex.Match( output, "[0-9]* fps" );
+            var match = Regex.Match( output, "[0-9]+ fps" );
             frameRate = double.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
 
-            match = Regex.Match( output, "Duration: [0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9]" );
+            match = Regex.Match( output, "Duration: [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}" );
             duration = TimeSpan.Parse( match.Groups[0].Value.Substring( 10 ) );
 
             return true;
@@ -81,7 +81,19 @@ namespace Interpolator.Encoding
 
       private void OnErrorDataReceived( object sender, DataReceivedEventArgs e )
       {
-         OutputReceived?.Invoke( this, e );
+         if ( e.Data == null )
+         {
+            return;
+         }
+
+         var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
+         if ( match.Success )
+         {
+            var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
+            var framesDone = int.Parse( numMatch.Groups[0].Value );
+            var progress = framesDone / (double)_params.TargetTotalFrames * 100;
+            EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( progress ) );
+         }
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )

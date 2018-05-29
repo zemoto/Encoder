@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Encoding\EncodingProgressEventArgs.cs" />
     <Compile Include="Encoding\EncodingTask.cs" />
     <Compile Include="Encoding\EncodingTaskControl.xaml.cs">
       <DependentUpon>EncodingTaskControl.xaml</DependentUpon>

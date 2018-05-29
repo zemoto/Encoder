@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Interpolator.Encoding
@@ -20,25 +21,48 @@ namespace Interpolator.Encoding
          set => SetProperty( ref _currentFile, value );
       }
 
-      public int _targetFrameRate;
+      private int _targetFrameRate;
       public int TargetFrameRate
       {
          get => _targetFrameRate;
          set => SetProperty( ref _targetFrameRate, value );
       }
 
-      public string _currentFileEllapsedEncodingTime = "00:00:00";
-      public string CurrentFileEllapsedEncodingTime
+      private TimeSpan _timeRemaining;
+      public void SetTimeRemaining( TimeSpan remaining )
       {
-         get => _currentFileEllapsedEncodingTime;
-         set => SetProperty( ref _currentFileEllapsedEncodingTime, value );
+         if ( remaining == _timeRemaining )
+         {
+            return;
+         }
+         _timeRemaining = remaining;
+         OnPropertyChanged( nameof( TimeRemaining ) );
       }
 
-      private string _encoderOutput;
-      public string EncoderOutput
+      public string TimeRemaining
       {
-         get => _encoderOutput;
-         set => SetProperty( ref _encoderOutput, value );
+         get
+         {
+            if ( _timeRemaining == TimeSpan.Zero )
+            {
+               return "Estimating...";
+            }
+            return _timeRemaining.ToString( @"hh\:mm\:ss" );
+         }
+      }
+
+      private bool _isInterpolating;
+      public bool IsInterpolating
+      {
+         get => _isInterpolating;
+         set => SetProperty( ref _isInterpolating, value );
+      }
+
+      private double _progress;
+      public double Progress
+      {
+         get => _progress;
+         set => SetProperty( ref _progress, value );
       }
 
       public RelayCommand StopInterpolatingCommand { get; set; }
