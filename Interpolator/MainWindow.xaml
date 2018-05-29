@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Interpolator"
         xmlns:encoding="clr-namespace:Interpolator.Encoding"
         mc:Ignorable="d"
+        x:Name="Root"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -14,7 +15,14 @@
         Title="Interpolator"
         Width="400"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
-   
+   <Window.Resources>
+      <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Styles.xaml" />
+         </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+   </Window.Resources>
+
    <Grid>
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
@@ -34,7 +42,13 @@
                <ItemsControl ItemsSource="{Binding SelectedFiles}">
                   <ItemsControl.ItemTemplate>
                      <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                        <Grid>
+                           <TextBlock Text="{Binding}" />
+                           <Button HorizontalAlignment="Right"
+                                   Command="{Binding ElementName=Root, Path=DataContext.RemoveFileCommand}"
+                                   CommandParameter="{Binding}"
+                                   Style="{StaticResource DeleteButton}" />
+                        </Grid>
                      </DataTemplate>
                   </ItemsControl.ItemTemplate>
                </ItemsControl>
@@ -69,7 +83,7 @@
                  Command="{Binding StartJobCommand}"
                  Content="Start Task" />
 
-         <TabControl Grid.Row="2" 
+         <TabControl Grid.Row="2"
                      Margin="0,8,0,0"
                      ItemsSource="{Binding EncodingJobs}">
             <TabControl.Style>

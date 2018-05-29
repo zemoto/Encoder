@@ -18,7 +18,8 @@ namespace Interpolator
          _model = new MainWindowViewModel
          {
             SelectFilesCommand = new RelayCommand( SelectFiles ),
-            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles?.Any() == true )
+            RemoveFileCommand = new RelayCommand<string>( file => _model.SelectedFiles.Remove( file ) ),
+            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles.Any() == true )
          };
       }
 
@@ -49,7 +50,8 @@ namespace Interpolator
          {
             foreach( var file in dlg.FileNames )
             {
-               if ( !_model.EncodingJobs.Any( x => x.Tasks.Any( y => y.SourceFile == file ) ) )
+               if ( !_model.SelectedFiles.Contains( file ) && 
+                    !_model.EncodingJobs.Any( x => x.Tasks.Any( y => y.SourceFile == file ) ) )
                {
                   _model.SelectedFiles.Add( file );
                }

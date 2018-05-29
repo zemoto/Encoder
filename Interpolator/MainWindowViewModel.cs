@@ -16,6 +16,7 @@ namespace Interpolator
       }
 
       public RelayCommand SelectFilesCommand { get; set; }
+      public RelayCommand<string> RemoveFileCommand { get; set; }
       public RelayCommand StartJobCommand { get; set; }
    }
 }
