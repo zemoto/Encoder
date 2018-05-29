@@ -11,7 +11,7 @@ namespace Interpolator.Encoding
    {
       private static readonly string _ffmpegExeLocation;
 
-      private readonly EncodingParameters _params;
+      private readonly EncodingTaskViewModel _encodingTask;
 
       private Process _currentffmpegProcess = null;
 
@@ -23,15 +23,15 @@ namespace Interpolator.Encoding
          _ffmpegExeLocation = Path.Combine( executingDir, "ffmpeg.exe" );
       }
 
-      public FfmpegEncoder( EncodingParameters encodingParams )
+      public FfmpegEncoder( EncodingTaskViewModel encodingTask )
       {
-         _params = encodingParams;
+         _encodingTask = encodingTask;
       }
 
       private static string BasicArgs( string file ) => $"-hide_banner -i \"{file}\"";
-      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_params.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
+      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
       private const string ReencodeArgs = "-c:v libx264";
-      private string EncodingArgs => $"{BasicArgs( _params.SourceFile )} -crf 18 -preset slow {(_params.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_params.TargetFile}\"";
+      private string EncodingArgs => $"{BasicArgs( _encodingTask.SourceFile )} -crf 18 -preset slow {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
 
       public void StartEncoding( CancellationToken token )
       {
@@ -91,7 +91,7 @@ namespace Interpolator.Encoding
          {
             var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
             var framesDone = int.Parse( numMatch.Groups[0].Value );
-            var progress = framesDone / (double)_params.TargetTotalFrames * 100;
+            var progress = framesDone / (double)_encodingTask.TargetTotalFrames * 100;
             EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( progress ) );
          }
       }

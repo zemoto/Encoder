@@ -7,17 +7,30 @@
              xmlns:local="clr-namespace:Interpolator.Encoding"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:EncodingJobViewModel}}">
+   <UserControl.Resources>
+      <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="../Styles.xaml" />
+         </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+   </UserControl.Resources>
+   
    <StackPanel>
 
       <Border Margin="0,8"
               BorderThickness="1"
               BorderBrush="Gray"
-              Height="50">
+              Height="53">
          <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Files}">
+            <ItemsControl ItemsSource="{Binding Tasks}">
                <ItemsControl.ItemTemplate>
-                  <DataTemplate>
-                     <TextBlock Text="{Binding}" />
+                  <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
+                     <Grid>
+                        <ProgressBar Value="{Binding Progress}"
+                                     Style="{StaticResource MinimalistProgressBar}" />
+                        <TextBlock Text="{Binding SourceFile}"
+                                   Margin="0,0,0,1" />
+                     </Grid>
                   </DataTemplate>
                </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -26,17 +39,17 @@
 
       <TextBlock>
             <Run>File Name:</Run>
-            <Run Text="{Binding CurrentFile, Mode=OneWay}" />
+            <Run Text="{Binding CurrentTask.SourceFile, Mode=OneWay}" />
       </TextBlock>
       
       <TextBlock>
             <Run>Target Frame Rate:</Run>
-            <Run Text="{Binding TargetFrameRate, Mode=OneWay}" />
+            <Run Text="{Binding CurrentTask.TargetFrameRate, Mode=OneWay}" />
       </TextBlock>
       
       <TextBlock>
             <Run>Interpolating:</Run>
-            <Run Text="{Binding IsInterpolating, Mode=OneWay}" />
+            <Run Text="{Binding CurrentTask.ShouldInterpolate, Mode=OneWay}" />
       </TextBlock>
 
       <TextBlock>
@@ -44,14 +57,11 @@
             <Run Text="{Binding TimeRemaining, Mode=OneWay}" />
       </TextBlock>
 
-      <ProgressBar Margin="0,8"
-                   Value="{Binding Progress}"
-                   Height="12" />
-
       <Button Height="24"
+              Margin="0,4,0,0"
               Width="80"
               HorizontalAlignment="Center"
-              Command="{Binding StopInterpolatingCommand}"
+              Command="{Binding StopJobCommand}"
               Content="Stop" />
 
    </StackPanel>

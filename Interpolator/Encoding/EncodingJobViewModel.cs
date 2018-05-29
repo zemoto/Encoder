@@ -6,26 +6,18 @@ namespace Interpolator.Encoding
 {
    internal sealed class EncodingJobViewModel : ViewModelBase
    {
-      public EncodingJobViewModel( IEnumerable<string> files, int targetFrameRate )
+      public EncodingJobViewModel( IEnumerable<EncodingTaskViewModel> tasks )
       {
-         Files = new ObservableCollection<string>( files );
-         TargetFrameRate = targetFrameRate;
+         Tasks = new ObservableCollection<EncodingTaskViewModel>( tasks );
       }
 
-      public ObservableCollection<string> Files { get; }
+      public ObservableCollection<EncodingTaskViewModel> Tasks { get; }
 
-      private string _currentFile;
-      public string CurrentFile
+      private EncodingTaskViewModel _currentTask;
+      public EncodingTaskViewModel CurrentTask
       {
-         get => _currentFile;
-         set => SetProperty( ref _currentFile, value );
-      }
-
-      private int _targetFrameRate;
-      public int TargetFrameRate
-      {
-         get => _targetFrameRate;
-         set => SetProperty( ref _targetFrameRate, value );
+         get => _currentTask;
+         set => SetProperty( ref _currentTask, value );
       }
 
       private TimeSpan _timeRemaining;
@@ -51,20 +43,6 @@ namespace Interpolator.Encoding
          }
       }
 
-      private bool _isInterpolating;
-      public bool IsInterpolating
-      {
-         get => _isInterpolating;
-         set => SetProperty( ref _isInterpolating, value );
-      }
-
-      private double _progress;
-      public double Progress
-      {
-         get => _progress;
-         set => SetProperty( ref _progress, value );
-      }
-
-      public RelayCommand StopInterpolatingCommand { get; set; }
+      public RelayCommand StopJobCommand { get; set; }
    }
 }

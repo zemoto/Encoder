@@ -49,7 +49,7 @@ namespace Interpolator
          {
             foreach( var file in dlg.FileNames )
             {
-               if ( !_model.EncodingJobs.Any( x => x.Files.Contains( file ) ) )
+               if ( !_model.EncodingJobs.Any( x => x.Tasks.Any( y => y.SourceFile == file ) ) )
                {
                   _model.SelectedFiles.Add( file );
                }

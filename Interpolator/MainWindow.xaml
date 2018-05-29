@@ -57,7 +57,6 @@
             <TextBox Text="{Binding TargetFrameRate}"
                      MinWidth="40"
                      Height="24"
-                     IsEnabled="{Binding ElementName=StartButton, Path=IsEnabled}"
                      VerticalContentAlignment="Center"
                      HorizontalContentAlignment="Center" />
          </StackPanel>
@@ -88,7 +87,7 @@
             </TabControl.Style>
             <TabControl.ItemTemplate>
                <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
-                  <TextBlock Text="{Binding CurrentFile}" />
+                  <TextBlock Text="{Binding CurrentTask.SourceFile}" />
                </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>

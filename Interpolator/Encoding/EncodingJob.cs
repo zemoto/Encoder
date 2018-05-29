@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 
@@ -13,62 +14,70 @@ namespace Interpolator.Encoding
       private readonly CancellationTokenSource _cancelTokenSource;
 
       private DateTime _startTime;
-      private bool _interpolationStarted;
+      private bool _jobStarted;
       private FfmpegEncoder _currentEncoder;
 
       public EncodingJob( List<string> files, int targetFrameRate )
       {
-         Model = new EncodingJobViewModel( files, targetFrameRate )
+         var failedFiles = new List<string>();
+         var tasks = new List<EncodingTaskViewModel>();
+         foreach( var file in files )
          {
-            StopInterpolatingCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _interpolationStarted )
+            try
+            {
+               var task = new EncodingTaskViewModel( file, targetFrameRate );
+               tasks.Add( task );
+            }
+            catch
+            {
+               failedFiles.Add( file );
+            }
+         }
+         if ( failedFiles.Any() )
+         {
+            MessageBox.Show( $"Could not read video file(s): {Environment.NewLine + failedFiles.Aggregate( ( x, y ) => x + Environment.NewLine + y )}" );
+         }
+
+         Model = new EncodingJobViewModel( tasks )
+         {
+            StopJobCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _jobStarted )
          };
 
          _cancelTokenSource = new CancellationTokenSource();
-
       }
 
       public void Start()
       {
-         _interpolationStarted = true;
-         var files = new List<string>( Model.Files );
+         _jobStarted = true;
+         var tasks = new List<EncodingTaskViewModel>( Model.Tasks );
 
-         foreach ( var file in files )
+         foreach ( var task in tasks )
          {
-            if ( !FfmpegEncoder.GetVideoInfo( file, out double frameRate, out TimeSpan duration ) )
-            {
-               MessageBox.Show( $"Could not read video file: {file}" );
-               continue;
-            }
-
-            var targetDir = Path.Combine( Path.GetDirectoryName( file ), "interpolated" );
+            var targetDir = Path.GetDirectoryName( task.TargetFile );
             if ( !Directory.Exists( targetDir ) )
             {
                Directory.CreateDirectory( targetDir );
             }
 
-            var newFilename = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( file ) + ".mp4" );
-
-            var encodingParams = new EncodingParameters( file, frameRate, duration, newFilename, Model.TargetFrameRate );
-            Model.IsInterpolating = encodingParams.ShouldInterpolate;
-            Model.Progress = 0;
-
-            _currentEncoder = new FfmpegEncoder( encodingParams );
+            _currentEncoder = new FfmpegEncoder( task );
             _currentEncoder.EncodingProgress += OnEncodingProgress;
             _currentEncoder.StartEncoding( _cancelTokenSource.Token );
 
-            Model.CurrentFile = Path.GetFileName( file );
+            task.Progress = 0;
+            Model.CurrentTask = task;
             _startTime = DateTime.Now;
 
             _currentEncoder.AwaitCompletion();
 
+            task.Progress = 100;
             Model.SetTimeRemaining( TimeSpan.Zero );
             _currentEncoder.EncodingProgress -= OnEncodingProgress;
 
             if ( _cancelTokenSource.IsCancellationRequested )
             {
-               if ( File.Exists ( newFilename ) )
+               if ( File.Exists ( task.TargetFile ) )
                {
-                  File.Delete( newFilename );
+                  File.Delete( task.TargetFile );
                }
                if ( Directory.GetFiles( targetDir ).Length == 0 )
                {
@@ -81,7 +90,7 @@ namespace Interpolator.Encoding
 
       private void OnEncodingProgress( object sender, EncodingProgressEventArgs e )
       {
-         Model.Progress = e.Progress;
+         Model.CurrentTask.Progress = e.Progress;
 
          double progress = (int)e.Progress;
          if ( progress == 0 )
