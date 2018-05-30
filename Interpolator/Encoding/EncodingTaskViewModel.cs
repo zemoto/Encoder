@@ -31,7 +31,7 @@ namespace Interpolator.Encoding
       public string TargetFile { get; }
       public double TargetFrameRate { get; }
 
-      public bool ShouldInterpolate => Math.Abs( SourceFrameRate - TargetFrameRate ) > 5;
+      public bool ShouldInterpolate => TargetFrameRate / SourceFrameRate > 1.5;
       public int TargetTotalFrames => (int)( SourceDuration.TotalSeconds * ( ShouldInterpolate ? TargetFrameRate : SourceFrameRate ) );
 
       private int _framesDone;
