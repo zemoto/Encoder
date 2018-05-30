@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Interpolator.Utils;
 
 namespace Interpolator.Encoding
 {
@@ -44,7 +45,7 @@ namespace Interpolator.Encoding
 
          _currentffmpegProcess.ErrorDataReceived += OnErrorDataReceived;
          _currentffmpegProcess.Exited += CleanupProcessInfo;
-         _currentffmpegProcess.Start();
+         _currentffmpegProcess.StartAsChildProcess();
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
       }
@@ -53,7 +54,7 @@ namespace Interpolator.Encoding
       {
          var process = CreateFfmpegProcess( BasicArgs( file ) );
 
-         process.Start();
+         process.StartAsChildProcess();
          process.WaitForExit();
          var output = process.StandardError.ReadToEnd();
 
