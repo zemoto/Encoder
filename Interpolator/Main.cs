@@ -11,8 +11,6 @@ namespace Interpolator
    {
       private MainWindowViewModel _model;
 
-      private readonly object _jobLock = new object();
-
       public Main()
       {
          _model = new MainWindowViewModel
@@ -83,19 +81,15 @@ namespace Interpolator
          Task.Run( () =>
          {
             var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
-            Application.Current.Dispatcher.Invoke( () => _model.SelectedFiles.Clear() );
-
-            lock ( _jobLock )
+            Application.Current.Dispatcher.Invoke( () =>
             {
-               Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Add( job.Model ) );
-            }
+               _model.SelectedFiles.Clear();
+               _model.EncodingJobs.Add( job.Model );
+            } );
 
             job.DoJob();
 
-            lock ( _jobLock )
-            {
-               Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
-            }
+            Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
 
             job.Dispose();
          } );
