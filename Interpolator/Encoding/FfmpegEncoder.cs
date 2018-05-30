@@ -99,8 +99,7 @@ namespace Interpolator.Encoding
          {
             var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
             var framesDone = int.Parse( numMatch.Groups[0].Value );
-            var progress = framesDone / (double)_encodingTask.TargetTotalFrames * 100;
-            EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( progress ) );
+            EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( framesDone ) );
          }
       }
 

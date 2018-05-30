@@ -4,11 +4,11 @@ namespace Interpolator.Encoding
 {
    internal sealed class EncodingProgressEventArgs : EventArgs
    {
-      public EncodingProgressEventArgs( double progress )
+      public EncodingProgressEventArgs( int framesDone )
       {
-         Progress = progress;
+         FramesDone = framesDone;
       }
 
-      public double Progress { get; }
+      public int FramesDone { get; }
    }
 }

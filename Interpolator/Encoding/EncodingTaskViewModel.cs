@@ -34,20 +34,39 @@ namespace Interpolator.Encoding
       public bool ShouldInterpolate => Math.Abs( SourceFrameRate - TargetFrameRate ) > 5;
       public int TargetTotalFrames => (int)( SourceDuration.TotalSeconds * ( ShouldInterpolate ? TargetFrameRate : SourceFrameRate ) );
 
-      public bool Finished { get; private set; }
+      private int _framesDone;
+      public int FramesDone
+      {
+         get => _framesDone;
+         set
+         {
+            if ( SetProperty( ref _framesDone, value ) )
+            {
+               if ( value >= TargetTotalFrames )
+               {
+                  Finished = true;
+                  Progress = 100;
+               }
+               else
+               {
+                  Progress = Math.Round( value / (double)TargetTotalFrames * 100, 2 );
+               }
+            }
+         }
+      }
 
       private double _progress;
       public double Progress
       {
          get => _progress;
-         set
-         {
-            if ( SetProperty( ref _progress, value ) && value >= 100 )
-            {
-               Finished = true;
-               OnPropertyChanged( nameof( Finished ) );
-            }
-         }
+         private set => SetProperty( ref _progress, value );
+      }
+
+      private bool _finished;
+      public bool Finished
+      {
+         get => _finished;
+         private set => SetProperty( ref _finished, value );
       }
 
       private bool _started;

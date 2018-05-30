@@ -14,7 +14,7 @@
          </ResourceDictionary.MergedDictionaries>
       </ResourceDictionary>
    </UserControl.Resources>
-   
+
    <StackPanel>
 
       <Border Margin="0,8"
@@ -26,14 +26,22 @@
                <ItemsControl.ItemTemplate>
                   <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
                      <Grid>
-                        <ProgressBar Value="{Binding Progress}"
+                        <ProgressBar Value="{Binding Progress, Mode=OneWay}"
                                      IsIndeterminate="{Binding HasNoDurationData}"
                                      Style="{StaticResource MinimalistProgressBar}"
                                      Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
-                        <Rectangle Fill="LightGreen" 
+                        <Rectangle Fill="LightGreen"
                                    Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
                         <TextBlock Text="{Binding FileName}"
                                    Margin="0,0,0,1" />
+                        <TextBlock HorizontalAlignment="Right"
+                                   Margin="0,0,4,0"
+                                   Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}">
+                           <Run Text="{Binding Progress, Mode=OneWay, StringFormat='{}{0}% '}"/>
+                           <Run Text="{Binding FramesDone, Mode=OneWay}" />
+                           <Run Text="/" />
+                           <Run Text="{Binding TargetTotalFrames, Mode=OneWay}" />
+                        </TextBlock>
                      </Grid>
                   </DataTemplate>
                </ItemsControl.ItemTemplate>
@@ -41,25 +49,13 @@
          </ScrollViewer>
       </Border>
 
-      <TextBlock>
-            <Run>File Name:</Run>
-            <Run Text="{Binding CurrentTask.SourceFile, Mode=OneWay}" />
-      </TextBlock>
-      
-      <TextBlock>
-            <Run>Target Frame Rate:</Run>
-            <Run Text="{Binding CurrentTask.TargetFrameRate, Mode=OneWay}" />
-      </TextBlock>
-      
-      <TextBlock>
-            <Run>Interpolating:</Run>
-            <Run Text="{Binding CurrentTask.ShouldInterpolate, Mode=OneWay}" />
-      </TextBlock>
+      <TextBlock Text="{Binding CurrentTask.SourceFile, Mode=OneWay, StringFormat='File Name: {0}'}" />
 
-      <TextBlock>
-            <Run>Time Remaining:</Run>
-            <Run Text="{Binding TimeRemaining, Mode=OneWay}" />
-      </TextBlock>
+      <TextBlock Text="{Binding CurrentTask.TargetFrameRate, Mode=OneWay, StringFormat='Target Frame Rate: {0}'}" />
+
+      <TextBlock Text="{Binding CurrentTask.ShouldInterpolate, Mode=OneWay, StringFormat='Interpolating: {0}'}" />
+
+      <TextBlock Text="{Binding TimeRemaining, Mode=OneWay, StringFormat='Time Remaining: {0}'}" />
 
       <Button Height="24"
               Margin="0,4,0,0"

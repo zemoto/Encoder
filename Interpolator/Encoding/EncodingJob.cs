@@ -63,14 +63,14 @@ namespace Interpolator.Encoding
             _currentEncoder.EncodingProgress += OnEncodingProgress;
             _currentEncoder.StartEncoding( _cancelTokenSource.Token );
 
-            task.Progress = 0;
+            task.FramesDone = 0;
             task.Started = true;
             Model.CurrentTask = task;
             _startTime = DateTime.Now;
 
             _currentEncoder.AwaitCompletion();
 
-            task.Progress = 100;
+            task.FramesDone = task.TargetTotalFrames;
             Model.SetTimeRemaining( TimeSpan.Zero );
             _currentEncoder.EncodingProgress -= OnEncodingProgress;
 
@@ -91,16 +91,15 @@ namespace Interpolator.Encoding
 
       private void OnEncodingProgress( object sender, EncodingProgressEventArgs e )
       {
-         Model.CurrentTask.Progress = e.Progress;
+         Model.CurrentTask.FramesDone = e.FramesDone;
 
-         double progress = (int)e.Progress;
-         if ( progress == 0 )
+         if ( Model.CurrentTask.Progress == 0 )
          {
             return;
          }
 
          var ellapsed = DateTime.Now - _startTime;
-         var remaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / progress ) * ( 100 - progress ) );
+         var remaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / Model.CurrentTask.Progress ) * ( 100 - Model.CurrentTask.Progress ) );
 
          Model.SetTimeRemaining( remaining );
       }
