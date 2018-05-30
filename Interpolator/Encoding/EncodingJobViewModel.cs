@@ -35,7 +35,7 @@ namespace Interpolator.Encoding
       {
          get
          {
-            if ( CurrentTask.HasNoDurationData )
+            if ( CurrentTask?.HasNoDurationData == true )
             {
                return "N/A";
             }

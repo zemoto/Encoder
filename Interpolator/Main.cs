@@ -30,11 +30,30 @@ namespace Interpolator
          window.ShowDialog();
       }
 
-      private void OnMainWindowClosing( object sender, CancelEventArgs e )
+      private async void OnMainWindowClosing( object sender, CancelEventArgs e )
       {
-         if ( _model.EncodingJobs.Any() )
+         if ( !_model.EncodingJobs.Any() )
+         {
+            return;
+         }
+
+         var result = MessageBox.Show( "Files are still being encoded, wait for cancellation and cleanup?", "Exiting", MessageBoxButton.YesNoCancel );
+         if ( result == MessageBoxResult.Cancel )
          {
             e.Cancel = true;
+         }
+         else if ( result == MessageBoxResult.Yes )
+         {
+            e.Cancel = true;
+            foreach ( var job in _model.EncodingJobs )
+            {
+               job.StopJobCommand.Execute( null );
+            }
+            while ( _model.EncodingJobs.Any() )
+            {
+               await Task.Delay( 300 );
+            }
+            ( sender as Window ).Close();
          }
       }
 
