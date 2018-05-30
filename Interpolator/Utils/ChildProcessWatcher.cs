@@ -29,19 +29,12 @@ namespace Interpolator.Utils
 
          int length = Marshal.SizeOf( typeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION) );
          var extendedInfoPtr = Marshal.AllocHGlobal( length );
+         Marshal.StructureToPtr( extendedInfo, extendedInfoPtr, false );
 
-         try
-         {
-            Marshal.StructureToPtr( extendedInfo, extendedInfoPtr, false );
-            if ( !SetInformationJobObject( _handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length ) )
-            {
-               throw new Exception( string.Format( "Unable to set job information. Error: {0}", Marshal.GetLastWin32Error() ) );
-            }
-         }
-         finally
-         {
-            Marshal.FreeHGlobal( extendedInfoPtr );
-         }
+         var result = SetInformationJobObject( _handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length );
+         Debug.Assert( result );
+
+         Marshal.FreeHGlobal( extendedInfoPtr );
       }
 
       public static bool AddProcess( Process process )
