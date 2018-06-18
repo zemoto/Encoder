@@ -19,6 +19,12 @@ namespace Interpolator.Encoding
          SourceDuration = duration;
          HasNoDurationData = duration == TimeSpan.Zero;
          TargetFile = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( sourceFile ) + ".mp4" );
+
+         // Target the closest framerate that is multiple of half the original framerate.
+         // This should prevent interpolator from having to put in weird partial frames.
+         var halfFrameRate = frameRate / 2;
+         TargetFrameRate = halfFrameRate * Math.Floor( targetFrameRate / halfFrameRate );
+
          TargetFrameRate = targetFrameRate;
       }
 
