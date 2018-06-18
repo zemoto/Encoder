@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Interpolator.Utils;
 
 namespace Interpolator.Encoding
 {
@@ -7,7 +8,7 @@ namespace Interpolator.Encoding
    {
       public EncodingTaskViewModel( string sourceFile, double targetFrameRate )
       {
-         if ( !FfmpegEncoder.GetVideoInfo( sourceFile, out double frameRate, out TimeSpan duration ) )
+         if ( !FfmpegEncoder.GetVideoInfo( sourceFile, out double sourceFrameRate, out TimeSpan duration ) )
          {
             throw new ArgumentException( "Could not read file", nameof( sourceFile ) );
          }
@@ -15,24 +16,21 @@ namespace Interpolator.Encoding
          var targetDir = Path.Combine( Path.GetDirectoryName( sourceFile ), "interpolated" );
 
          SourceFile = sourceFile;
-         SourceFrameRate = frameRate;
+         SourceFrameRate = sourceFrameRate;
          SourceDuration = duration;
-         HasNoDurationData = duration == TimeSpan.Zero;
          TargetFile = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( sourceFile ) + ".mp4" );
 
          // Target the closest framerate that is multiple of half the original framerate.
          // This should prevent interpolator from having to put in weird partial frames.
-         var halfFrameRate = frameRate / 2;
-         TargetFrameRate = halfFrameRate * Math.Floor( targetFrameRate / halfFrameRate );
-
-         TargetFrameRate = targetFrameRate;
+         var halfSourceFrameRate = sourceFrameRate / 2;
+         TargetFrameRate = UtilityMethods.GetClosestMultiple( halfSourceFrameRate, targetFrameRate );
       }
 
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
       public double SourceFrameRate { get; }
       public TimeSpan SourceDuration { get; }
-      public bool HasNoDurationData { get; }
+      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
 
       public string TargetFile { get; }
       public double TargetFrameRate { get; }

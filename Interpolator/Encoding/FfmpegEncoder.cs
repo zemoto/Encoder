@@ -32,7 +32,8 @@ namespace Interpolator.Encoding
       private static string BasicArgs( string file ) => $"-hide_banner -i \"{file}\"";
       private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
       private const string ReencodeArgs = "-c:v libx264";
-      private string EncodingArgs => $"{BasicArgs( _encodingTask.SourceFile )} -crf 18 -preset slow {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
+      private const string QualityArgs = "-crf 18 -preset slow";
+      private string EncodingArgs => $"{BasicArgs( _encodingTask.SourceFile )} {QualityArgs} {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
 
       public void StartEncoding( CancellationToken token )
       {
