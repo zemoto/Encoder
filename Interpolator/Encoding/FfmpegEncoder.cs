@@ -60,7 +60,7 @@ namespace Interpolator.Encoding
 
          try
          {
-            var match = Regex.Match( output, "[0-9]+ fps" );
+            var match = Regex.Match( output, "([0-9]+){1}(.?[0-9]+?)? fps" );
             frameRate = double.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
 
             var hasDuration = !Regex.IsMatch( output, "Duration:[ ]*N/A" );
