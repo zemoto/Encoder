@@ -8,7 +8,7 @@ namespace Interpolator.Encoding
    {
       public EncodingTaskViewModel( string sourceFile, double targetFrameRate )
       {
-         if ( !FfmpegEncoder.GetVideoInfo( sourceFile, out double sourceFrameRate, out TimeSpan duration ) )
+         if ( !VideoMetadataReader.GetVideoInfo( sourceFile, out double sourceFrameRate, out TimeSpan duration ) )
          {
             throw new ArgumentException( "Could not read file", nameof( sourceFile ) );
          }

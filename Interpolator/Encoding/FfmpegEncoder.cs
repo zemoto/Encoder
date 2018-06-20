@@ -29,11 +29,11 @@ namespace Interpolator.Encoding
          _encodingTask = encodingTask;
       }
 
-      private static string BasicArgs( string file ) => $"-hide_banner -i \"{file}\"";
+      private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
       private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
       private const string ReencodeArgs = "-c:v libx264";
       private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs( _encodingTask.SourceFile )} {QualityArgs} {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
 
       public void StartEncoding( CancellationToken token )
       {
@@ -42,51 +42,25 @@ namespace Interpolator.Encoding
             throw new InvalidOperationException( "Interpolation already started" );
          }
 
-         _currentffmpegProcess = CreateFfmpegProcess( EncodingArgs );
+         _currentffmpegProcess = new Process
+         {
+            StartInfo = new ProcessStartInfo
+            {
+               FileName = _ffmpegExeLocation,
+               Arguments = EncodingArgs,
+               UseShellExecute = false,
+               RedirectStandardError = true,
+               CreateNoWindow = true,
+               WindowStyle = ProcessWindowStyle.Hidden
+            },
+            EnableRaisingEvents = true
+         };
 
          _currentffmpegProcess.ErrorDataReceived += OnErrorDataReceived;
          _currentffmpegProcess.Exited += CleanupProcessInfo;
          _currentffmpegProcess.StartAsChildProcess();
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
-      }
-
-      public static bool GetVideoInfo( string file, out double frameRate, out TimeSpan duration )
-      {
-         var process = CreateFfmpegProcess( BasicArgs( file ) );
-
-         process.StartAsChildProcess();
-         process.WaitForExit();
-         var output = process.StandardError.ReadToEnd();
-
-         try
-         {
-            var match = Regex.Match( output, "([0-9]+){1}(.?[0-9]+?)? fps" );
-            frameRate = double.Parse( match.Groups[0].Value.Replace( " fps", "" ) );
-
-            var hasDuration = !Regex.IsMatch( output, "Duration:[ ]*N/A" );
-            if ( hasDuration )
-            {
-               match = Regex.Match( output, "Duration: [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}" );
-               duration = TimeSpan.Parse( match.Groups[0].Value.Substring( 10 ) );
-            }
-            else
-            {
-               duration = TimeSpan.Zero;
-            }
-
-            return true;
-         }
-         catch
-         {
-            frameRate = 0;
-            duration = new TimeSpan();
-            return false;
-         }
-         finally
-         {
-            process.Dispose();
-         }
       }
 
       private void OnErrorDataReceived( object sender, DataReceivedEventArgs e )
@@ -120,23 +94,6 @@ namespace Interpolator.Encoding
       public void AwaitCompletion()
       {
          _currentffmpegProcess?.WaitForExit();
-      }
-
-      private static Process CreateFfmpegProcess( string arguments )
-      {
-         return new Process
-         {
-            StartInfo = new ProcessStartInfo
-            {
-               FileName = _ffmpegExeLocation,
-               Arguments = arguments,
-               UseShellExecute = false,
-               RedirectStandardError = true,
-               CreateNoWindow = true,
-               WindowStyle = ProcessWindowStyle.Hidden
-            },
-            EnableRaisingEvents = true
-         };
       }
    }
 }
