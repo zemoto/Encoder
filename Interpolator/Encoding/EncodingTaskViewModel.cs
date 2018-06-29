@@ -30,7 +30,7 @@ namespace Interpolator.Encoding
       public string FileName => Path.GetFileName( SourceFile );
       public double SourceFrameRate { get; }
       public TimeSpan SourceDuration { get; }
-      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
+      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero && !Finished;
 
       public string TargetFile { get; }
       public double TargetFrameRate { get; }
@@ -46,12 +46,7 @@ namespace Interpolator.Encoding
          {
             if ( SetProperty( ref _framesDone, value ) )
             {
-               if ( value >= TargetTotalFrames )
-               {
-                  Finished = true;
-                  Progress = 100;
-               }
-               else
+               if ( TargetTotalFrames != 0 )
                {
                   Progress = Math.Round( value / (double)TargetTotalFrames * 100, 2 );
                }
@@ -70,7 +65,18 @@ namespace Interpolator.Encoding
       public bool Finished
       {
          get => _finished;
-         private set => SetProperty( ref _finished, value );
+         set
+         {
+            if ( SetProperty( ref _finished, value ) )
+            {
+               OnPropertyChanged( nameof( HasNoDurationData ) );
+               if ( value )
+               {
+                  FramesDone = TargetTotalFrames;
+                  Progress = 100;
+               }
+            }
+         }
       }
 
       private bool _started;

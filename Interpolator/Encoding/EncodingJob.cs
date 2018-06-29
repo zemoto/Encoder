@@ -70,7 +70,7 @@ namespace Interpolator.Encoding
 
             _currentEncoder.AwaitCompletion();
 
-            task.FramesDone = task.TargetTotalFrames;
+            task.Finished = true;
             Model.SetTimeRemaining( TimeSpan.Zero );
             _currentEncoder.EncodingProgress -= OnEncodingProgress;
 
