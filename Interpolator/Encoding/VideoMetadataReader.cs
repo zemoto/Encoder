@@ -10,7 +10,7 @@ namespace Interpolator.Encoding
    {
       private static readonly string _ffprobeExeLocation;
 
-      private static string VideoInfoArgs( string fileName ) => $"-v error -select_streams v:0 -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate,duration {fileName}";
+      private static string VideoInfoArgs( string fileName ) => $"-v error -select_streams v:0 -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate,duration \"{fileName}\"";
 
       static VideoMetadataReader()
       {
