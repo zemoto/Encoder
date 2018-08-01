@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Timers;
 using System.Threading;
 using System.Threading.Tasks;
 using Interpolator.Utils;
+using Timer = System.Timers.Timer;
 
 namespace Interpolator.Encoding
 {
@@ -14,8 +15,8 @@ namespace Interpolator.Encoding
 
       private readonly CancellationTokenSource _cancelTokenSource;
 
-      private DateTime _startTime;
-      private bool _jobStarted;
+      private DateTime _startTime = DateTime.MinValue;
+      private Timer _jobRefreshTimer;
 
       public EncodingJob( List<string> files, int targetFrameRate )
       {
@@ -23,22 +24,41 @@ namespace Interpolator.Encoding
 
          Model = new EncodingJobViewModel( tasks )
          {
-            StopJobCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _jobStarted )
+            StopJobCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _startTime != DateTime.MinValue )
          };
 
          _cancelTokenSource = new CancellationTokenSource();
+
+         _jobRefreshTimer = new Timer( 1000 );
+         _jobRefreshTimer.Elapsed += OnRefreshTimerTick;
+      }
+
+      private void OnRefreshTimerTick( object sender, ElapsedEventArgs e )
+      {
+         var totalFrames = Model.Tasks.Select( x => x.TargetTotalFrames ).Aggregate( (x,y) => x += y );
+         var finishedFrames = Model.Tasks.Select( x => x.FramesDone ).Aggregate( (x,y) => x += y );
+
+         var timeRemaining = TimeSpan.Zero;
+         if ( finishedFrames > 0 )
+         {
+            var ellapsed = DateTime.Now - _startTime;
+            timeRemaining = TimeSpan.FromSeconds( ( ellapsed.TotalSeconds / finishedFrames ) * ( totalFrames - finishedFrames ) );
+         }
+
+         Model.UpdateJobState( timeRemaining );
       }
 
       public async Task DoJobAsync()
       {
-         _jobStarted = true;
-
          await InitializeTasks();
 
+         _startTime = DateTime.Now;
          var tasks = new List<Task>
          {
             StartTaskAsync( Model.Tasks.FirstOrDefault() )
          };
+
+         _jobRefreshTimer.Start();
 
          while ( true )
          {
@@ -56,6 +76,8 @@ namespace Interpolator.Encoding
                }
             }
          }
+
+         _jobRefreshTimer.Stop();
 
          if ( _cancelTokenSource.IsCancellationRequested )
          {
@@ -94,38 +116,17 @@ namespace Interpolator.Encoding
          }
 
          var encoder = new FfmpegEncoder( task );
-         encoder.EncodingProgress += OnEncodingProgress;
          encoder.StartEncoding( _cancelTokenSource.Token );
-
-         task.FramesDone = 0;
-         task.Started = true;
-         _startTime = DateTime.Now;
 
          await Task.Run( () => encoder.AwaitCompletion() );
 
          task.Finished = !_cancelTokenSource.IsCancellationRequested;
-         Model.UpdateJobState( TimeSpan.Zero );
-         encoder.EncodingProgress -= OnEncodingProgress;
-      }
-
-      private void OnEncodingProgress( object sender, EventArgs e )
-      {
-         var timeRemaining = TimeSpan.Zero;
-
-         var startedTasks = Model.Tasks.Where( x => x.Started && x.Progress > 0 );
-         if ( startedTasks.Any() )
-         {
-            var averageProgress = startedTasks.Average( x => x.Progress );
-            var ellapsed = DateTime.Now - _startTime;
-            timeRemaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / averageProgress ) * ( 100 - averageProgress ) );
-         }
-
-         Model.UpdateJobState( timeRemaining );
       }
 
       public void Dispose()
       {
          _cancelTokenSource?.Dispose();
+         _jobRefreshTimer?.Dispose();
       }
    }
 }

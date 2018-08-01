@@ -23,8 +23,6 @@ namespace Interpolator.Encoding
       private Process _currentffmpegProcess = null;
       private ProcessCpuMonitor _cpuUsageMonitor = null;
 
-      public event EventHandler EncodingProgress;
-
       static FfmpegEncoder()
       {
          var executingDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
@@ -64,25 +62,26 @@ namespace Interpolator.Encoding
          token.Register( () => _currentffmpegProcess?.Kill() );
 
          _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
+
+         _encodingTask.Started = true;
       }
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data == null || _cpuUsageMonitor == null )
+         if ( e.Data != null )
          {
-            return;
+            var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
+            if ( match.Success )
+            {
+               var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
+               _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
+            }
          }
-
-         var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
-         if ( match.Success )
+         
+         if ( _cpuUsageMonitor != null )
          {
-            var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
-            _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
+            _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
          }
-
-         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
-
-         EncodingProgress?.Invoke( this, EventArgs.Empty );
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
