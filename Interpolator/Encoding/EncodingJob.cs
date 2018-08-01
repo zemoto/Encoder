@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Windows;
+using System.Threading.Tasks;
+using Interpolator.Utils;
 
 namespace Interpolator.Encoding
 {
@@ -15,28 +16,10 @@ namespace Interpolator.Encoding
 
       private DateTime _startTime;
       private bool _jobStarted;
-      private FfmpegEncoder _currentEncoder;
 
       public EncodingJob( List<string> files, int targetFrameRate )
       {
-         var failedFiles = new List<string>();
-         var tasks = new List<EncodingTaskViewModel>();
-         foreach( var file in files )
-         {
-            try
-            {
-               var task = new EncodingTaskViewModel( file, targetFrameRate );
-               tasks.Add( task );
-            }
-            catch
-            {
-               failedFiles.Add( file );
-            }
-         }
-         if ( failedFiles.Any() )
-         {
-            MessageBox.Show( $"Could not read video file(s): {Environment.NewLine + failedFiles.Aggregate( ( x, y ) => x + Environment.NewLine + y )}" );
-         }
+         var tasks = files.Select( x => new EncodingTaskViewModel( x, targetFrameRate ) );
 
          Model = new EncodingJobViewModel( tasks )
          {
@@ -46,64 +29,99 @@ namespace Interpolator.Encoding
          _cancelTokenSource = new CancellationTokenSource();
       }
 
-      public void DoJob()
+      public async Task DoJobAsync()
       {
          _jobStarted = true;
-         var tasks = new List<EncodingTaskViewModel>( Model.Tasks );
 
-         foreach ( var task in tasks )
+         await InitializeTasks();
+
+         var tasks = new List<Task>
          {
-            var targetDir = Path.GetDirectoryName( task.TargetFile );
-            if ( !Directory.Exists( targetDir ) )
+            StartTaskAsync( Model.Tasks.FirstOrDefault() )
+         };
+
+         while ( true )
+         {
+            if ( Model.Tasks.All( x => x.Started ) )
             {
-               Directory.CreateDirectory( targetDir );
-            }
-
-            _currentEncoder = new FfmpegEncoder( task );
-            _currentEncoder.EncodingProgress += OnEncodingProgress;
-            _currentEncoder.StartEncoding( _cancelTokenSource.Token );
-
-            task.FramesDone = 0;
-            task.Started = true;
-            Model.CurrentTask = task;
-            _startTime = DateTime.Now;
-
-            _currentEncoder.AwaitCompletion();
-
-            task.Finished = true;
-            Model.UpdateJobState( TimeSpan.Zero, 0 );
-            _currentEncoder.EncodingProgress -= OnEncodingProgress;
-
-            if ( _cancelTokenSource.IsCancellationRequested )
-            {
-               if ( File.Exists ( task.TargetFile ) )
-               {
-                  File.Delete( task.TargetFile );
-               }
-               if ( Directory.GetFiles( targetDir ).Length == 0 )
-               {
-                  Directory.Delete( targetDir );
-               }
+               await Task.WhenAll( tasks );
                break;
             }
+            else
+            {
+               await Task.Delay( 10000 );
+
+               if ( CanSupportMoreTasks() )
+               {
+                  tasks.Add( StartTaskAsync( Model.Tasks.FirstOrDefault( x => !x.Started ) ) );
+               }
+            }
+         }
+
+         if ( _cancelTokenSource.IsCancellationRequested )
+         {
+            Model.Tasks.ForEach( x => UtilityMethods.SafeDeleteFile( x.TargetFile ) );
          }
       }
 
-      private void OnEncodingProgress( object sender, EncodingProgressEventArgs e )
+      private async Task InitializeTasks()
       {
-         var timeRemaining = TimeSpan.Zero;
-         if ( !Model.CurrentTask.HasNoDurationData )
-         {
-            Model.CurrentTask.FramesDone = e.FramesDone;
+         var results = await Task.WhenAll( Model.Tasks.Select( x => x.InitializeTaskAsync() ) );
 
-            if ( Model.CurrentTask.Progress > 0 )
-            {
-               var ellapsed = DateTime.Now - _startTime;
-               timeRemaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / Model.CurrentTask.Progress ) * ( 100 - Model.CurrentTask.Progress ) );
-            }
+         var failedTasks = Model.Tasks.Where( x => !results[Model.Tasks.IndexOf( x )] );
+
+         foreach ( var task in failedTasks )
+         {
+            Model.Tasks.Remove( task );
+         }
+      }
+
+      private bool CanSupportMoreTasks()
+      {
+         using ( var cpuCounter = new PerformanceCounter( "Processor", "% Processor Time", "_Total", true ) )
+         {
+            var currentTotalCpuUsage = cpuCounter.NextValue() / Environment.ProcessorCount;
+            var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
+
+            return averageTaskCpuUsage < 100 - currentTotalCpuUsage;
+         }
+      }
+
+      private async Task StartTaskAsync( EncodingTaskViewModel task )
+      {
+         if ( task == null )
+         {
+            return;
          }
 
-         Model.UpdateJobState( timeRemaining, e.CurrentCpuUsage );
+         var encoder = new FfmpegEncoder( task );
+         encoder.EncodingProgress += OnEncodingProgress;
+         encoder.StartEncoding( _cancelTokenSource.Token );
+
+         task.FramesDone = 0;
+         task.Started = true;
+         _startTime = DateTime.Now;
+
+         await Task.Run( () => encoder.AwaitCompletion() );
+
+         task.Finished = !_cancelTokenSource.IsCancellationRequested;
+         Model.UpdateJobState( TimeSpan.Zero );
+         encoder.EncodingProgress -= OnEncodingProgress;
+      }
+
+      private void OnEncodingProgress( object sender, EventArgs e )
+      {
+         var timeRemaining = TimeSpan.Zero;
+
+         var startedTasks = Model.Tasks.Where( x => x.Started && x.Progress > 0 );
+         if ( startedTasks.Any() )
+         {
+            var averageProgress = startedTasks.Average( x => x.Progress );
+            var ellapsed = DateTime.Now - _startTime;
+            timeRemaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / averageProgress ) * ( 100 - averageProgress ) );
+         }
+
+         Model.UpdateJobState( timeRemaining );
       }
 
       public void Dispose()

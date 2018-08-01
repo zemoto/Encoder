@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Interpolator.Utils
 {
@@ -9,6 +10,14 @@ namespace Interpolator.Utils
          var lessThan = multiple * Math.Floor( target / multiple );
          var greaterThan = lessThan + multiple;
          return target - lessThan < greaterThan - target ? lessThan : greaterThan;
+      }
+
+      public static void SafeDeleteFile( string filePath )
+      {
+         if ( File.Exists( filePath ) )
+         {
+            File.Delete( filePath );
+         }
       }
    }
 }

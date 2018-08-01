@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Interpolator.Encoding
 {
@@ -11,27 +12,22 @@ namespace Interpolator.Encoding
          Tasks = new ObservableCollection<EncodingTaskViewModel>( tasks );
       }
 
-      public void UpdateJobState( TimeSpan timeRemaining, int cpuUsage )
+      public void UpdateJobState( TimeSpan timeRemaining )
       {
          SetProperty( ref _timeRemaining, timeRemaining, nameof( TimeRemainingString ) );
-         SetProperty( ref _cpuUsage, cpuUsage, nameof( CpuUsage ) );
+         OnPropertyChanged( nameof( CpuUsage ) );
       }
 
       public ObservableCollection<EncodingTaskViewModel> Tasks { get; }
 
-      private EncodingTaskViewModel _currentTask;
-      public EncodingTaskViewModel CurrentTask
-      {
-         get => _currentTask;
-         set => SetProperty( ref _currentTask, value );
-      }
+      public string JobName => Tasks.First().FileName;
 
       private TimeSpan _timeRemaining;
       public string TimeRemainingString
       {
          get
          {
-            if ( CurrentTask?.HasNoDurationData == true )
+            if ( Tasks.Any( x => x.HasNoDurationData ) )
             {
                return "N/A";
             }
@@ -43,8 +39,7 @@ namespace Interpolator.Encoding
          }
       }
 
-      private int _cpuUsage;
-      public int CpuUsage => _cpuUsage;
+      public int CpuUsage => Tasks.Select( x => x.CpuUsage ).Aggregate( ( x, y ) => x += y );
 
       public RelayCommand StopJobCommand { get; set; }
    }

@@ -76,24 +76,18 @@ namespace Interpolator
          }
       }
 
-      private void StartEncodingJob()
+      private async void StartEncodingJob()
       {
-         Task.Run( () =>
-         {
-            var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
-            Application.Current.Dispatcher.Invoke( () =>
-            {
-               _model.SelectedFiles.Clear();
-               _model.EncodingJobs.Add( job.Model );
-            } );
+         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
 
-            job.DoJob();
+         _model.SelectedFiles.Clear();
+         _model.EncodingJobs.Add( job.Model );
 
-            Application.Current.Dispatcher.Invoke( () => _model.EncodingJobs.Remove( job.Model ) );
+         await job.DoJobAsync();
 
-            job.Dispose();
-         } );
+         _model.EncodingJobs.Remove( job.Model );
 
+         job.Dispose();
       }
    }
 }

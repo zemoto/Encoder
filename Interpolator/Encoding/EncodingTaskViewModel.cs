@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
 using Interpolator.Utils;
 
 namespace Interpolator.Encoding
@@ -8,35 +10,48 @@ namespace Interpolator.Encoding
    {
       public EncodingTaskViewModel( string sourceFile, double targetFrameRate )
       {
-         if ( !VideoMetadataReader.GetVideoInfo( sourceFile, out double sourceFrameRate, out TimeSpan duration ) )
+         SourceFile = sourceFile;
+         TargetFrameRate = targetFrameRate;
+      }
+
+      public async Task<bool> InitializeTaskAsync()
+      {
+         bool success = false;
+         double sourceFrameRate = 0;
+         var duration = TimeSpan.Zero;
+         await Task.Run( () => success = VideoMetadataReader.GetVideoInfo( SourceFile, out sourceFrameRate, out duration ) );
+         if ( !success )
          {
-            throw new ArgumentException( "Could not read file", nameof( sourceFile ) );
+            MessageBox.Show( $"Could not read video file: {SourceFile}" );
+            return false;
          }
 
-         var targetDir = Path.Combine( Path.GetDirectoryName( sourceFile ), "interpolated" );
-
-         SourceFile = sourceFile;
          SourceFrameRate = sourceFrameRate;
          SourceDuration = duration;
-         TargetFile = Path.Combine( targetDir, Path.GetFileNameWithoutExtension( sourceFile ) + ".mp4" );
+         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), Path.GetFileNameWithoutExtension( SourceFile ) + "_interpolated.mp4" );
 
          // Target the closest framerate that is multiple of half the original framerate.
          // This should prevent interpolator from having to put in weird partial frames.
-         var halfSourceFrameRate = sourceFrameRate / 2;
-         TargetFrameRate = UtilityMethods.GetClosestMultiple( halfSourceFrameRate, targetFrameRate );
+         TargetFrameRate = UtilityMethods.GetClosestMultiple( sourceFrameRate / 2, TargetFrameRate );
+
+         OnPropertyChanged( null );
+
+         return true;
       }
 
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
-      public double SourceFrameRate { get; }
-      public TimeSpan SourceDuration { get; }
+      public double SourceFrameRate { get; private set; }
+      public TimeSpan SourceDuration { get; private set; }
       public bool HasNoDurationData => SourceDuration == TimeSpan.Zero && !Finished;
 
-      public string TargetFile { get; }
-      public double TargetFrameRate { get; }
+      public string TargetFile { get; private set; }
+      public double TargetFrameRate { get; private set; }
 
       public bool ShouldInterpolate => TargetFrameRate / SourceFrameRate > 1.5;
       public int TargetTotalFrames => (int)( SourceDuration.TotalSeconds * ( ShouldInterpolate ? TargetFrameRate : SourceFrameRate ) );
+
+      public int CpuUsage { get; set; }
 
       private int _framesDone;
       public int FramesDone

@@ -56,7 +56,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Encoding\EncodingProgressEventArgs.cs" />
     <Compile Include="Encoding\EncodingJob.cs" />
     <Compile Include="Encoding\EncodingJobControl.xaml.cs">
       <DependentUpon>EncodingJobControl.xaml</DependentUpon>

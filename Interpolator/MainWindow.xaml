@@ -11,9 +11,9 @@
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        SizeToContent="Height"
+        SizeToContent="WidthAndHeight"
         Title="Interpolator"
-        Width="400"
+        MinWidth="370"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
    <Window.Resources>
       <ResourceDictionary>
@@ -101,7 +101,7 @@
             </TabControl.Style>
             <TabControl.ItemTemplate>
                <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
-                  <TextBlock Text="{Binding CurrentTask.FileName}" />
+                  <TextBlock Text="{Binding JobName}" />
                </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>

@@ -23,7 +23,7 @@ namespace Interpolator.Encoding
       private Process _currentffmpegProcess = null;
       private PerformanceCounter _cpuUsageCounter = null;
 
-      public event EventHandler<EncodingProgressEventArgs> EncodingProgress;
+      public event EventHandler EncodingProgress;
 
       static FfmpegEncoder()
       {
@@ -63,33 +63,36 @@ namespace Interpolator.Encoding
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
 
-         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", _currentffmpegProcess.ProcessName, true );
+         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", _currentffmpegProcess.GetInstanceName(), true );
       }
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( _currentffmpegProcess.HasExited || _cpuUsageCounter == null || e.Data == null )
+         if ( e.Data == null )
          {
             return;
          }
 
-         int framesDone = 0;
          var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
          if ( match.Success )
          {
             var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
-            framesDone = int.Parse( numMatch.Groups[0].Value );
+            _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
          }
 
-         int cpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
+         if ( _cpuUsageCounter != null && !_encodingTask.Finished )
+         {
+            _encodingTask.CpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
+         }
 
-         EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( framesDone, cpuUsage ) );
+         EncodingProgress?.Invoke( this, EventArgs.Empty );
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
       {
          if ( _cpuUsageCounter != null )
          {
+            _cpuUsageCounter.Dispose();
             _cpuUsageCounter = null;
          }
          if ( _currentffmpegProcess != null )
