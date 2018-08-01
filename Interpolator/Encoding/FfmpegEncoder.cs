@@ -10,6 +10,12 @@ namespace Interpolator.Encoding
 {
    internal sealed class FfmpegEncoder
    {
+      private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
+      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir'\"";
+      private const string ReencodeArgs = "-c:v libx264";
+      private const string QualityArgs = "-crf 18 -preset slow";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {( _encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs )} \"{_encodingTask.TargetFile}\"";
+
       private static readonly string _ffmpegExeLocation;
 
       private readonly EncodingTaskViewModel _encodingTask;
@@ -29,12 +35,6 @@ namespace Interpolator.Encoding
       {
          _encodingTask = encodingTask;
       }
-
-      private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
-      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:vsbmc=1'\"";
-      private const string ReencodeArgs = "-c:v libx264";
-      private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {(_encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs)} \"{_encodingTask.TargetFile}\"";
 
       public void StartEncoding( CancellationToken token )
       {
@@ -68,7 +68,7 @@ namespace Interpolator.Encoding
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data == null || _cpuUsageCounter == null )
+         if ( _currentffmpegProcess.HasExited || _cpuUsageCounter == null || e.Data == null )
          {
             return;
          }
@@ -81,7 +81,7 @@ namespace Interpolator.Encoding
             framesDone = int.Parse( numMatch.Groups[0].Value );
          }
 
-         var cpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
+         int cpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
 
          EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( framesDone, cpuUsage ) );
       }
