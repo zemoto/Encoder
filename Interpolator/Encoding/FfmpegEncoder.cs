@@ -36,11 +36,6 @@ namespace Interpolator.Encoding
 
       public void StartEncoding( CancellationToken token )
       {
-         if ( _currentffmpegProcess != null )
-         {
-            throw new InvalidOperationException( "Interpolation already started" );
-         }
-
          _currentffmpegProcess = new Process
          {
             StartInfo = new ProcessStartInfo
