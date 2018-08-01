@@ -42,16 +42,15 @@ namespace Interpolator.Encoding
 
          while ( true )
          {
-            if ( Model.Tasks.All( x => x.Started ) )
+            if ( _cancelTokenSource.IsCancellationRequested || Model.Tasks.All( x => x.Started ) )
             {
                await Task.WhenAll( tasks );
                break;
             }
             else
             {
-               await Task.Delay( 10000 );
-
-               if ( CanSupportMoreTasks() )
+               await Task.Delay( 10000, _cancelTokenSource.Token ).ContinueWith( x => { } );
+               if ( !_cancelTokenSource.IsCancellationRequested && CanSupportMoreTasks() )
                {
                   tasks.Add( StartTaskAsync( Model.Tasks.FirstOrDefault( x => !x.Started ) ) );
                }

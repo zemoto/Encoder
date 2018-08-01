@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         Title="Interpolator"
-        MinWidth="370"
+        MinWidth="360"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
    <Window.Resources>
       <ResourceDictionary>
