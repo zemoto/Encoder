@@ -18,7 +18,7 @@ namespace Interpolator
          {
             SelectFilesCommand = new RelayCommand( SelectFiles ),
             RemoveFileCommand = new RelayCommand<string>( file => _model.SelectedFiles.Remove( file ) ),
-            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles.Any() == true )
+            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles.Any() )
          };
       }
 

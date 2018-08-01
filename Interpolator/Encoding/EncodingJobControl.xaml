@@ -32,10 +32,11 @@
                                    Binding="{Binding ShouldInterpolate, Mode=OneWay}"
                                    IsReadOnly="True" />
 
-               <DataGridTemplateColumn Header="Progress">
+               <DataGridTemplateColumn Header="Progress"
+                                       Width="*">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
-                        <Grid Width="100">
+                        <Grid>
                            <ProgressBar Value="{Binding Progress, Mode=OneWay}"
                                         IsIndeterminate="{Binding HasNoDurationData}"
                                         Style="{StaticResource MinimalistProgressBar}"
