@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Interpolator
+namespace Interpolator.Utils
 {
    internal sealed class RelayCommand : ICommand
    {

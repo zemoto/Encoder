@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Interpolator
+namespace Interpolator.Utils
 {
    internal abstract class ViewModelBase : INotifyPropertyChanged
    {

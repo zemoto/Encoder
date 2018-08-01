@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Interpolator.Encoding;
+using Interpolator.Utils;
 using Microsoft.Win32;
 
 namespace Interpolator

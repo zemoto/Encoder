@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Interpolator.Encoding;
+using Interpolator.Utils;
 
 namespace Interpolator
 {
