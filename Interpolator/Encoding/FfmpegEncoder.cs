@@ -21,7 +21,7 @@ namespace Interpolator.Encoding
       private readonly EncodingTaskViewModel _encodingTask;
 
       private Process _currentffmpegProcess = null;
-      private PerformanceCounter _cpuUsageCounter = null;
+      private ProcessCpuMonitor _cpuUsageMonitor = null;
 
       public event EventHandler EncodingProgress;
 
@@ -63,12 +63,12 @@ namespace Interpolator.Encoding
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
 
-         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", _currentffmpegProcess.GetInstanceName(), true );
+         _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
       }
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data == null )
+         if ( e.Data == null || _cpuUsageMonitor == null )
          {
             return;
          }
@@ -80,20 +80,17 @@ namespace Interpolator.Encoding
             _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
          }
 
-         if ( _cpuUsageCounter != null && !_encodingTask.Finished )
-         {
-            _encodingTask.CpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
-         }
+         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
 
          EncodingProgress?.Invoke( this, EventArgs.Empty );
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
       {
-         if ( _cpuUsageCounter != null )
+         if ( _cpuUsageMonitor != null )
          {
-            _cpuUsageCounter.Dispose();
-            _cpuUsageCounter = null;
+            _cpuUsageMonitor.Dispose();
+            _cpuUsageMonitor = null;
          }
          if ( _currentffmpegProcess != null )
          {

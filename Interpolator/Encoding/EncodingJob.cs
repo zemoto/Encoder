@@ -78,9 +78,9 @@ namespace Interpolator.Encoding
 
       private bool CanSupportMoreTasks()
       {
-         using ( var cpuCounter = new PerformanceCounter( "Processor", "% Processor Time", "_Total", true ) )
+         using ( var cpuUsageMonitor = new ProcessCpuMonitor() )
          {
-            var currentTotalCpuUsage = cpuCounter.NextValue() / Environment.ProcessorCount;
+            var currentTotalCpuUsage = cpuUsageMonitor.GetCurrentCpuUsage();
             var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
 
             return averageTaskCpuUsage < 100 - currentTotalCpuUsage;
