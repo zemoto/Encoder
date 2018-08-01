@@ -71,7 +71,7 @@ namespace Interpolator.Encoding
             _currentEncoder.AwaitCompletion();
 
             task.Finished = true;
-            Model.SetTimeRemaining( TimeSpan.Zero );
+            Model.UpdateJobState( TimeSpan.Zero, 0 );
             _currentEncoder.EncodingProgress -= OnEncodingProgress;
 
             if ( _cancelTokenSource.IsCancellationRequested )
@@ -91,17 +91,19 @@ namespace Interpolator.Encoding
 
       private void OnEncodingProgress( object sender, EncodingProgressEventArgs e )
       {
-         Model.CurrentTask.FramesDone = e.FramesDone;
-
-         if ( Model.CurrentTask.Progress == 0 )
+         var timeRemaining = TimeSpan.Zero;
+         if ( !Model.CurrentTask.HasNoDurationData )
          {
-            return;
+            Model.CurrentTask.FramesDone = e.FramesDone;
+
+            if ( Model.CurrentTask.Progress > 0 )
+            {
+               var ellapsed = DateTime.Now - _startTime;
+               timeRemaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / Model.CurrentTask.Progress ) * ( 100 - Model.CurrentTask.Progress ) );
+            }
          }
 
-         var ellapsed = DateTime.Now - _startTime;
-         var remaining = TimeSpan.FromSeconds( ( (int)ellapsed.TotalSeconds / Model.CurrentTask.Progress ) * ( 100 - Model.CurrentTask.Progress ) );
-
-         Model.SetTimeRemaining( remaining );
+         Model.UpdateJobState( timeRemaining, e.CurrentCpuUsage );
       }
 
       public void Dispose()

@@ -15,6 +15,7 @@ namespace Interpolator.Encoding
       private readonly EncodingTaskViewModel _encodingTask;
 
       private Process _currentffmpegProcess = null;
+      private PerformanceCounter _cpuUsageCounter = null;
 
       public event EventHandler<EncodingProgressEventArgs> EncodingProgress;
 
@@ -56,34 +57,44 @@ namespace Interpolator.Encoding
             EnableRaisingEvents = true
          };
 
-         _currentffmpegProcess.ErrorDataReceived += OnErrorDataReceived;
+         _currentffmpegProcess.ErrorDataReceived += OnEncodingProgress;
          _currentffmpegProcess.Exited += CleanupProcessInfo;
          _currentffmpegProcess.StartAsChildProcess();
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
+
+         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", _currentffmpegProcess.ProcessName, true );
       }
 
-      private void OnErrorDataReceived( object sender, DataReceivedEventArgs e )
+      private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data == null || _encodingTask.HasNoDurationData )
+         if ( e.Data == null || _cpuUsageCounter == null )
          {
             return;
          }
 
+         int framesDone = 0;
          var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
          if ( match.Success )
          {
             var numMatch = Regex.Match( match.Groups[0].Value, @"\d+" );
-            var framesDone = int.Parse( numMatch.Groups[0].Value );
-            EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( framesDone ) );
+            framesDone = int.Parse( numMatch.Groups[0].Value );
          }
+
+         var cpuUsage = (int)( _cpuUsageCounter.NextValue() / Environment.ProcessorCount );
+
+         EncodingProgress?.Invoke( this, new EncodingProgressEventArgs( framesDone, cpuUsage ) );
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
       {
+         if ( _cpuUsageCounter != null )
+         {
+            _cpuUsageCounter = null;
+         }
          if ( _currentffmpegProcess != null )
          {
-            _currentffmpegProcess.ErrorDataReceived -= OnErrorDataReceived;
+            _currentffmpegProcess.ErrorDataReceived -= OnEncodingProgress;
             _currentffmpegProcess.Exited -= CleanupProcessInfo;
             _currentffmpegProcess.CancelErrorRead();
             _currentffmpegProcess.Dispose();

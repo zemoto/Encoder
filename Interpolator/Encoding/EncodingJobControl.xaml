@@ -55,7 +55,9 @@
 
       <TextBlock Text="{Binding CurrentTask.ShouldInterpolate, Mode=OneWay, StringFormat='Interpolating: {0}'}" />
 
-      <TextBlock Text="{Binding TimeRemaining, Mode=OneWay, StringFormat='Time Remaining: {0}'}" />
+      <TextBlock Text="{Binding CpuUsage, Mode=OneWay, StringFormat='CPU Usage: {0}%'}" />
+      
+      <TextBlock Text="{Binding TimeRemainingString, Mode=OneWay, StringFormat='Time Remaining: {0}'}" />
 
       <Button Height="24"
               Margin="0,4,0,0"

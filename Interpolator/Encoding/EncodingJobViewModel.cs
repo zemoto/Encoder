@@ -11,6 +11,12 @@ namespace Interpolator.Encoding
          Tasks = new ObservableCollection<EncodingTaskViewModel>( tasks );
       }
 
+      public void UpdateJobState( TimeSpan timeRemaining, int cpuUsage )
+      {
+         SetProperty( ref _timeRemaining, timeRemaining, nameof( TimeRemainingString ) );
+         SetProperty( ref _cpuUsage, cpuUsage, nameof( CpuUsage ) );
+      }
+
       public ObservableCollection<EncodingTaskViewModel> Tasks { get; }
 
       private EncodingTaskViewModel _currentTask;
@@ -21,17 +27,7 @@ namespace Interpolator.Encoding
       }
 
       private TimeSpan _timeRemaining;
-      public void SetTimeRemaining( TimeSpan remaining )
-      {
-         if ( remaining == _timeRemaining )
-         {
-            return;
-         }
-         _timeRemaining = remaining;
-         OnPropertyChanged( nameof( TimeRemaining ) );
-      }
-
-      public string TimeRemaining
+      public string TimeRemainingString
       {
          get
          {
@@ -46,6 +42,9 @@ namespace Interpolator.Encoding
             return _timeRemaining.ToString( @"hh\:mm\:ss" );
          }
       }
+
+      private int _cpuUsage;
+      public int CpuUsage => _cpuUsage;
 
       public RelayCommand StopJobCommand { get; set; }
    }
