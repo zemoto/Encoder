@@ -5,14 +5,29 @@ using System.Linq;
 
 namespace Interpolator.Utils
 {
+   internal static class TotalCpuMonitor
+   {
+      private static readonly PerformanceCounter _cpuUsageCounter;
+
+      public static void Initialize() { /*Ensures the static constructor is called*/ }
+
+      static TotalCpuMonitor()
+      {
+         _cpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
+         _cpuUsageCounter.NextValue();
+      }
+
+      public static int GetCurrentCpuUsage() => (int)_cpuUsageCounter.NextValue();
+   }
+
    internal sealed class ProcessCpuMonitor : IDisposable
    {
       private readonly PerformanceCounter _cpuUsageCounter;
 
-      public ProcessCpuMonitor( Process process = null )
+      public ProcessCpuMonitor( Process process )
       {
-         var instanceName = process != null ? GetInstanceName( process ) : "_Total";
-         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", instanceName, true );
+         _cpuUsageCounter = new PerformanceCounter( "Process", "% Processor Time", GetInstanceName( process ), true );
+         _cpuUsageCounter.NextValue();
       }
 
       public void Dispose()

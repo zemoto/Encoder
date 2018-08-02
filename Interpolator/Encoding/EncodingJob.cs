@@ -99,13 +99,10 @@ namespace Interpolator.Encoding
 
       private bool CanSupportMoreTasks()
       {
-         using ( var cpuUsageMonitor = new ProcessCpuMonitor() )
-         {
-            var currentTotalCpuUsage = cpuUsageMonitor.GetCurrentCpuUsage();
-            var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
+         var currentTotalCpuUsage = TotalCpuMonitor.GetCurrentCpuUsage();
+         var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
 
-            return averageTaskCpuUsage < 100 - currentTotalCpuUsage;
-         }
+         return averageTaskCpuUsage < 100 - currentTotalCpuUsage;
       }
 
       private async Task StartTaskAsync( EncodingTaskViewModel task )

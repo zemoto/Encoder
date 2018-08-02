@@ -7,6 +7,7 @@ namespace Interpolator
       public App()
       {
          ChildProcessWatcher.Initialize();
+         TotalCpuMonitor.Initialize();
 
          var main = new Main();
          main.ShowDialog();
