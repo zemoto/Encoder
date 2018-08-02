@@ -20,20 +20,23 @@
       <ScrollViewer Margin="0,8"
                     MaxHeight="250">
          <DataGrid ItemsSource="{Binding Tasks}"
+                   HorizontalAlignment="Center"
                    Margin="2,0"
                    AutoGenerateColumns="False"
-                   IsHitTestVisible="False">
+                   IsHitTestVisible="False"
+                   HeadersVisibility="Column">
             <DataGrid.Columns>
                <DataGridTextColumn Header="File"
                                    Binding="{Binding FileName, Mode=OneWay}"
                                    IsReadOnly="True" />
+
 
                <DataGridTextColumn Header="Interpolate"
                                    Binding="{Binding ShouldInterpolate, Mode=OneWay}"
                                    IsReadOnly="True" />
 
                <DataGridTemplateColumn Header="Progress"
-                                       Width="*">
+                                       Width="100">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
                         <Grid>
@@ -51,6 +54,12 @@
                         </Grid>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
+                  <DataGridTemplateColumn.CellStyle>
+                     <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Margin"
+                                Value="0,0,-1,0" />
+                     </Style>
+                  </DataGridTemplateColumn.CellStyle>
                </DataGridTemplateColumn>
 
             </DataGrid.Columns>
