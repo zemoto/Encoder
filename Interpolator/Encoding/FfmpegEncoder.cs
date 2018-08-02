@@ -63,6 +63,11 @@ namespace Interpolator.Encoding
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
+         if ( !_encodingTask.Started || _encodingTask.Finished )
+         {
+            return;
+         }
+
          if ( e.Data != null )
          {
             var match = Regex.Match( e.Data, "frame=[ ]*[0-9]+");
@@ -73,10 +78,7 @@ namespace Interpolator.Encoding
             }
          }
          
-         if ( _cpuUsageMonitor != null )
-         {
-            _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
-         }
+         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
