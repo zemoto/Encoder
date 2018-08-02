@@ -29,7 +29,7 @@ namespace Interpolator.Encoding
 
          _cancelTokenSource = new CancellationTokenSource();
 
-         _jobRefreshTimer = new Timer( 1000 );
+         _jobRefreshTimer = new Timer( 3000 );
          _jobRefreshTimer.Elapsed += OnRefreshTimerTick;
       }
 
@@ -69,7 +69,7 @@ namespace Interpolator.Encoding
             }
             else
             {
-               await Task.Delay( 10000, _cancelTokenSource.Token ).ContinueWith( x => { } );
+               await Task.Delay( 30000, _cancelTokenSource.Token ).ContinueWith( x => { } );
                if ( !_cancelTokenSource.IsCancellationRequested && CanSupportMoreTasks() )
                {
                   tasks.Add( StartTaskAsync( Model.Tasks.FirstOrDefault( x => !x.Started ) ) );
