@@ -17,57 +17,54 @@
 
    <StackPanel>
 
-      <ScrollViewer Margin="0,8"
-                    MaxHeight="250">
-         <DataGrid ItemsSource="{Binding Tasks}"
-                   HorizontalAlignment="Center"
-                   Margin="2,0"
-                   AutoGenerateColumns="False"
-                   IsHitTestVisible="False"
-                   HeadersVisibility="Column">
-            <DataGrid.Columns>
-               <DataGridTextColumn Header="File"
-                                   Binding="{Binding FileName, Mode=OneWay}"
-                                   IsReadOnly="True" />
+      <DataGrid ItemsSource="{Binding Tasks}"
+                HorizontalAlignment="Center"
+                Margin="0,8"
+                AutoGenerateColumns="False"
+                IsHitTestVisible="False"
+                HeadersVisibility="Column">
+         <DataGrid.Columns>
+            <DataGridTextColumn Header="File"
+                                Binding="{Binding FileName, Mode=OneWay}"
+                                IsReadOnly="True" />
 
 
-               <DataGridTextColumn Header="Interpolate"
-                                   Binding="{Binding ShouldInterpolate, Mode=OneWay}"
-                                   IsReadOnly="True" />
+            <DataGridTextColumn Header="Interpolate"
+                                Binding="{Binding ShouldInterpolate, Mode=OneWay}"
+                                IsReadOnly="True" />
 
-               <DataGridTemplateColumn Header="Progress"
-                                       Width="100">
-                  <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
-                        <Grid>
-                           <ProgressBar Value="{Binding Progress, Mode=OneWay}"
-                                        IsIndeterminate="{Binding HasNoDurationData}"
-                                        Style="{StaticResource MinimalistProgressBar}"
-                                        Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
-                           <Rectangle Fill="LightGreen"
-                                      Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
-                           <TextBlock HorizontalAlignment="Right">
+            <DataGridTemplateColumn Header="Progress"
+                                    Width="100">
+               <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate DataType="{x:Type local:EncodingTaskViewModel}">
+                     <Grid>
+                        <ProgressBar Value="{Binding Progress, Mode=OneWay}"
+                                     IsIndeterminate="{Binding HasNoDurationData}"
+                                     Style="{StaticResource MinimalistProgressBar}"
+                                     Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
+                        <Rectangle Fill="LightGreen"
+                                   Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
+                        <TextBlock HorizontalAlignment="Right">
                               <Run Text="{Binding FramesDone, Mode=OneWay}" />
                               <Run Text="/" />
                               <Run Text="{Binding TargetTotalFrames, Mode=OneWay}" />
-                           </TextBlock>
-                        </Grid>
-                     </DataTemplate>
-                  </DataGridTemplateColumn.CellTemplate>
-                  <DataGridTemplateColumn.CellStyle>
-                     <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Margin"
-                                Value="0,0,-1,0" />
-                     </Style>
-                  </DataGridTemplateColumn.CellStyle>
-               </DataGridTemplateColumn>
+                        </TextBlock>
+                     </Grid>
+                  </DataTemplate>
+               </DataGridTemplateColumn.CellTemplate>
+               <DataGridTemplateColumn.CellStyle>
+                  <Style TargetType="{x:Type DataGridCell}">
+                     <Setter Property="Margin"
+                             Value="0,0,-1,0" />
+                  </Style>
+               </DataGridTemplateColumn.CellStyle>
+            </DataGridTemplateColumn>
 
-            </DataGrid.Columns>
-         </DataGrid>
-      </ScrollViewer>
+         </DataGrid.Columns>
+      </DataGrid>
 
       <TextBlock Text="{Binding CpuUsage, Mode=OneWay, StringFormat='CPU Usage: {0}%'}" />
-      
+
       <TextBlock Text="{Binding TimeRemainingString, Mode=OneWay, StringFormat='Time Remaining: {0}'}" />
 
       <Button Height="24"
