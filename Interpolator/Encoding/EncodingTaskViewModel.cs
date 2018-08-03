@@ -32,7 +32,7 @@ namespace Interpolator.Encoding
 
          // Target the closest framerate that is multiple of the original framerate.
          // This should prevent interpolator from having to put in weird partial frames.
-         TargetFrameRate = UtilityMethods.GetClosestMultiple( sourceFrameRate, TargetFrameRate );
+         TargetFrameRate = sourceFrameRate * Math.Floor( TargetFrameRate / sourceFrameRate );
 
          OnPropertyChanged( null );
 
