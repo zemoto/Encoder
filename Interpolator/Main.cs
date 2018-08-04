@@ -79,7 +79,7 @@ namespace Interpolator
 
       private async void StartEncodingJob()
       {
-         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.TargetFrameRate );
+         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.Filter );
 
          _model.SelectedFiles.Clear();
          _model.EncodingJobs.Add( job.Model );

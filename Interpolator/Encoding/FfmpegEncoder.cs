@@ -11,10 +11,9 @@ namespace Interpolator.Encoding
    internal sealed class FfmpegEncoder
    {
       private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
-      private string InterpolationArgs => $"-filter:v \"minterpolate='fps={_encodingTask.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir'\"";
-      private const string ReencodeArgs = "-c:v libx264";
+      private const string DefaultArgs = "-c:v libx264";
       private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {( _encodingTask.ShouldInterpolate ? InterpolationArgs : ReencodeArgs )} \"{_encodingTask.TargetFile}\"";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.GetEncodingArguments() ?? DefaultArgs} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string _ffmpegExeLocation;
 

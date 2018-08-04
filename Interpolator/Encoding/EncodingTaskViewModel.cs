@@ -2,54 +2,58 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using Interpolator.Filters;
 using Interpolator.Utils;
 
 namespace Interpolator.Encoding
 {
    internal sealed class EncodingTaskViewModel : ViewModelBase
    {
-      public EncodingTaskViewModel( string sourceFile, double targetFrameRate )
+      private Filter _filter;
+      private double _sourceFrameRate;
+      private TimeSpan _sourceDuration;
+
+      public EncodingTaskViewModel( string sourceFile, Filter filter )
       {
          SourceFile = sourceFile;
-         TargetFrameRate = targetFrameRate;
+         _filter = filter;
       }
+
+      private bool ShouldApplyFilter() => _filter != null && _filter.ShouldApplyFilter();
+
+      public string GetEncodingArguments() => ShouldApplyFilter() ? _filter.GetFilterArguments() : null;
 
       public async Task<bool> InitializeTaskAsync()
       {
          bool success = false;
          double sourceFrameRate = 0;
-         var duration = TimeSpan.Zero;
-         await Task.Run( () => success = VideoMetadataReader.GetVideoInfo( SourceFile, out sourceFrameRate, out duration ) );
+         var sourceDuration = TimeSpan.Zero;
+         await Task.Run( () => success = VideoMetadataReader.GetVideoInfo( SourceFile, out sourceFrameRate, out sourceDuration ) );
          if ( !success )
          {
             MessageBox.Show( $"Could not read video file: {SourceFile}" );
             return false;
          }
 
-         SourceFrameRate = sourceFrameRate;
-         SourceDuration = duration;
-         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), Path.GetFileNameWithoutExtension( SourceFile ) + $"_{TargetFrameRate}.mp4" );
+         _sourceFrameRate = sourceFrameRate;
+         _sourceDuration = sourceDuration;
+         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), Path.GetFileNameWithoutExtension( SourceFile ) + $"_done.mp4" );
 
-         // Target the closest framerate that is multiple of the original framerate.
-         // This should prevent interpolator from having to put in weird partial frames.
-         TargetFrameRate = sourceFrameRate * Math.Floor( TargetFrameRate / sourceFrameRate );
+         _filter?.Initialize( sourceFrameRate, sourceDuration );
 
          OnPropertyChanged( null );
 
          return true;
       }
 
+      public string FilterName => ShouldApplyFilter() ? _filter.GetFilterName() : "None";
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
-      public double SourceFrameRate { get; private set; }
-      public TimeSpan SourceDuration { get; private set; }
-      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero && !Finished;
+      public bool HasNoDurationData => _sourceDuration == TimeSpan.Zero && !Finished;
 
       public string TargetFile { get; private set; }
-      public double TargetFrameRate { get; private set; }
 
-      public bool ShouldInterpolate => TargetFrameRate / SourceFrameRate > 1.5;
-      public int TargetTotalFrames => (int)( SourceDuration.TotalSeconds * ( ShouldInterpolate ? TargetFrameRate : SourceFrameRate ) );
+      public int TargetTotalFrames => ShouldApplyFilter() ? _filter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
 
       public int CpuUsage { get; set; }
 

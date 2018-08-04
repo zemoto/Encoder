@@ -64,6 +64,17 @@
     <Compile Include="Encoding\FfmpegEncoder.cs" />
     <Compile Include="Encoding\EncodingTaskViewModel.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\FilterSelectorControl.xaml.cs">
+      <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\FilterType.cs" />
+    <Compile Include="Filters\FilterViewModel.cs" />
+    <Compile Include="Filters\Interpolate\InterpolateFilter.cs" />
+    <Compile Include="Filters\Interpolate\InterpolateFilterControl.xaml.cs">
+      <DependentUpon>InterpolateFilterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Interpolate\InterpolateFilterViewModel.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Utils\ChildProcessWatcher.cs" />
@@ -72,6 +83,14 @@
     <Compile Include="Utils\UtilityMethods.cs" />
     <Compile Include="Utils\ViewModelBase.cs" />
     <Page Include="Encoding\EncodingJobControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\FilterSelectorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\Interpolate\InterpolateFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

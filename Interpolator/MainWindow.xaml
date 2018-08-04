@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interpolator"
         xmlns:encoding="clr-namespace:Interpolator.Encoding"
+        xmlns:filters="clr-namespace:Interpolator.Filters"
         mc:Ignorable="d"
         x:Name="Root"
         WindowStyle="ToolWindow"
@@ -27,7 +28,6 @@
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -55,35 +55,25 @@
             </ScrollViewer>
          </Border>
 
-         <Button Grid.Row="1"
+         <filters:FilterSelectorControl Grid.Row="1"
+                                        Margin="0,0,0,8" />
+
+         <Button Grid.Row="2"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <StackPanel Grid.Row="1"
-                     HorizontalAlignment="Center"
-                     Orientation="Horizontal">
-            <TextBlock Text="Target Frame Rate:"
-                       VerticalAlignment="Center"
-                       Margin="0,0,8,0" />
-            <TextBox Text="{Binding TargetFrameRate}"
-                     MinWidth="40"
-                     Height="24"
-                     VerticalContentAlignment="Center"
-                     HorizontalContentAlignment="Center" />
-         </StackPanel>
-
          <Button x:Name="StartButton"
-                 Grid.Row="1"
+                 Grid.Row="2"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"
                  Command="{Binding StartJobCommand}"
                  Content="Start Task" />
 
-         <TabControl Grid.Row="2"
+         <TabControl Grid.Row="3"
                      Margin="0,8,0,0"
                      ItemsSource="{Binding EncodingJobs}">
             <TabControl.Style>

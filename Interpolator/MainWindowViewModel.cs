@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Interpolator.Encoding;
+using Interpolator.Filters;
 using Interpolator.Utils;
 
 namespace Interpolator
@@ -9,11 +10,24 @@ namespace Interpolator
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
       public ObservableCollection<EncodingJobViewModel> EncodingJobs { get; } = new ObservableCollection<EncodingJobViewModel>();
 
-      public int _targetFrameRate = 60;
-      public int TargetFrameRate
+      private FilterType _selectedFilter = FilterType.None;
+      public FilterType SelectedFilter
       {
-         get => _targetFrameRate;
-         set => SetProperty( ref _targetFrameRate, value );
+         get => _selectedFilter;
+         set
+         {
+            if ( SetProperty( ref _selectedFilter, value ) )
+            {
+               Filter = FilterProvider.GetFilterForType( value );
+            }
+         }
+      }
+
+      private Filter _filter;
+      public Filter Filter
+      {
+         get => _filter;
+         private set => SetProperty( ref _filter, value );
       }
 
       public RelayCommand SelectFilesCommand { get; set; }

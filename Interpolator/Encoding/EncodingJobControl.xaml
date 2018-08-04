@@ -28,10 +28,10 @@
                                 Binding="{Binding FileName, Mode=OneWay}"
                                 IsReadOnly="True" />
 
-
-            <DataGridTextColumn Header="Interpolate"
-                                Binding="{Binding ShouldInterpolate, Mode=OneWay}"
-                                IsReadOnly="True" />
+            <DataGridTextColumn Header="Filter"
+                                Binding="{Binding FilterName, Mode=OneWay}"
+                                IsReadOnly="True"
+                                MinWidth="100" />
 
             <DataGridTemplateColumn Header="Progress"
                                     Width="100">

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interpolator.Utils;
 using Timer = System.Timers.Timer;
+using Interpolator.Filters;
 
 namespace Interpolator.Encoding
 {
@@ -18,9 +19,9 @@ namespace Interpolator.Encoding
       private DateTime _startTime = DateTime.MinValue;
       private Timer _jobRefreshTimer;
 
-      public EncodingJob( List<string> files, int targetFrameRate )
+      public EncodingJob( List<string> files, Filter filter )
       {
-         var tasks = files.Select( x => new EncodingTaskViewModel( x, targetFrameRate ) );
+         var tasks = files.Select( x => new EncodingTaskViewModel( x, filter ) );
 
          Model = new EncodingJobViewModel( tasks )
          {
