@@ -21,14 +21,14 @@ namespace Interpolator.Encoding
 
       public EncodingJob( List<string> files, Filter filter )
       {
+         _cancelTokenSource = new CancellationTokenSource();
+
          var tasks = files.Select( x => new EncodingTaskViewModel( x, filter ) );
 
          Model = new EncodingJobViewModel( tasks )
          {
-            StopJobCommand = new RelayCommand( () => _cancelTokenSource.Cancel(), () => _startTime != DateTime.MinValue )
+            StopJobCommand = new RelayCommand( _cancelTokenSource.Cancel )
          };
-
-         _cancelTokenSource = new CancellationTokenSource();
 
          _jobRefreshTimer = new Timer( 3000 );
          _jobRefreshTimer.Elapsed += OnRefreshTimerTick;
