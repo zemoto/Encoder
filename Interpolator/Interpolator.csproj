@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Filters\Interpolate\InterpolateFilterViewModel.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Utils\GetEnumValuesExtension.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Utils\ChildProcessWatcher.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />

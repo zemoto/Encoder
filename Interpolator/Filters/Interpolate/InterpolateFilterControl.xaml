@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Interpolator.Filters.Interpolate"
              xmlns:main="clr-namespace:Interpolator"
+             xmlns:utils="clr-namespace:Interpolator.Utils"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
@@ -13,46 +14,6 @@
    <UserControl.Resources>
 
       <main:EqualityToVisibilityConverter x:Key="VisibleIfEqual" />
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="InterpolationModeProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="local:InterpolationMode" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="MotionCompensationModeProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="local:MotionCompensationMode" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="MotionEstimationModeProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="local:MotionEstimationMode" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="MotionEstimationAlgorithmProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="local:MotionEstimationAlgorithm" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="SceneChangeDetectionAlgorithmProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="local:SceneChangeDetectionAlgorithm" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
 
       <Style TargetType="{x:Type TextBlock}">
          <Setter Property="Margin"
@@ -65,6 +26,8 @@
          <Setter Property="Margin"
                  Value="0,4" />
          <Setter Property="VerticalAlignment"
+                 Value="Center" />
+         <Setter Property="VerticalContentAlignment"
                  Value="Center" />
          <Setter Property="Height"
                  Value="24" />
@@ -117,8 +80,8 @@
                  Text="Scene Change Algorithm:" />
       <ComboBox Grid.Row="1"
                 Grid.Column="2"
-                ItemsSource="{Binding Source={StaticResource SceneChangeDetectionAlgorithmProvider}}"
-                SelectedItem="{Binding SceneChangeDetectionAlgorithm}" />
+                ItemsSource="{utils:GetEnumValues {x:Type local:SceneChangeDetectionAlgorithm}}"
+                SelectedValue="{Binding SceneChangeDetectionAlgorithm}" />
 
       <StackPanel Grid.Row="2" 
                   Grid.Column="0" 
@@ -139,8 +102,8 @@
                  Text="Interpolation Mode:" />
       <ComboBox Grid.Row="3"
                 Grid.Column="2"
-                ItemsSource="{Binding Source={StaticResource InterpolationModeProvider}}"
-                SelectedItem="{Binding InterpolationMode}" />
+                ItemsSource="{utils:GetEnumValues {x:Type local:InterpolationMode}}"
+                SelectedValue="{Binding InterpolationMode}" />
 
       <Grid Grid.Row="4"
             Grid.Column="0"
@@ -168,24 +131,24 @@
                     Text="Motion Compensation:" />
          <ComboBox Grid.Row="0"
                    Grid.Column="2"
-                   ItemsSource="{Binding Source={StaticResource MotionCompensationModeProvider}}"
-                   SelectedItem="{Binding MotionCompensationMode}" />
+                   ItemsSource="{utils:GetEnumValues {x:Type local:MotionCompensationMode}}"
+                   SelectedValue="{Binding MotionCompensationMode}" />
 
          <TextBlock Grid.Row="1"
                     Grid.Column="0"
                     Text="Motion Estimation:" />
          <ComboBox Grid.Row="1"
                    Grid.Column="2"
-                   ItemsSource="{Binding Source={StaticResource MotionEstimationModeProvider}}"
-                   SelectedItem="{Binding MotionEstimationMode}" />
+                   ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationMode}}"
+                   SelectedValue="{Binding MotionEstimationMode}" />
 
          <TextBlock Grid.Row="2"
                     Grid.Column="0"
                     Text="Estimation Algorithm:" />
          <ComboBox Grid.Row="2"
                    Grid.Column="2"
-                   ItemsSource="{Binding Source={StaticResource MotionEstimationAlgorithmProvider}}"
-                   SelectedItem="{Binding MotionEstimationAlgorithm}" />
+                   ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationAlgorithm}}"
+                   SelectedValue="{Binding MotionEstimationAlgorithm}" />
 
          <TextBlock Grid.Row="3"
                     Grid.Column="0"
