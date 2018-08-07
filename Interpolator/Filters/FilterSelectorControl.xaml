@@ -7,19 +7,12 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:main="clr-namespace:Interpolator"
              xmlns:filters="clr-namespace:Interpolator.Filters"
+             xmlns:utils="clr-namespace:Interpolator.Utils"
              xmlns:interpolate="clr-namespace:Interpolator.Filters.Interpolate"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type main:MainWindowViewModel}}">
 
    <UserControl.Resources>
-
-      <ObjectDataProvider MethodName="GetValues"
-                          ObjectType="{x:Type sys:Enum}"
-                          x:Key="FilterTypeProvider">
-         <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="filters:FilterType" />
-         </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
 
       <DataTemplate DataType="{x:Type interpolate:InterpolateFilterViewModel}">
          <interpolate:InterpolateFilterControl Margin="0,8,0,0" />
@@ -40,8 +33,8 @@
                     Margin="0,0,8,0"
                     VerticalAlignment="Center" />
 
-         <ComboBox ItemsSource="{Binding Source={StaticResource FilterTypeProvider}}"
-                   SelectedItem="{Binding SelectedFilter}"
+         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type filters:FilterType}}"
+                   SelectedValue="{Binding SelectedFilter}"
                    Width="100"
                    Height="24" />
          

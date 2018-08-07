@@ -14,11 +14,11 @@ namespace Interpolator.Filters
          SourceDuration = sourceDuration;
       }
 
-      public abstract string GetFilterName();
       public abstract bool ShouldApplyFilter();
       public abstract int GetTargetFrameCount();
 
       public abstract FilterViewModel ViewModel { get; }
+      public abstract string FilterName { get; }
    }
 
    internal static class FilterProvider

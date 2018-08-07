@@ -46,7 +46,7 @@ namespace Interpolator.Encoding
          return true;
       }
 
-      public string FilterName => ShouldApplyFilter() ? _filter.GetFilterName() : "None";
+      public string FilterName => ShouldApplyFilter() ? _filter.FilterName : "None";
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
       public bool HasNoDurationData => _sourceDuration == TimeSpan.Zero && !Finished;

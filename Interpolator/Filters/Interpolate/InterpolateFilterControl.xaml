@@ -7,7 +7,6 @@
              xmlns:local="clr-namespace:Interpolator.Filters.Interpolate"
              xmlns:main="clr-namespace:Interpolator"
              xmlns:utils="clr-namespace:Interpolator.Utils"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
 
@@ -173,8 +172,5 @@
                    VerticalAlignment="Center" />
 
       </Grid>
-      
    </Grid>
-   
-   
 </UserControl>
