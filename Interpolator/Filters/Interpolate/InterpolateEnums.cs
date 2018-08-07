@@ -11,12 +11,14 @@ namespace Interpolator.Filters.Interpolate
       Blend,
 
       [FilterParameterValue( "mci" )]
+      [Description( "Motion Compensated" )]
       MotionCompensated
    }
 
    internal enum MotionCompensationMode
    {
       [FilterParameterValue( "obmc" )]
+      [Description( "Overlapped Block" )]
       OverlappedBlock,
 
       [FilterParameterValue( "aobmc" )]
@@ -38,15 +40,19 @@ namespace Interpolator.Filters.Interpolate
       Exhaustive,
 
       [FilterParameterValue( "tss" )]
+      [Description( "Three Step" )]
       ThreeStep,
 
       [FilterParameterValue( "tdls" )]
+      [Description( "Two Dimensional" )]
       TwoDimensional,
 
       [FilterParameterValue( "ntss" )]
+      [Description( "New Three Step" )]
       NewThreeStep,
 
       [FilterParameterValue( "fss" )]
+      [Description( "Four Step" )]
       FourStep,
 
       [FilterParameterValue( "ds" )]
@@ -59,6 +65,7 @@ namespace Interpolator.Filters.Interpolate
       Predictive,
 
       [FilterParameterValue( "umh" )]
+      [Description( "Uneven Multi-Hexagon" )]
       UnevenMultiHexagon
    }
 
@@ -68,6 +75,7 @@ namespace Interpolator.Filters.Interpolate
       None,
 
       [FilterParameterValue( "fdiff" )]
+      [Description( "Frame Difference" )]
       FrameDifference
    }
 }

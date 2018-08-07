@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -9,12 +10,26 @@ namespace Interpolator.Utils
    {
       public BoundEnumMember( object value )
       {
-         Display = value.ToString();
+         Display = GetDescription( value );
          Value = value;
       }
 
       public string Display { get; set; }
       public object Value { get; set; }
+
+      private string GetDescription( object value )
+      {
+         var enumMember = value.GetType().GetMember( value.ToString() ).FirstOrDefault();
+         if ( enumMember != null )
+         {
+            var description = enumMember.GetAttribute<DescriptionAttribute>()?.Description;
+            if ( !string.IsNullOrEmpty( description ) )
+            {
+               return description;
+            }
+         }
+         return value.ToString();
+      }
    }
 
    internal sealed class GetEnumValuesExtension : MarkupExtension

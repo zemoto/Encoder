@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
+using Interpolator.Utils;
 
 namespace Interpolator.Filters
 {
@@ -41,12 +41,6 @@ namespace Interpolator.Filters
          filterString += "'\"";
 
          return filterString;
-      }
-
-      private static T GetAttribute<T>( this ICustomAttributeProvider property ) where T : Attribute
-      {
-         var attribute = property.GetCustomAttributes( typeof( T ), false ).First();
-         return attribute as T;
       }
    }
 }
