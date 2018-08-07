@@ -5,20 +5,213 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Interpolator.Filters.Interpolate"
+             xmlns:main="clr-namespace:Interpolator"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
+
+   <UserControl.Resources>
+
+      <main:EqualityToVisibilityConverter x:Key="VisibleIfEqual" />
+
+      <ObjectDataProvider MethodName="GetValues"
+                          ObjectType="{x:Type sys:Enum}"
+                          x:Key="InterpolationModeProvider">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="local:InterpolationMode" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider MethodName="GetValues"
+                          ObjectType="{x:Type sys:Enum}"
+                          x:Key="MotionCompensationModeProvider">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="local:MotionCompensationMode" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider MethodName="GetValues"
+                          ObjectType="{x:Type sys:Enum}"
+                          x:Key="MotionEstimationModeProvider">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="local:MotionEstimationMode" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider MethodName="GetValues"
+                          ObjectType="{x:Type sys:Enum}"
+                          x:Key="MotionEstimationAlgorithmProvider">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="local:MotionEstimationAlgorithm" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider MethodName="GetValues"
+                          ObjectType="{x:Type sys:Enum}"
+                          x:Key="SceneChangeDetectionAlgorithmProvider">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="local:SceneChangeDetectionAlgorithm" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <Style TargetType="{x:Type TextBlock}">
+         <Setter Property="Margin"
+                 Value="0,4" />
+         <Setter Property="VerticalAlignment"
+                 Value="Center" />
+      </Style>
+      
+      <Style TargetType="{x:Type ComboBox}">
+         <Setter Property="Margin"
+                 Value="0,4" />
+         <Setter Property="VerticalAlignment"
+                 Value="Center" />
+         <Setter Property="Height"
+                 Value="24" />
+         <Setter Property="Padding"
+                 Value="8,0,0,0" />
+      </Style>
+      
+      <Style TargetType="{x:Type TextBox}">
+         <Setter Property="Margin"
+                 Value="0,4" />
+         <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+         <Setter Property="VerticalContentAlignment"
+                 Value="Center" />
+         <Setter Property="HorizontalAlignment"
+                 Value="Left" />
+         <Setter Property="VerticalAlignment"
+                 Value="Center" />
+         <Setter Property="Width"
+                 Value="35" />
+         <Setter Property="Height"
+                 Value="20" />
+      </Style>
+
+   </UserControl.Resources>
+
+   <Grid>
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="Auto" />
+         <ColumnDefinition Width="8" />
+         <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0" 
+                 Grid.Column="0" 
+                 Text="Target Frame Rate:" />
+      <TextBox Grid.Row="0"
+               Grid.Column="2"
+               Text="{Binding TargetFrameRate}" />
+
+      <TextBlock Grid.Row="1"
+                 Grid.Column="0"
+                 Text="Scene Change Algorithm:" />
+      <ComboBox Grid.Row="1"
+                Grid.Column="2"
+                ItemsSource="{Binding Source={StaticResource SceneChangeDetectionAlgorithmProvider}}"
+                SelectedItem="{Binding SceneChangeDetectionAlgorithm}" />
+
+      <StackPanel Grid.Row="2" 
+                  Grid.Column="0" 
+                  Grid.ColumnSpan="3"
+                  Orientation="Horizontal"
+                  Margin="16,0,0,0"
+                  Visibility="{Binding Path=SceneChangeDetectionAlgorithm, 
+                                       Converter={StaticResource VisibleIfEqual}, 
+                                       ConverterParameter={x:Static local:SceneChangeDetectionAlgorithm.FrameDifference}}">
+         <TextBlock Text="Scene Change Threshold:"
+                    Margin="0,0,8,0" />
+
+         <TextBox Text="{Binding SceneChangeThreshold}" />
+      </StackPanel>
+
+      <TextBlock Grid.Row="3"
+                 Grid.Column="0"
+                 Text="Interpolation Mode:" />
+      <ComboBox Grid.Row="3"
+                Grid.Column="2"
+                ItemsSource="{Binding Source={StaticResource InterpolationModeProvider}}"
+                SelectedItem="{Binding InterpolationMode}" />
+
+      <Grid Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Margin="16,0,0,0"
+            Visibility="{Binding Path=InterpolationMode, 
+                                 Converter={StaticResource VisibleIfEqual}, 
+                                 ConverterParameter={x:Static local:InterpolationMode.MotionCompensated}}">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="*" />
+         </Grid.ColumnDefinitions>
+         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+         </Grid.RowDefinitions>
+
+         <TextBlock Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Motion Compensation:" />
+         <ComboBox Grid.Row="0"
+                   Grid.Column="2"
+                   ItemsSource="{Binding Source={StaticResource MotionCompensationModeProvider}}"
+                   SelectedItem="{Binding MotionCompensationMode}" />
+
+         <TextBlock Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Motion Estimation:" />
+         <ComboBox Grid.Row="1"
+                   Grid.Column="2"
+                   ItemsSource="{Binding Source={StaticResource MotionEstimationModeProvider}}"
+                   SelectedItem="{Binding MotionEstimationMode}" />
+
+         <TextBlock Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Estimation Algorithm:" />
+         <ComboBox Grid.Row="2"
+                   Grid.Column="2"
+                   ItemsSource="{Binding Source={StaticResource MotionEstimationAlgorithmProvider}}"
+                   SelectedItem="{Binding MotionEstimationAlgorithm}" />
+
+         <TextBlock Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Macroblock Size:" />
+         <TextBox Grid.Row="3"
+                  Grid.Column="2"
+                  Text="{Binding MacroblockSize}" />
+
+         <TextBlock Grid.Row="4"
+                    Grid.Column="0"
+                    Text="Algorithm Parameter:" />
+         <TextBox Grid.Row="4"
+                  Grid.Column="2"
+                  Text="{Binding SearchParameter}" />
+
+         <TextBlock Grid.Row="5"
+                    Grid.Column="0"
+                    Text="Variable Block Size:" />
+         <CheckBox Grid.Row="5"
+                   Grid.Column="2"
+                   IsChecked="{Binding VariableSizeCompensation}"
+                   VerticalAlignment="Center" />
+
+      </Grid>
+      
+   </Grid>
    
-   <StackPanel Orientation="Horizontal">
-      
-      <TextBlock Text="Target Frame Rate:"
-                 VerticalAlignment="Center"
-                 Margin="0,0,8,0" />
-      <TextBox Text="{Binding TargetFrameRate}"
-               MinWidth="40"
-               Height="24"
-               VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center" />
-      
-   </StackPanel>
    
 </UserControl>

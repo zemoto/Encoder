@@ -37,11 +37,39 @@
          set => SetProperty( ref _motionEstimationAlgorithm, value );
       }
 
+      private int _macroblockSize = 16;
+      public int MacroblockSize
+      {
+         get => _macroblockSize;
+         set => SetProperty( ref _macroblockSize, value );
+      }
+
+      private int _searchParameter = 32;
+      public int SearchParameter
+      {
+         get => _searchParameter;
+         set => SetProperty( ref _searchParameter, value );
+      }
+
+      private bool _variableSizeCompensation = false;
+      public bool VariableSizeCompensation
+      {
+         get => _variableSizeCompensation;
+         set => SetProperty( ref _variableSizeCompensation, value );
+      }
+
       private SceneChangeDetectionAlgorithm _sceneChangeDetectionAlgorithm = SceneChangeDetectionAlgorithm.FrameDifference;
       public SceneChangeDetectionAlgorithm SceneChangeDetectionAlgorithm
       {
          get => _sceneChangeDetectionAlgorithm;
          set => SetProperty( ref _sceneChangeDetectionAlgorithm, value );
-      }  
+      }
+
+      private float _sceneChangeThreshold = 5.0f;
+      public float SceneChangeThreshold
+      {
+         get => _sceneChangeThreshold;
+         set => SetProperty( ref _sceneChangeThreshold, value );
+      }
    }
 }
