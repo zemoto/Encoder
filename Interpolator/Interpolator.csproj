@@ -66,6 +66,8 @@
     <Compile Include="Encoding\EncodingTaskViewModel.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
     <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\FilterArgumentBuilder.cs" />
+    <Compile Include="Filters\FilterAttributes.cs" />
     <Compile Include="Filters\FilterSelectorControl.xaml.cs">
       <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
     </Compile>

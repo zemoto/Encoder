@@ -17,7 +17,6 @@ namespace Interpolator.Filters
       public abstract string GetFilterName();
       public abstract bool ShouldApplyFilter();
       public abstract int GetTargetFrameCount();
-      public abstract string GetFilterArguments();
 
       public abstract FilterViewModel ViewModel { get; }
    }

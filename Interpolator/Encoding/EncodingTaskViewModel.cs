@@ -21,7 +21,7 @@ namespace Interpolator.Encoding
 
       private bool ShouldApplyFilter() => _filter != null && _filter.ShouldApplyFilter();
 
-      public string GetEncodingArguments() => ShouldApplyFilter() ? _filter.GetFilterArguments() : null;
+      public string GetEncodingArguments() => ShouldApplyFilter() ? FilterArgumentBuilder.GetFilterArguments( _filter ) : null;
 
       public async Task<bool> InitializeTaskAsync()
       {

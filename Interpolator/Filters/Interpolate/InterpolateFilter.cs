@@ -22,11 +22,5 @@ namespace Interpolator.Filters.Interpolate
       public override bool ShouldApplyFilter() => ( (InterpolateFilterViewModel)ViewModel ).TargetFrameRate / SourceFrameRate > 1.5;
 
       public override int GetTargetFrameCount() => (int)( SourceDuration.TotalSeconds * ( (InterpolateFilterViewModel)ViewModel ).TargetFrameRate );
-
-      public override string GetFilterArguments()
-      {
-         var vm = (InterpolateFilterViewModel)ViewModel;
-         return $"-filter:v \"minterpolate='fps={vm.TargetFrameRate}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir'\"";
-      }
    }
 }
