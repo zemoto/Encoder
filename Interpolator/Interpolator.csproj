@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Filters\FilterType.cs" />
     <Compile Include="Filters\FilterViewModel.cs" />
+    <Compile Include="Filters\Interpolate\InterpolateEnums.cs" />
     <Compile Include="Filters\Interpolate\InterpolateFilter.cs" />
     <Compile Include="Filters\Interpolate\InterpolateFilterControl.xaml.cs">
       <DependentUpon>InterpolateFilterControl.xaml</DependentUpon>
