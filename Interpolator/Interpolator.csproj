@@ -68,6 +68,9 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterArgumentBuilder.cs" />
     <Compile Include="Filters\FilterAttributes.cs" />
+    <Compile Include="Filters\FilterPropertyControl.xaml.cs">
+      <DependentUpon>FilterPropertyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Filters\FilterSelectorControl.xaml.cs">
       <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -88,6 +91,14 @@
     <Compile Include="Utils\UtilityMethods.cs" />
     <Compile Include="Utils\ViewModelBase.cs" />
     <Page Include="Encoding\EncodingJobControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\FilterPropertyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\FilterPropertyDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
