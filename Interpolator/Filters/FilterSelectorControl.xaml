@@ -14,7 +14,7 @@
    <UserControl.Resources>
 
       <DataTemplate DataType="{x:Type interpolate:InterpolateFilterViewModel}">
-         <interpolate:InterpolateFilterControl Margin="0,8,0,0" />
+         <interpolate:InterpolateFilterControl />
       </DataTemplate>
       
    </UserControl.Resources>
@@ -40,6 +40,7 @@
       </StackPanel>
       
       <ContentPresenter Grid.Row="1" 
+                        Margin="0,8,0,0"
                         Content="{Binding Filter.ViewModel}" />
    </Grid>
 </UserControl>

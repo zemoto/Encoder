@@ -5,8 +5,8 @@ using System.Timers;
 using System.Threading;
 using System.Threading.Tasks;
 using Interpolator.Utils;
-using Timer = System.Timers.Timer;
 using Interpolator.Filters;
+using Timer = System.Timers.Timer;
 
 namespace Interpolator.Encoding
 {
@@ -17,7 +17,7 @@ namespace Interpolator.Encoding
       private readonly CancellationTokenSource _cancelTokenSource;
 
       private DateTime _startTime = DateTime.MinValue;
-      private Timer _jobRefreshTimer;
+      private readonly Timer _jobRefreshTimer;
 
       public EncodingJob( List<string> files, Filter filter )
       {

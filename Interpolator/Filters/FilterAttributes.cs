@@ -2,10 +2,10 @@
 
 namespace Interpolator.Filters
 {
-   [AttributeUsage( AttributeTargets.Class, Inherited = false, AllowMultiple = false )]
+   [AttributeUsage( AttributeTargets.Class )]
    internal sealed class FilterAttribute : Attribute
    {
-      public string FilterName { get; set; }
+      public string FilterName { get; }
 
       public FilterAttribute( string filterName )
       {
@@ -13,10 +13,10 @@ namespace Interpolator.Filters
       }
    }
 
-   [AttributeUsage( AttributeTargets.Property, Inherited = false, AllowMultiple = false )]
+   [AttributeUsage( AttributeTargets.Property )]
    internal sealed class FilterParameterNameAttribute : Attribute
    {
-      public string ParameterName { get; set; }
+      public string ParameterName { get; }
 
       public FilterParameterNameAttribute( string parameterName )
       {
@@ -24,10 +24,10 @@ namespace Interpolator.Filters
       }
    }
 
-   [AttributeUsage( AttributeTargets.Field, Inherited = false, AllowMultiple = false )]
+   [AttributeUsage( AttributeTargets.Field )]
    internal sealed class FilterParameterValueAttribute : Attribute
    {
-      public string ParameterValue { get; set; }
+      public string ParameterValue { get; }
 
       public FilterParameterValueAttribute( string parameterValue )
       {

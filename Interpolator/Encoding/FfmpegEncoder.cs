@@ -15,17 +15,17 @@ namespace Interpolator.Encoding
       private const string QualityArgs = "-crf 18 -preset slow";
       private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.GetEncodingArguments() ?? DefaultArgs} \"{_encodingTask.TargetFile}\"";
 
-      private static readonly string _ffmpegExeLocation;
+      private static readonly string FfmpegExeLocation;
 
       private readonly EncodingTaskViewModel _encodingTask;
 
-      private Process _currentffmpegProcess = null;
-      private ProcessCpuMonitor _cpuUsageMonitor = null;
+      private Process _currentffmpegProcess;
+      private ProcessCpuMonitor _cpuUsageMonitor;
 
       static FfmpegEncoder()
       {
          var executingDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-         _ffmpegExeLocation = Path.Combine( executingDir, "ffmpeg.exe" );
+         FfmpegExeLocation = Path.Combine( executingDir, "ffmpeg.exe" );
       }
 
       public FfmpegEncoder( EncodingTaskViewModel encodingTask )
@@ -39,7 +39,7 @@ namespace Interpolator.Encoding
          {
             StartInfo = new ProcessStartInfo
             {
-               FileName = _ffmpegExeLocation,
+               FileName = FfmpegExeLocation,
                Arguments = EncodingArgs,
                UseShellExecute = false,
                RedirectStandardError = true,

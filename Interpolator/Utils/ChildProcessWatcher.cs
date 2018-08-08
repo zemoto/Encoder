@@ -9,13 +9,13 @@ namespace Interpolator.Utils
    // processes are closed with it.
    internal static class ChildProcessWatcher
    {
-      private static readonly IntPtr _handle;
+      private static readonly IntPtr Handle;
 
       public static void Initialize() { /*Ensures the static constructor is called*/ }
 
       static ChildProcessWatcher()
       {
-         _handle = CreateJobObject( IntPtr.Zero, $"InterpolatorChildProcessTracker{Process.GetCurrentProcess().Id}" );
+         Handle = CreateJobObject( IntPtr.Zero, $"InterpolatorChildProcessTracker{Process.GetCurrentProcess().Id}" );
 
          var info = new JOBOBJECT_BASIC_LIMIT_INFORMATION
          {
@@ -31,7 +31,7 @@ namespace Interpolator.Utils
          var extendedInfoPtr = Marshal.AllocHGlobal( length );
          Marshal.StructureToPtr( extendedInfo, extendedInfoPtr, false );
 
-         var result = SetInformationJobObject( _handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length );
+         var result = SetInformationJobObject( Handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length );
          Debug.Assert( result );
 
          Marshal.FreeHGlobal( extendedInfoPtr );
@@ -39,7 +39,7 @@ namespace Interpolator.Utils
 
       public static bool AddProcess( Process process )
       {
-         return AssignProcessToJobObject( _handle, process.Handle );
+         return AssignProcessToJobObject( Handle, process.Handle );
       }
 
       #region Native Structs and Methods

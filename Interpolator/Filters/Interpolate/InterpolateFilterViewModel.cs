@@ -3,7 +3,7 @@
    [Filter( "minterpolate" )]
    internal sealed class InterpolateFilterViewModel : FilterViewModel
    {
-      public double _targetFrameRate = 60;
+      private double _targetFrameRate = 60;
       [FilterParameterName( "fps" )]
       public double TargetFrameRate
       {

@@ -14,7 +14,7 @@ namespace Interpolator.Utils
          _canExecute = canExecute;
       }
 
-      public bool CanExecute( object _ ) => _canExecute == null ? true : _canExecute();
+      public bool CanExecute( object _ ) => _canExecute?.Invoke() ?? true;
 
       public event EventHandler CanExecuteChanged
       {

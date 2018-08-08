@@ -10,7 +10,7 @@ namespace Interpolator
 {
    internal sealed class Main
    {
-      private MainWindowViewModel _model;
+      private readonly MainWindowViewModel _model;
 
       public Main()
       {

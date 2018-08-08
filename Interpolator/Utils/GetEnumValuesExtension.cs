@@ -14,8 +14,8 @@ namespace Interpolator.Utils
          Value = value;
       }
 
-      public string Display { get; set; }
-      public object Value { get; set; }
+      public string Display { get; }
+      public object Value { get; }
 
       private string GetDescription( object value )
       {
@@ -42,11 +42,10 @@ namespace Interpolator.Utils
 
       public override object ProvideValue( IServiceProvider serviceProvider )
       {
-         var target = serviceProvider.GetService( typeof(IProvideValueTarget) ) as IProvideValueTarget;
-         if ( target != null && target.TargetObject is ComboBox )
+         if ( serviceProvider.GetService( typeof(IProvideValueTarget) ) is IProvideValueTarget target && target.TargetObject is ComboBox box )
          {
-            ( (ComboBox)target.TargetObject ).SelectedValuePath = "Value";
-            ( (ComboBox)target.TargetObject ).DisplayMemberPath = "Display";
+            box.SelectedValuePath = "Value";
+            box.DisplayMemberPath = "Display";
          }
 
          var enumValues = Enum.GetValues( _type );

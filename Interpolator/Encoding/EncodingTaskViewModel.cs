@@ -9,7 +9,7 @@ namespace Interpolator.Encoding
 {
    internal sealed class EncodingTaskViewModel : ViewModelBase
    {
-      private Filter _filter;
+      private readonly Filter _filter;
       private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
 

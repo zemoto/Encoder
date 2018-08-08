@@ -7,17 +7,17 @@ namespace Interpolator.Utils
 {
    internal static class TotalCpuMonitor
    {
-      private static readonly PerformanceCounter _cpuUsageCounter;
+      private static readonly PerformanceCounter CpuUsageCounter;
 
       public static void Initialize() { /*Ensures the static constructor is called*/ }
 
       static TotalCpuMonitor()
       {
-         _cpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
-         _cpuUsageCounter.NextValue();
+         CpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
+         CpuUsageCounter.NextValue();
       }
 
-      public static int GetCurrentCpuUsage() => (int)_cpuUsageCounter.NextValue();
+      public static int GetCurrentCpuUsage() => (int)CpuUsageCounter.NextValue();
    }
 
    internal sealed class ProcessCpuMonitor : IDisposable
