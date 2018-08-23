@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encoder", "Encoder\Encoder.csproj", "{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D88D624B-3308-4000-A953-3C8977367A30}
+	EndGlobalSection
+EndGlobal

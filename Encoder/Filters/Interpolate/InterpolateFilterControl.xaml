@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Encoder.Filters.Interpolate.InterpolateFilterControl"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Encoder.Filters.Interpolate"
+             xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:utils="clr-namespace:Encoder.Utils"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
+
+   <UserControl.Resources>
+      <ResourceDictionary Source="../FilterPropertyDictionary.xaml" />
+   </UserControl.Resources>
+
+   <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <filters:FilterPropertyControl Grid.Row="0"
+                                     Label="Target Frame Rate:">
+         <TextBox Text="{Binding TargetFrameRate}" />
+      </filters:FilterPropertyControl>
+
+      <filters:FilterPropertyControl Grid.Row="1"
+                                     Label="Scene Change Algorithm:">
+         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:SceneChangeDetectionAlgorithm}}"
+                   SelectedValue="{Binding SceneChangeDetectionAlgorithm}" />
+      </filters:FilterPropertyControl>
+
+      <Grid Grid.Row="2"
+            Margin="16,0,0,0"
+            Visibility="{Binding Path=SceneChangeDetectionAlgorithm, 
+                                 Converter={StaticResource VisibleIfEqual}, 
+                                 ConverterParameter={x:Static local:SceneChangeDetectionAlgorithm.FrameDifference}}">
+         <Rectangle Style="{StaticResource IndentIndicator}" />
+
+         <filters:FilterPropertyControl Label="Scene Change Threshold:">
+            <TextBox Text="{Binding SceneChangeThreshold}" />
+         </filters:FilterPropertyControl>
+      </Grid>
+
+      <filters:FilterPropertyControl Grid.Row="3"
+                                     Label="Interpolation Mode:">
+         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:InterpolationMode}}"
+                   SelectedValue="{Binding InterpolationMode}" />
+      </filters:FilterPropertyControl>
+
+      <Grid Grid.Row="4"
+            Margin="16,0,0,0"
+            Visibility="{Binding Path=InterpolationMode, 
+                                 Converter={StaticResource VisibleIfEqual}, 
+                                 ConverterParameter={x:Static local:InterpolationMode.MotionCompensated}}">
+         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+         </Grid.RowDefinitions>
+
+         <Rectangle Grid.Row="0"
+                    Grid.RowSpan="6"
+                    Style="{StaticResource IndentIndicator}" />
+
+         <filters:FilterPropertyControl Grid.Row="0"
+                                        Label="Motion Compensation:">
+            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionCompensationMode}}"
+                      SelectedValue="{Binding MotionCompensationMode}" />
+         </filters:FilterPropertyControl>
+
+         <filters:FilterPropertyControl Grid.Row="1"
+                                        Label="Motion Estimation:">
+            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationMode}}"
+                      SelectedValue="{Binding MotionEstimationMode}" />
+         </filters:FilterPropertyControl>
+
+         <filters:FilterPropertyControl Grid.Row="2"
+                                        Label="Estimation Algorithm:">
+            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationAlgorithm}}"
+                      SelectedValue="{Binding MotionEstimationAlgorithm}" />
+         </filters:FilterPropertyControl>
+
+         <filters:FilterPropertyControl Grid.Row="3"
+                                        Label="Macroblock Size:">
+            <TextBox Text="{Binding MacroblockSize}" />
+         </filters:FilterPropertyControl>
+
+         <filters:FilterPropertyControl Grid.Row="4"
+                                        Label="Algorithm Parameter:">
+            <TextBox Text="{Binding SearchParameter}" />
+         </filters:FilterPropertyControl>
+
+         <filters:FilterPropertyControl Grid.Row="5"
+                                        Label="Variable Block Size:">
+            <CheckBox IsChecked="{Binding VariableSizeCompensation}"
+                      VerticalAlignment="Center" />
+         </filters:FilterPropertyControl>
+
+      </Grid>
+   </Grid>
+</UserControl>
