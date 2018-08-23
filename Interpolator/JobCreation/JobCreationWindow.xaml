@@ -1,0 +1,72 @@
+﻿<Window x:Class="Interpolator.JobCreation.JobCreationWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Interpolator.JobCreation"
+        xmlns:filters="clr-namespace:Interpolator.Filters"
+        mc:Ignorable="d"
+        x:Name="Root"
+        Title="Create Encoding Job"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
+        Width="360"
+        d:DataContext="{d:DesignInstance Type={x:Type local:JobCreationViewModel}}">
+
+   <Window.Resources>
+      <ResourceDictionary Source="../Resources.xaml" />
+   </Window.Resources>
+
+   <Grid>
+      <Grid Margin="8,0,8,8">
+         <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+         </Grid.RowDefinitions>
+
+         <Border Grid.Row="0"
+                 Margin="0,8"
+                 BorderThickness="1"
+                 BorderBrush="Gray"
+                 Height="100">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+               <ItemsControl ItemsSource="{Binding SelectedFiles}">
+                  <ItemsControl.ItemTemplate>
+                     <DataTemplate>
+                        <Grid>
+                           <TextBlock Text="{Binding}" />
+                           <Button HorizontalAlignment="Right"
+                                   Command="{Binding ElementName=Root, Path=DataContext.RemoveFileCommand}"
+                                   CommandParameter="{Binding}"
+                                   Style="{StaticResource DeleteButton}" />
+                        </Grid>
+                     </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+               </ItemsControl>
+            </ScrollViewer>
+         </Border>
+
+         <filters:FilterSelectorControl Grid.Row="1"
+                                        Margin="0,0,0,8" />
+
+         <Button Grid.Row="2"
+                 Height="24"
+                 Width="80"
+                 HorizontalAlignment="Left"
+                 Command="{Binding SelectFilesCommand}"
+                 Content="Select Files" />
+
+         <Button Grid.Row="2"
+                 Height="24"
+                 Width="80"
+                 HorizontalAlignment="Right"
+                 Command="{Binding CreateJobCommand}"
+                 Content="Start Task" />
+
+      </Grid>
+   </Grid>
+</Window>

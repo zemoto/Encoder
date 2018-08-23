@@ -4,12 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:main="clr-namespace:Interpolator"
              xmlns:filters="clr-namespace:Interpolator.Filters"
              xmlns:utils="clr-namespace:Interpolator.Utils"
              xmlns:interpolate="clr-namespace:Interpolator.Filters.Interpolate"
+             xmlns:jobCreation="clr-namespace:Interpolator.JobCreation"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type={x:Type main:MainWindowViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type jobCreation:JobCreationViewModel}}">
 
    <UserControl.Resources>
 

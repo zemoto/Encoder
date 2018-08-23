@@ -82,6 +82,11 @@
       <DependentUpon>InterpolateFilterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\Interpolate\InterpolateFilterViewModel.cs" />
+    <Compile Include="JobCreation\JobCreationViewModel.cs" />
+    <Compile Include="JobCreation\JobCreationWindow.xaml.cs">
+      <DependentUpon>JobCreationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JobCreation\JobCreationWizard.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Utils\GetEnumValuesExtension.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
@@ -107,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Filters\Interpolate\InterpolateFilterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JobCreation\JobCreationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,7 +19,7 @@ namespace Interpolator.Encoding
       private DateTime _startTime = DateTime.MinValue;
       private readonly Timer _jobRefreshTimer;
 
-      public EncodingJob( List<string> files, Filter filter )
+      public EncodingJob( IEnumerable<string> files, Filter filter )
       {
          _cancelTokenSource = new CancellationTokenSource();
 

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Interpolator.Encoding;
+using Interpolator.JobCreation;
 using Interpolator.Utils;
-using Microsoft.Win32;
 
 namespace Interpolator
 {
@@ -16,9 +16,7 @@ namespace Interpolator
       {
          _model = new MainWindowViewModel
          {
-            SelectFilesCommand = new RelayCommand( SelectFiles ),
-            RemoveFileCommand = new RelayCommand<string>( file => _model.SelectedFiles.Remove( file ) ),
-            StartJobCommand = new RelayCommand( StartEncodingJob, () => _model.SelectedFiles.Any() )
+            NewJobCommand = new RelayCommand( async () => await CreateAndStartNewJobAsync() )
          };
       }
 
@@ -56,39 +54,26 @@ namespace Interpolator
          }
       }
 
-      private void SelectFiles()
+      private async Task CreateAndStartNewJobAsync()
       {
-         var dlg = new OpenFileDialog
-         {
-            Filter = "Video Files (*.mp4;*.wmv;*.webm;*.swf;*.mkv)|*.mp4;*.wmv;*.webm;*.swf;*.mkv|All files (*.*)|*.*",
-            Multiselect = true
-         };
+         var jobWizard = new JobCreationWizard();
+         var job = jobWizard.CreateJob();
 
-         if ( dlg.ShowDialog( Application.Current.MainWindow ) == true )
+         if ( job != null )
          {
-            foreach( var file in dlg.FileNames )
-            {
-               if ( !_model.SelectedFiles.Contains( file ) && 
-                    !_model.EncodingJobs.Any( x => x.Tasks.Any( y => y.SourceFile == file ) ) )
-               {
-                  _model.SelectedFiles.Add( file );
-               }
-            }
+            await StartJobAsync( job );
+            job.Dispose();
          }
       }
 
-      private async void StartEncodingJob()
+      private async Task StartJobAsync( EncodingJob job )
       {
-         var job = new EncodingJob( _model.SelectedFiles.ToList(), _model.Filter );
-
-         _model.SelectedFiles.Clear();
          _model.EncodingJobs.Add( job.Model );
 
          await job.DoJobAsync();
 
          _model.EncodingJobs.Remove( job.Model );
 
-         job.Dispose();
       }
    }
 }

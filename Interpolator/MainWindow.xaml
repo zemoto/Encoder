@@ -6,7 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interpolator"
         xmlns:encoding="clr-namespace:Interpolator.Encoding"
-        xmlns:filters="clr-namespace:Interpolator.Filters"
         mc:Ignorable="d"
         x:Name="Root"
         WindowStyle="ToolWindow"
@@ -27,54 +26,19 @@
    <Grid>
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
-         <Border Grid.Row="0"
-                 Margin="0,8"
-                 BorderThickness="1"
-                 BorderBrush="Gray"
-                 Height="100">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-               <ItemsControl ItemsSource="{Binding SelectedFiles}">
-                  <ItemsControl.ItemTemplate>
-                     <DataTemplate>
-                        <Grid>
-                           <TextBlock Text="{Binding}" />
-                           <Button HorizontalAlignment="Right"
-                                   Command="{Binding ElementName=Root, Path=DataContext.RemoveFileCommand}"
-                                   CommandParameter="{Binding}"
-                                   Style="{StaticResource DeleteButton}" />
-                        </Grid>
-                     </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-               </ItemsControl>
-            </ScrollViewer>
-         </Border>
-
-         <filters:FilterSelectorControl Grid.Row="1"
-                                        Margin="0,0,0,8" />
-
-         <Button Grid.Row="2"
+         <Button Grid.Row="0" 
                  Height="24"
                  Width="80"
-                 HorizontalAlignment="Left"
-                 Command="{Binding SelectFilesCommand}"
-                 Content="Select Files" />
+                 HorizontalAlignment="Center"
+                 Margin="8"
+                 Content="Create Job"
+                 Command="{Binding NewJobCommand}" />
 
-         <Button x:Name="StartButton"
-                 Grid.Row="2"
-                 Height="24"
-                 Width="80"
-                 HorizontalAlignment="Right"
-                 Command="{Binding StartJobCommand}"
-                 Content="Start Task" />
-
-         <TabControl Grid.Row="3"
-                     Margin="0,8,0,0"
+         <TabControl Grid.Row="1"
                      ItemsSource="{Binding EncodingJobs}">
             <TabControl.Style>
                <Style TargetType="{x:Type TabControl}">
