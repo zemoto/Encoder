@@ -7,9 +7,9 @@
              xmlns:filters="clr-namespace:Interpolator.Filters"
              xmlns:utils="clr-namespace:Interpolator.Utils"
              xmlns:interpolate="clr-namespace:Interpolator.Filters.Interpolate"
-             xmlns:jobCreation="clr-namespace:Interpolator.JobCreation"
+             xmlns:taskCreation1="clr-namespace:Interpolator.TaskCreation"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type={x:Type jobCreation:JobCreationViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type taskCreation1:TaskCreationViewModel}}">
 
    <UserControl.Resources>
 

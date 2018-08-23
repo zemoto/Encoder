@@ -57,11 +57,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters.cs" />
-    <Compile Include="Encoding\EncodingJob.cs" />
-    <Compile Include="Encoding\EncodingJobControl.xaml.cs">
-      <DependentUpon>EncodingJobControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Encoding\EncodingJobViewModel.cs" />
+    <Compile Include="Encoding\EncodingManager.cs" />
+    <Compile Include="Encoding\EncodingManagerViewModel.cs" />
     <Compile Include="Encoding\FfmpegEncoder.cs" />
     <Compile Include="Encoding\EncodingTaskViewModel.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
@@ -82,11 +79,11 @@
       <DependentUpon>InterpolateFilterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\Interpolate\InterpolateFilterViewModel.cs" />
-    <Compile Include="JobCreation\JobCreationViewModel.cs" />
-    <Compile Include="JobCreation\JobCreationWindow.xaml.cs">
-      <DependentUpon>JobCreationWindow.xaml</DependentUpon>
+    <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
+    <Compile Include="TaskCreation\TaskCreationWindow.xaml.cs">
+      <DependentUpon>TaskCreationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JobCreation\JobCreationWizard.cs" />
+    <Compile Include="TaskCreation\TaskCreationWizard.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Utils\GetEnumValuesExtension.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
@@ -95,10 +92,6 @@
     <Compile Include="Utils\ProcessCpuMonitor.cs" />
     <Compile Include="Utils\UtilityMethods.cs" />
     <Compile Include="Utils\ViewModelBase.cs" />
-    <Page Include="Encoding\EncodingJobControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Filters\FilterPropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,7 +108,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JobCreation\JobCreationWindow.xaml">
+    <Page Include="TaskCreation\TaskCreationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

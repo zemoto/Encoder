@@ -2,9 +2,9 @@
 using Interpolator.Filters;
 using Interpolator.Utils;
 
-namespace Interpolator.JobCreation
+namespace Interpolator.TaskCreation
 {
-   internal sealed class JobCreationViewModel : ViewModelBase
+   internal sealed class TaskCreationViewModel : ViewModelBase
    {
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
 
@@ -30,6 +30,6 @@ namespace Interpolator.JobCreation
 
       public RelayCommand SelectFilesCommand { get; set; }
       public RelayCommand<string> RemoveFileCommand { get; set; }
-      public RelayCommand CreateJobCommand { get; set; }
+      public RelayCommand CreateTasksCommand { get; set; }
    }
 }

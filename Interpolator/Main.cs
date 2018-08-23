@@ -1,23 +1,32 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Interpolator.Encoding;
-using Interpolator.JobCreation;
+using Interpolator.TaskCreation;
 using Interpolator.Utils;
 
 namespace Interpolator
 {
-   internal sealed class Main
+   internal sealed class Main : IDisposable
    {
       private readonly MainWindowViewModel _model;
+      private readonly EncodingManager _encodingManager;
 
       public Main()
       {
-         _model = new MainWindowViewModel
+         _encodingManager = new EncodingManager();
+
+         _model = new MainWindowViewModel( _encodingManager.Model )
          {
-            NewJobCommand = new RelayCommand( async () => await CreateAndStartNewJobAsync() )
+            NewTasksCommand = new RelayCommand( CreateAndStartNewTasks )
          };
+      }
+
+      public void Dispose()
+      {
+         _encodingManager?.Dispose();
       }
 
       public void ShowDialog()
@@ -29,7 +38,7 @@ namespace Interpolator
 
       private async void OnMainWindowClosing( object sender, CancelEventArgs e )
       {
-         if ( !_model.EncodingJobs.Any() )
+         if ( !_encodingManager.Model.Tasks.Any() )
          {
             return;
          }
@@ -42,11 +51,11 @@ namespace Interpolator
          else if ( result == MessageBoxResult.Yes )
          {
             e.Cancel = true;
-            foreach ( var job in _model.EncodingJobs )
+            foreach ( var task in _encodingManager.Model.Tasks )
             {
-               job.StopJobCommand.Execute( null );
+               task.CancelTaskCommand.Execute( null );
             }
-            while ( _model.EncodingJobs.Any() )
+            while ( _encodingManager.Model.Tasks.Any() )
             {
                await Task.Delay( 300 );
             }
@@ -54,26 +63,15 @@ namespace Interpolator
          }
       }
 
-      private async Task CreateAndStartNewJobAsync()
+      private void CreateAndStartNewTasks()
       {
-         var jobWizard = new JobCreationWizard();
-         var job = jobWizard.CreateJob();
+         var taskWizard = new TaskCreationWizard();
+         var tasks = taskWizard.CreateEncodingTasks();
 
-         if ( job != null )
+         foreach ( var task in tasks )
          {
-            await StartJobAsync( job );
-            job.Dispose();
+            _encodingManager.Model.Tasks.Add( task );
          }
-      }
-
-      private async Task StartJobAsync( EncodingJob job )
-      {
-         _model.EncodingJobs.Add( job.Model );
-
-         await job.DoJobAsync();
-
-         _model.EncodingJobs.Remove( job.Model );
-
       }
    }
 }

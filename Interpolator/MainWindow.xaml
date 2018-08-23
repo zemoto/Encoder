@@ -27,43 +27,79 @@
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
-         <Button Grid.Row="0" 
+         <Button Grid.Row="0"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Center"
                  Margin="8"
-                 Content="Create Job"
-                 Command="{Binding NewJobCommand}" />
+                 Content="Create Tasks"
+                 Command="{Binding NewTasksCommand}" />
 
-         <TabControl Grid.Row="1"
-                     ItemsSource="{Binding EncodingJobs}">
-            <TabControl.Style>
-               <Style TargetType="{x:Type TabControl}">
-                  <Style.Triggers>
-                     <DataTrigger Binding="{Binding EncodingJobs.Count}"
-                                  Value="0">
-                        <DataTrigger.Setters>
-                           <Setter Property="Visibility"
-                                   Value="Collapsed" />
-                        </DataTrigger.Setters>
-                     </DataTrigger>
-                  </Style.Triggers>
-               </Style>
-            </TabControl.Style>
-            <TabControl.ItemTemplate>
-               <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
-                  <TextBlock Text="{Binding JobName}" />
-               </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-               <DataTemplate DataType="{x:Type encoding:EncodingJobViewModel}">
-                  <encoding:EncodingJobControl DataContext="{Binding}" />
-               </DataTemplate>
-            </TabControl.ContentTemplate>
-         </TabControl>
+         <DataGrid Grid.Row="1"
+                   ItemsSource="{Binding EncodingVm.Tasks}"
+                   Margin="0,8"
+                   AutoGenerateColumns="False"
+                   HeadersVisibility="Column">
+            <DataGrid.Columns>
+               <DataGridTextColumn Header="File"
+                                   Binding="{Binding FileName, Mode=OneWay}"
+                                   IsReadOnly="True" />
+
+               <DataGridTextColumn Header="Filter"
+                                   Binding="{Binding FilterName, Mode=OneWay}"
+                                   IsReadOnly="True"
+                                   MinWidth="100" />
+
+               <DataGridTemplateColumn Header="Progress"
+                                       Width="100">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                        <Grid>
+                           <ProgressBar Value="{Binding Progress, Mode=OneWay}"
+                                        IsIndeterminate="{Binding HasNoDurationData}"
+                                        Style="{StaticResource MinimalistProgressBar}"
+                                        Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
+                           <Rectangle Fill="LightGreen"
+                                      Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
+                           <TextBlock HorizontalAlignment="Right">
+                              <Run Text="{Binding FramesDone, Mode=OneWay}" />
+                              <Run Text="/" />
+                              <Run Text="{Binding TargetTotalFrames, Mode=OneWay}" />
+                           </TextBlock>
+                        </Grid>
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                  <DataGridTemplateColumn.CellStyle>
+                     <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Margin"
+                                Value="0,0,-1,0" />
+                     </Style>
+                  </DataGridTemplateColumn.CellStyle>
+               </DataGridTemplateColumn>
+
+               <DataGridTemplateColumn Width="24">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                        <Button Content="X"
+                                Command="{Binding CancelTaskCommand}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+         </DataGrid>
+         
+         <TextBlock Grid.Row="2" 
+                    Text="{Binding EncodingVm.CpuUsage, Mode=OneWay, StringFormat='CPU Usage: {0}%'}" /> 
+ 
+         <TextBlock Grid.Row="3" 
+                    Text="{Binding EncodingVm.TimeRemainingString, Mode=OneWay, StringFormat='Time Remaining: {0}'}" /> 
+
       </Grid>
    </Grid>
 </Window>

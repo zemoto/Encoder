@@ -1,32 +1,38 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Interpolator.Encoding;
 using Interpolator.Utils;
 using Microsoft.Win32;
 
-namespace Interpolator.JobCreation
+namespace Interpolator.TaskCreation
 {
-   internal sealed class JobCreationWizard
+   internal sealed class TaskCreationWizard
    {
-      private JobCreationWindow _window;
-      private JobCreationViewModel _model;
+      private TaskCreationWindow _window;
+      private TaskCreationViewModel _model;
 
-      public EncodingJob CreateJob()
+      public IEnumerable<EncodingTaskViewModel> CreateEncodingTasks()
       {
-         _model = new JobCreationViewModel
+         _model = new TaskCreationViewModel
          {
             SelectFilesCommand = new RelayCommand( SelectFiles ),
             RemoveFileCommand = new RelayCommand<string>( file => _model.SelectedFiles.Remove( file ) ),
-            CreateJobCommand = new RelayCommand( () => _window.DialogResult = true, () => _model.SelectedFiles.Any() )
+            CreateTasksCommand = new RelayCommand( () => _window.DialogResult = true, () => _model.SelectedFiles.Any() )
          };
 
-         _window = new JobCreationWindow
+         _window = new TaskCreationWindow
          {
             DataContext = _model,
             Owner = Application.Current.MainWindow
          };
 
-         return _window.ShowDialog() == true ? new EncodingJob( _model.SelectedFiles, _model.Filter ) : null;
+         if ( _window.ShowDialog() == true )
+         {
+            return _model.SelectedFiles.Select( file => new EncodingTaskViewModel( file, _model.Filter ) );
+         }
+
+         return new List<EncodingTaskViewModel>();
       }
 
       private void SelectFiles()

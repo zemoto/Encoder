@@ -1,34 +1,39 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using Interpolator.Filters;
 using Interpolator.Utils;
 
 namespace Interpolator.Encoding
 {
-   internal sealed class EncodingTaskViewModel : ViewModelBase
+   internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
       private readonly Filter _filter;
       private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
+      public CancellationTokenSource CancelToken { get; }
 
       public EncodingTaskViewModel( string sourceFile, Filter filter )
       {
          SourceFile = sourceFile;
          _filter = filter;
+
+         CancelToken = new CancellationTokenSource();
+      }
+
+      public void Dispose()
+      {
+         CancelToken?.Dispose();
       }
 
       private bool ShouldApplyFilter() => _filter != null && _filter.ShouldApplyFilter();
 
       public string GetEncodingArguments() => ShouldApplyFilter() ? FilterArgumentBuilder.GetFilterArguments( _filter ) : null;
 
-      public async Task<bool> InitializeTaskAsync()
+      public bool Initialize()
       {
-         bool success = false;
-         double sourceFrameRate = 0;
-         var sourceDuration = TimeSpan.Zero;
-         await Task.Run( () => success = VideoMetadataReader.GetVideoInfo( SourceFile, out sourceFrameRate, out sourceDuration ) );
+         bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
          if ( !success )
          {
             MessageBox.Show( $"Could not read video file: {SourceFile}" );
@@ -40,12 +45,15 @@ namespace Interpolator.Encoding
          TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), Path.GetFileNameWithoutExtension( SourceFile ) + $"_done.mp4" );
 
          _filter?.Initialize( sourceFrameRate, sourceDuration );
-
+         
          OnPropertyChanged( null );
+
+         Initialized = true;
 
          return true;
       }
 
+      public bool Initialized { get; private set; }
       public string FilterName => ShouldApplyFilter() ? _filter.FilterName : "None";
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
@@ -104,5 +112,8 @@ namespace Interpolator.Encoding
          get => _started;
          set => SetProperty( ref _started, value );
       }
+
+      private RelayCommand _cancelTaskCommand;
+      public RelayCommand CancelTaskCommand => _cancelTaskCommand ?? ( _cancelTaskCommand = new RelayCommand( CancelToken.Cancel ) );
    }
 }

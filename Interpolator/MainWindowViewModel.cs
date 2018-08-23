@@ -1,13 +1,17 @@
-﻿using System.Collections.ObjectModel;
-using Interpolator.Encoding;
+﻿using Interpolator.Encoding;
 using Interpolator.Utils;
 
 namespace Interpolator
 {
    internal sealed class MainWindowViewModel : ViewModelBase
    {
-      public ObservableCollection<EncodingJobViewModel> EncodingJobs { get; } = new ObservableCollection<EncodingJobViewModel>();
+      public MainWindowViewModel( EncodingManagerViewModel encodingViewModel )
+      {
+         EncodingVm = encodingViewModel;
+      }
 
-      public RelayCommand NewJobCommand { get; set; }
+      public EncodingManagerViewModel EncodingVm { get; }
+
+      public RelayCommand NewTasksCommand { get; set; }
    }
 }
