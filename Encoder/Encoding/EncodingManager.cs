@@ -32,7 +32,7 @@ namespace Encoder.Encoding
       {
          if ( e.Action == NotifyCollectionChangedAction.Add )
          {
-            if ( !Model.Tasks.Any( x => x.Started ) )
+            if ( Model.NoTasksStarted )
             {
                _startTime = DateTime.Now;
                StartNextTask();
@@ -40,7 +40,7 @@ namespace Encoder.Encoding
             _refreshTimer.Start();
             _taskStartTimer.Start();
          }
-         else if ( e.Action == NotifyCollectionChangedAction.Remove && !Model.Tasks.Any() )
+         else if ( e.Action == NotifyCollectionChangedAction.Remove && !Model.AnyTasksPending )
          {
             _refreshTimer.Stop();
             _taskStartTimer.Stop();
@@ -70,7 +70,7 @@ namespace Encoder.Encoding
 
       private void OnTaskStartTimerTick( object sender, ElapsedEventArgs e )
       {
-         if ( Model.Tasks.All( x => x.Started ) )
+         if ( Model.AllTasksStarted )
          {
             _taskStartTimer.Stop();
          }
@@ -90,7 +90,7 @@ namespace Encoder.Encoding
 
       private void StartNextTask()
       {
-         Task.Run( () => DoTask( Model.Tasks.FirstOrDefault( x => !x.Started ) ) );
+         Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
       private void DoTask( EncodingTaskViewModel task )

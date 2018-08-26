@@ -38,7 +38,7 @@ namespace Encoder
 
       private async void OnMainWindowClosing( object sender, CancelEventArgs e )
       {
-         if ( !_encodingManager.Model.Tasks.Any() )
+         if ( !_encodingManager.Model.AnyTasksPending )
          {
             return;
          }
@@ -55,7 +55,7 @@ namespace Encoder
             {
                task.CancelTaskCommand.Execute( null );
             }
-            while ( _encodingManager.Model.Tasks.Any() )
+            while ( _encodingManager.Model.AnyTasksPending )
             {
                await Task.Delay( 300 );
             }
