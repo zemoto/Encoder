@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -24,26 +24,49 @@ namespace Encoder.Encoding
 
          _taskStartTimer = new Timer( 30000 );
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
-
-         Model.Tasks.CollectionChanged += OnTasksCollectionChanged;
       }
 
-      private void OnTasksCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+      public async Task EnqueueTasksAsync( IEnumerable<EncodingTaskViewModel> tasks )
       {
-         if ( e.Action == NotifyCollectionChangedAction.Add )
+         foreach( var task in tasks )
          {
-            if ( Model.NoTasksStarted )
+            if ( !await Task.Run( () => task.Initialize() ) )
             {
-               _startTime = DateTime.Now;
-               StartNextTask();
+               task.Dispose();
+               continue;
             }
-            _refreshTimer.Start();
-            _taskStartTimer.Start();
+
+            Model.Tasks.Add( task );
          }
-         else if ( e.Action == NotifyCollectionChangedAction.Remove && !Model.AnyTasksPending )
+
+         if ( Model.NoTasksStarted )
+         {
+            _startTime = DateTime.Now;
+            StartNextTask();
+         }
+
+         _refreshTimer.Start();
+         _taskStartTimer.Start();
+      }
+
+      private void CleanupTask( EncodingTaskViewModel task )
+      {
+         bool taskWasStarted = task.Started;
+
+         task.Dispose();
+         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
+
+         if ( !Model.AnyTasksPending )
          {
             _refreshTimer.Stop();
             _taskStartTimer.Stop();
+
+            Model.UpdateState( TimeSpan.Zero );
+         }
+
+         if ( taskWasStarted )
+         {
+            CheckIfCanStartNewTask();
          }
       }
 
@@ -74,7 +97,15 @@ namespace Encoder.Encoding
          {
             _taskStartTimer.Stop();
          }
-         else if ( CanSupportMoreTasks() )
+         else
+         {
+            CheckIfCanStartNewTask();
+         }
+      }
+
+      private void CheckIfCanStartNewTask()
+      {
+         if ( CanSupportMoreTasks() )
          {
             StartNextTask();
          }
@@ -82,6 +113,11 @@ namespace Encoder.Encoding
 
       private bool CanSupportMoreTasks()
       {
+         if ( Model.NoTasksStarted )
+         {
+            return true;
+         }
+
          var currentTotalCpuUsage = TotalCpuMonitor.GetCurrentCpuUsage();
          var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
 
@@ -100,23 +136,36 @@ namespace Encoder.Encoding
             return;
          }
 
-         if ( task.Initialized || task.Initialize() )
+         if ( task.CancelToken.IsCancellationRequested )
          {
-            var encoder = new FfmpegEncoder( task );
-            encoder.StartEncoding( task.CancelToken.Token );
-
-            encoder.AwaitCompletion();
-
-            task.Finished = !task.CancelToken.IsCancellationRequested;
-
-            if ( !task.Finished )
-            {
-               UtilityMethods.SafeDeleteFile( task.TargetFile );
-            }
+            CleanupTask( task );
+            return;
          }
 
-         task.Dispose();
-         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) ); 
+         var encoder = new FfmpegEncoder( task );
+         encoder.StartEncoding( task.CancelToken.Token );
+
+         encoder.AwaitCompletion();
+
+         task.Finished = !task.CancelToken.IsCancellationRequested;
+
+         if ( !task.Finished )
+         {
+            Task.Delay( 300 );
+            UtilityMethods.SafeDeleteFile( task.TargetFile );
+         }
+
+         CleanupTask( task );
+      }
+
+      public void CancelTask( EncodingTaskViewModel task )
+      {
+         task.CancelToken.Cancel();
+
+         if ( !task.Started )
+         {
+            CleanupTask( task );
+         }
       }
    }
 }

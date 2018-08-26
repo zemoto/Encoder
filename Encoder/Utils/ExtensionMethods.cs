@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +14,7 @@ namespace Encoder.Utils
          ChildProcessWatcher.AddProcess( process );
       }
 
-      public static void ForEach<T>( this ObservableCollection<T> collection, Action<T> action )
+      public static void ForEach<T>( this IEnumerable<T> collection, Action<T> action )
       {
          collection.ToList().ForEach( action );
       }

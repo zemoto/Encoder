@@ -48,12 +48,9 @@ namespace Encoder.Encoding
          
          OnPropertyChanged( null );
 
-         Initialized = true;
-
          return true;
       }
 
-      public bool Initialized { get; private set; }
       public string FilterName => ShouldApplyFilter() ? _filter.FilterName : "None";
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
@@ -112,8 +109,5 @@ namespace Encoder.Encoding
          get => _started;
          set => SetProperty( ref _started, value );
       }
-
-      private RelayCommand _cancelTaskCommand;
-      public RelayCommand CancelTaskCommand => _cancelTaskCommand ?? ( _cancelTaskCommand = new RelayCommand( CancelToken.Cancel ) );
    }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Encoder.Encoding;
@@ -20,7 +19,8 @@ namespace Encoder
 
          _model = new MainWindowViewModel( _encodingManager.Model )
          {
-            NewTasksCommand = new RelayCommand( CreateAndStartNewTasks )
+            NewTasksCommand = new RelayCommand( CreateAndStartNewTasks ),
+            CancelTaskCommand = new RelayCommand<EncodingTaskViewModel>( _encodingManager.CancelTask )
          };
       }
 
@@ -53,7 +53,7 @@ namespace Encoder
             e.Cancel = true;
             foreach ( var task in _encodingManager.Model.Tasks )
             {
-               task.CancelTaskCommand.Execute( null );
+               task.CancelToken.Cancel();
             }
             while ( _encodingManager.Model.AnyTasksPending )
             {
@@ -63,15 +63,12 @@ namespace Encoder
          }
       }
 
-      private void CreateAndStartNewTasks()
+      private async void CreateAndStartNewTasks()
       {
          var taskWizard = new TaskCreationWizard();
          var tasks = taskWizard.CreateEncodingTasks();
 
-         foreach ( var task in tasks )
-         {
-            _encodingManager.Model.Tasks.Add( task );
-         }
+         await _encodingManager.EnqueueTasksAsync( tasks );
       }
    }
 }

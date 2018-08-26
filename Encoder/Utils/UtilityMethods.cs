@@ -8,7 +8,11 @@ namespace Encoder.Utils
       {
          if ( File.Exists( filePath ) )
          {
-            File.Delete( filePath );
+            try
+            {
+               File.Delete( filePath );
+            }
+            catch { }
          }
       }
    }

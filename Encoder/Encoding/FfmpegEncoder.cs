@@ -62,7 +62,7 @@ namespace Encoder.Encoding
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( !_encodingTask.Started || _encodingTask.Finished )
+         if ( !_encodingTask.Started || _encodingTask.CancelToken.IsCancellationRequested || _encodingTask.Finished || _cpuUsageMonitor == null )
          {
             return;
          }
@@ -76,7 +76,7 @@ namespace Encoder.Encoding
                _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
             }
          }
-         
+
          _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
       }
 

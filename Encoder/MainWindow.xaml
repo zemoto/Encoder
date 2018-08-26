@@ -86,7 +86,8 @@
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
                         <Button Content="X"
-                                Command="{Binding CancelTaskCommand}" />
+                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"
+                                CommandParameter="{Binding}"/>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>

@@ -13,5 +13,6 @@ namespace Encoder
       public EncodingManagerViewModel EncodingVm { get; }
 
       public RelayCommand NewTasksCommand { get; set; }
+      public RelayCommand<EncodingTaskViewModel> CancelTaskCommand { get; set; }
    }
 }
