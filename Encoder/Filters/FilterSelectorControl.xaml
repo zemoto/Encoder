@@ -7,20 +7,12 @@
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:utils="clr-namespace:Encoder.Utils"
              xmlns:filters="clr-namespace:Encoder.Filters"
-             xmlns:interpolate="clr-namespace:Encoder.Filters.Video.Interpolate"
-             xmlns:amplify="clr-namespace:Encoder.Filters.Video.Amplify"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
 
    <UserControl.Resources>
 
-      <DataTemplate DataType="{x:Type amplify:AmplifyFilterViewModel}">
-         <amplify:AmplifyFilterControl />
-      </DataTemplate>
-
-      <DataTemplate DataType="{x:Type interpolate:InterpolateFilterViewModel}">
-         <interpolate:InterpolateFilterControl />
-      </DataTemplate>
+      <filters:FilterDataTemplateSelector x:Key="FilterDataTemplateSelector" />
       
    </UserControl.Resources>
 
@@ -46,6 +38,7 @@
       
       <ContentPresenter Grid.Row="1" 
                         Margin="0,8,0,0"
+                        ContentTemplateSelector="{StaticResource FilterDataTemplateSelector}"
                         Content="{Binding Filter.ViewModel}" />
    </Grid>
 </UserControl>

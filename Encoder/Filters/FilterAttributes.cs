@@ -6,10 +6,12 @@ namespace Encoder.Filters
    internal sealed class FilterAttribute : Attribute
    {
       public string FilterName { get; }
+      public Type ControlType { get; }
 
-      public FilterAttribute( string filterName )
+      public FilterAttribute( string filterName, Type controlType )
       {
          FilterName = filterName;
+         ControlType = controlType;
       }
    }
 

@@ -62,6 +62,7 @@
     <Compile Include="Encoding\FfmpegEncoder.cs" />
     <Compile Include="Encoding\EncodingTaskViewModel.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
+    <Compile Include="Filters\FilterDataTemplateSelector.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterArgumentBuilder.cs" />
