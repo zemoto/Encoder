@@ -42,13 +42,26 @@ namespace Encoder.Encoding
 
          _sourceFrameRate = sourceFrameRate;
          _sourceDuration = sourceDuration;
-         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), Path.GetFileNameWithoutExtension( SourceFile ) + $"_done.mp4" );
+         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
 
          _filter?.Initialize( sourceFrameRate, sourceDuration );
          
          OnPropertyChanged( null );
 
          return true;
+      }
+
+      private void UpdateTimeRemaining()
+      {
+         if ( !Started || HasNoDurationData || FramesDone == 0 )
+         {
+            return;
+         }
+
+         var ellapsed = DateTime.Now - _startTime;
+         _timeRemaining = TimeSpan.FromSeconds( ellapsed.TotalSeconds / FramesDone * ( TargetTotalFrames - FramesDone ) );
+
+         OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
       public string FilterName => ShouldApplyFilter() ? _filter.FilterName : "None";
@@ -59,6 +72,10 @@ namespace Encoder.Encoding
       public string TargetFile { get; private set; }
 
       public int TargetTotalFrames => ShouldApplyFilter() ? _filter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
+
+      private DateTime _startTime;
+      private TimeSpan _timeRemaining = TimeSpan.Zero;
+      public string TimeRemainingString => _timeRemaining == TimeSpan.Zero ? "N/A" : _timeRemaining.ToString( @"hh\:mm\:ss" );
 
       private int _cpuUsage;
       public int CpuUsage
@@ -78,6 +95,7 @@ namespace Encoder.Encoding
                if ( TargetTotalFrames != 0 )
                {
                   Progress = Math.Round( value / (double)TargetTotalFrames * 100, 2 );
+                  UpdateTimeRemaining();
                }
             }
          }
@@ -112,7 +130,13 @@ namespace Encoder.Encoding
       public bool Started
       {
          get => _started;
-         set => SetProperty( ref _started, value );
+         set
+         {
+            if ( SetProperty( ref _started, value ) && value )
+            {
+               _startTime = DateTime.Now;
+            }
+         }
       }
    }
 }

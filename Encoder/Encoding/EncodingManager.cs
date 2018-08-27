@@ -13,15 +13,10 @@ namespace Encoder.Encoding
    {
       public EncodingManagerViewModel Model { get; } = new EncodingManagerViewModel();
 
-      private DateTime _startTime = DateTime.MinValue;
-      private readonly Timer _refreshTimer;
       private readonly Timer _taskStartTimer;
 
       public EncodingManager()
       {
-         _refreshTimer = new Timer( 3000 );
-         _refreshTimer.Elapsed += OnRefreshTimerTick;
-
          _taskStartTimer = new Timer( 30000 );
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
@@ -41,11 +36,9 @@ namespace Encoder.Encoding
 
          if ( Model.NoTasksStarted )
          {
-            _startTime = DateTime.Now;
             StartNextTask();
          }
 
-         _refreshTimer.Start();
          _taskStartTimer.Start();
       }
 
@@ -58,10 +51,7 @@ namespace Encoder.Encoding
 
          if ( !Model.AnyTasksPending )
          {
-            _refreshTimer.Stop();
             _taskStartTimer.Stop();
-
-            Model.UpdateState( TimeSpan.Zero );
          }
 
          if ( taskWasStarted )
@@ -72,23 +62,7 @@ namespace Encoder.Encoding
 
       public void Dispose()
       {
-         _refreshTimer.Dispose();
          _taskStartTimer.Dispose();
-      }
-
-      private void OnRefreshTimerTick( object sender, ElapsedEventArgs e )
-      {
-         var totalFrames = Model.Tasks.Select( x => x.TargetTotalFrames ).Aggregate( (x,y) => x += y );
-         var finishedFrames = Model.Tasks.Select( x => x.FramesDone ).Aggregate( (x,y) => x += y );
-
-         var timeRemaining = TimeSpan.Zero;
-         if ( finishedFrames > 0 )
-         {
-            var ellapsed = DateTime.Now - _startTime;
-            timeRemaining = TimeSpan.FromSeconds( ( ellapsed.TotalSeconds / finishedFrames ) * ( totalFrames - finishedFrames ) );
-         }
-
-         Model.UpdateState( timeRemaining );
       }
 
       private void OnTaskStartTimerTick( object sender, ElapsedEventArgs e )

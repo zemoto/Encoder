@@ -56,7 +56,11 @@
                                    MinWidth="100" />
                
                <DataGridTextColumn Header="CPU Usage"
-                                   Binding="{Binding CpuUsage, Mode=OneWay}"
+                                   Binding="{Binding CpuUsage, Mode=OneWay, StringFormat={}{0}%}"
+                                   IsReadOnly="True" />
+               
+               <DataGridTextColumn Header="Time Remaining"
+                                   Binding="{Binding TimeRemainingString, Mode=OneWay}"
                                    IsReadOnly="True" />
 
                <DataGridTemplateColumn Header="Progress"
@@ -90,7 +94,7 @@
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
                         <Button Content="X"
-                                Height="20"
+                                Height="18"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"
                                 CommandParameter="{Binding}"/>
                      </DataTemplate>
