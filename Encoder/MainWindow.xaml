@@ -29,7 +29,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Button Grid.Row="0"
@@ -44,7 +43,8 @@
                    ItemsSource="{Binding EncodingVm.Tasks}"
                    Margin="0,8"
                    AutoGenerateColumns="False"
-                   HeadersVisibility="Column">
+                   HeadersVisibility="Column"
+                   RowHeight="20">
             <DataGrid.Columns>
                <DataGridTextColumn Header="File"
                                    Binding="{Binding FileName, Mode=OneWay}"
@@ -54,6 +54,10 @@
                                    Binding="{Binding FilterName, Mode=OneWay}"
                                    IsReadOnly="True"
                                    MinWidth="100" />
+               
+               <DataGridTextColumn Header="CPU Usage"
+                                   Binding="{Binding CpuUsage, Mode=OneWay}"
+                                   IsReadOnly="True" />
 
                <DataGridTemplateColumn Header="Progress"
                                        Width="100">
@@ -86,6 +90,7 @@
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
                         <Button Content="X"
+                                Height="20"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"
                                 CommandParameter="{Binding}"/>
                      </DataTemplate>
@@ -96,9 +101,6 @@
          </DataGrid>
          
          <TextBlock Grid.Row="2" 
-                    Text="{Binding EncodingVm.CpuUsage, Mode=OneWay, StringFormat='CPU Usage: {0}%'}" /> 
- 
-         <TextBlock Grid.Row="3" 
                     Text="{Binding EncodingVm.TimeRemainingString, Mode=OneWay, StringFormat='Time Remaining: {0}'}" /> 
 
       </Grid>

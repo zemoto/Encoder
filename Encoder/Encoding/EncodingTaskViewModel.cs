@@ -60,7 +60,12 @@ namespace Encoder.Encoding
 
       public int TargetTotalFrames => ShouldApplyFilter() ? _filter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
 
-      public int CpuUsage { get; set; }
+      private int _cpuUsage;
+      public int CpuUsage
+      {
+         get => _cpuUsage;
+         set => SetProperty( ref _cpuUsage, value );
+      }
 
       private int _framesDone;
       public int FramesDone

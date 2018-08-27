@@ -113,6 +113,11 @@ namespace Encoder.Encoding
 
       private bool CanSupportMoreTasks()
       {
+         if ( !Model.AnyTasksPending )
+         {
+            return false;
+         }
+
          if ( Model.NoTasksStarted )
          {
             return true;

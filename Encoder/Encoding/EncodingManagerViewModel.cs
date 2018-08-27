@@ -10,7 +10,6 @@ namespace Encoder.Encoding
       public void UpdateState( TimeSpan timeRemaining )
       {
          SetProperty( ref _timeRemaining, timeRemaining, nameof( TimeRemainingString ) );
-         OnPropertyChanged( nameof( CpuUsage ) );
       }
 
       public ObservableCollection<EncodingTaskViewModel> Tasks { get; } = new ObservableCollection<EncodingTaskViewModel>();
@@ -32,7 +31,5 @@ namespace Encoder.Encoding
             return _timeRemaining.ToString( @"hh\:mm\:ss" );
          }
       }
-
-      public int CpuUsage => Tasks.Any() ? Tasks.Select( x => x.CpuUsage ).Aggregate( ( x, y ) => x += y ) : 0;
    }
 }
