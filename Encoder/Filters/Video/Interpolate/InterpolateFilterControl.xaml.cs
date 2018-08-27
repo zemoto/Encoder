@@ -1,4 +1,4 @@
-﻿namespace Encoder.Filters.Interpolate
+﻿namespace Encoder.Filters.Video.Interpolate
 {
    internal partial class InterpolateFilterControl
    {

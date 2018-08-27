@@ -1,5 +1,6 @@
 ﻿using System;
-using Encoder.Filters.Interpolate;
+using Encoder.Filters.Video.Amplify;
+using Encoder.Filters.Video.Interpolate;
 
 namespace Encoder.Filters
 {
@@ -8,17 +9,17 @@ namespace Encoder.Filters
       protected double SourceFrameRate { get; private set; }
       protected TimeSpan SourceDuration { get; private set; }
 
+      public abstract FilterViewModel ViewModel { get; }
+      public abstract string FilterName { get; }
+
       public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
       {
          SourceFrameRate = sourceFrameRate;
          SourceDuration = sourceDuration;
       }
 
-      public abstract bool ShouldApplyFilter();
-      public abstract int GetTargetFrameCount();
-
-      public abstract FilterViewModel ViewModel { get; }
-      public abstract string FilterName { get; }
+      public virtual bool ShouldApplyFilter() => true;
+      public virtual int GetTargetFrameCount() => (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
    }
 
    internal static class FilterProvider
@@ -27,6 +28,8 @@ namespace Encoder.Filters
       {
          switch ( type )
          {
+            case FilterType.Amplify:
+               return new AmplifyFilter();
             case FilterType.Interpolate:
                return new InterpolateFilter();
             default:

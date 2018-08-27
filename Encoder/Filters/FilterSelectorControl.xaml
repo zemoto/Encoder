@@ -4,14 +4,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:taskCreation1="clr-namespace:Encoder.TaskCreation"
-             xmlns:interpolate="clr-namespace:Encoder.Filters.Interpolate"
+             xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:utils="clr-namespace:Encoder.Utils"
              xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:interpolate="clr-namespace:Encoder.Filters.Video.Interpolate"
+             xmlns:amplify="clr-namespace:Encoder.Filters.Video.Amplify"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type={x:Type taskCreation1:TaskCreationViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
 
    <UserControl.Resources>
+
+      <DataTemplate DataType="{x:Type amplify:AmplifyFilterViewModel}">
+         <amplify:AmplifyFilterControl />
+      </DataTemplate>
 
       <DataTemplate DataType="{x:Type interpolate:InterpolateFilterViewModel}">
          <interpolate:InterpolateFilterControl />

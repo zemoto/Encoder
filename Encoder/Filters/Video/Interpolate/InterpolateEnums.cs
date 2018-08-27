@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Encoder.Filters.Interpolate
+namespace Encoder.Filters.Video.Interpolate
 {
    internal enum InterpolationMode
    {

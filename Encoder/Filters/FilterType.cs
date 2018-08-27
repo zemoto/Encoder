@@ -3,6 +3,7 @@
    internal enum FilterType
    {
       None,
+      Amplify,
       Interpolate
    }
 }

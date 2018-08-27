@@ -1,4 +1,4 @@
-﻿namespace Encoder.Filters.Interpolate
+﻿namespace Encoder.Filters.Video.Interpolate
 {
    [Filter( "minterpolate" )]
    internal sealed class InterpolateFilterViewModel : FilterViewModel

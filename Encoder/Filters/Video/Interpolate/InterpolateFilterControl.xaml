@@ -1,17 +1,17 @@
-﻿<UserControl x:Class="Encoder.Filters.Interpolate.InterpolateFilterControl"
+﻿<UserControl x:Class="Encoder.Filters.Video.Interpolate.InterpolateFilterControl"
              x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Encoder.Filters.Interpolate"
              xmlns:filters="clr-namespace:Encoder.Filters"
              xmlns:utils="clr-namespace:Encoder.Utils"
+             xmlns:local="clr-namespace:Encoder.Filters.Video.Interpolate"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
 
    <UserControl.Resources>
-      <ResourceDictionary Source="../FilterPropertyDictionary.xaml" />
+      <ResourceDictionary Source="../../FilterPropertyDictionary.xaml" />
    </UserControl.Resources>
 
    <Grid>

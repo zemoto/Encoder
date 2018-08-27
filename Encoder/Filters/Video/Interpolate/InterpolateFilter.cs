@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Encoder.Filters.Interpolate
+namespace Encoder.Filters.Video.Interpolate
 {
    internal sealed class InterpolateFilter : Filter
    {
