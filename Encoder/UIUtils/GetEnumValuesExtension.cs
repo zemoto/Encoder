@@ -3,8 +3,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using Encoder.Utils;
 
-namespace Encoder.Utils
+namespace Encoder.UIUtils
 {
    internal sealed class BoundEnumMember
    {

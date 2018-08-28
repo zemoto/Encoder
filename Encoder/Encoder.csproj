@@ -56,7 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters.cs" />
+    <Compile Include="UIUtils\Converters.cs" />
     <Compile Include="Encoding\EncodingManager.cs" />
     <Compile Include="Encoding\EncodingManagerViewModel.cs" />
     <Compile Include="Encoding\FfmpegEncoder.cs" />
@@ -96,8 +96,8 @@
     </Compile>
     <Compile Include="TaskCreation\TaskCreationWizard.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Utils\GetEnumValuesExtension.cs" />
-    <Compile Include="Utils\MinMaxValidationRule.cs" />
+    <Compile Include="UIUtils\GetEnumValuesExtension.cs" />
+    <Compile Include="UIUtils\MinMaxValidationRule.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Utils\ChildProcessWatcher.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />

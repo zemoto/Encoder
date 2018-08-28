@@ -5,8 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:filters="clr-namespace:Encoder.Filters"
-             xmlns:utils="clr-namespace:Encoder.Utils"
              xmlns:local="clr-namespace:Encoder.Filters.Video.Interpolate"
+             xmlns:uiUtils="clr-namespace:Encoder.UIUtils"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
 
@@ -30,7 +30,7 @@
 
       <filters:FilterPropertyControl Grid.Row="1"
                                      Label="Scene Change Algorithm:">
-         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:SceneChangeDetectionAlgorithm}}"
+         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type local:SceneChangeDetectionAlgorithm}}"
                    SelectedValue="{Binding SceneChangeDetectionAlgorithm}" />
       </filters:FilterPropertyControl>
 
@@ -48,7 +48,7 @@
 
       <filters:FilterPropertyControl Grid.Row="3"
                                      Label="Interpolation Mode:">
-         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:InterpolationMode}}"
+         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type local:InterpolationMode}}"
                    SelectedValue="{Binding InterpolationMode}" />
       </filters:FilterPropertyControl>
 
@@ -72,19 +72,19 @@
 
          <filters:FilterPropertyControl Grid.Row="0"
                                         Label="Motion Compensation:">
-            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionCompensationMode}}"
+            <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type local:MotionCompensationMode}}"
                       SelectedValue="{Binding MotionCompensationMode}" />
          </filters:FilterPropertyControl>
 
          <filters:FilterPropertyControl Grid.Row="1"
                                         Label="Motion Estimation:">
-            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationMode}}"
+            <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type local:MotionEstimationMode}}"
                       SelectedValue="{Binding MotionEstimationMode}" />
          </filters:FilterPropertyControl>
 
          <filters:FilterPropertyControl Grid.Row="2"
                                         Label="Estimation Algorithm:">
-            <ComboBox ItemsSource="{utils:GetEnumValues {x:Type local:MotionEstimationAlgorithm}}"
+            <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type local:MotionEstimationAlgorithm}}"
                       SelectedValue="{Binding MotionEstimationAlgorithm}" />
          </filters:FilterPropertyControl>
 

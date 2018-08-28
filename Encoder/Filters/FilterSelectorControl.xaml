@@ -5,8 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
-             xmlns:utils="clr-namespace:Encoder.Utils"
              xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:uiUtils="clr-namespace:Encoder.UIUtils"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
 
@@ -29,7 +29,7 @@
                     Margin="0,0,8,0"
                     VerticalAlignment="Center" />
 
-         <ComboBox ItemsSource="{utils:GetEnumValues {x:Type filters:FilterType}}"
+         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type filters:FilterType}}"
                    SelectedValue="{Binding SelectedFilter}"
                    Width="100"
                    Height="24" />

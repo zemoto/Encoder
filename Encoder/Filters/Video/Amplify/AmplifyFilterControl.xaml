@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:filters="clr-namespace:Encoder.Filters"
              xmlns:local="clr-namespace:Encoder.Filters.Video.Amplify"
-             xmlns:utils="clr-namespace:Encoder.Utils"
+             xmlns:uiUtils="clr-namespace:Encoder.UIUtils"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:AmplifyFilterViewModel}}">
 
@@ -21,27 +21,27 @@
 
       <filters:FilterPropertyControl Grid.Row="0"
                                      Label="Frame Radius:">
-         <TextBox Text="{utils:IntMinMaxBinding Radius, 1, 63}" />
+         <TextBox Text="{uiUtils:IntMinMaxBinding Radius, 1, 63}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="1"
                                      Label="Amplify Factor:">
-         <TextBox Text="{utils:IntMinMaxBinding Factor, 0, 65535}" />
+         <TextBox Text="{uiUtils:IntMinMaxBinding Factor, 0, 65535}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="2"
                                      Label="Difference Threshold:">
-         <TextBox Text="{utils:IntMinMaxBinding Threshold, 0, 65535}" />
+         <TextBox Text="{uiUtils:IntMinMaxBinding Threshold, 0, 65535}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="3"
                                      Label="Pixel Change Lower Limit:">
-         <TextBox Text="{utils:IntMinMaxBinding Low, 0, 65535}" />
+         <TextBox Text="{uiUtils:IntMinMaxBinding Low, 0, 65535}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="4"
                                      Label="Pixel Change Upper Limit:">
-         <TextBox Text="{utils:IntMinMaxBinding High, 0, 65535}" />
+         <TextBox Text="{uiUtils:IntMinMaxBinding High, 0, 65535}" />
       </filters:FilterPropertyControl>
 
    </Grid>

@@ -1,10 +1,8 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
-using static System.Double;
-using static System.Int32;
 
-namespace Encoder.Utils
+namespace Encoder.UIUtils
 {
    internal sealed class IntMinMaxBinding : Binding
    {
@@ -23,7 +21,7 @@ namespace Encoder.Utils
          {
             var text = ((string)value).Trim();
 
-            bool validValue = TryParse( text, out int intValue ) && intValue >= _min && intValue <= _max;
+            bool validValue = int.TryParse( text, out int intValue ) && intValue >= _min && intValue <= _max;
 
             return validValue ? new ValidationResult( true, null ) : new ValidationResult( false, $"Value must be an integer between {_min} and {_max}" );
          }
@@ -53,7 +51,7 @@ namespace Encoder.Utils
          {
             var text = ((string)value).Trim();
 
-            var validValue = TryParse( text, out double doubleValue ) && doubleValue >= _min && doubleValue <= _max;
+            var validValue = double.TryParse( text, out double doubleValue ) && doubleValue >= _min && doubleValue <= _max;
 
             return validValue ? new ValidationResult( true, null ) : new ValidationResult( false, $"Value must be between {_min} and {_max}" );
          }
