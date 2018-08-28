@@ -15,7 +15,7 @@ namespace Encoder.Utils
 
       static ChildProcessWatcher()
       {
-         Handle = CreateJobObject( IntPtr.Zero, $"InterpolatorChildProcessTracker{Process.GetCurrentProcess().Id}" );
+         Handle = CreateJobObject( IntPtr.Zero, $"EncoderChildProcessTracker{Process.GetCurrentProcess().Id}" );
 
          var info = new JOBOBJECT_BASIC_LIMIT_INFORMATION
          {
