@@ -79,6 +79,11 @@
     <Compile Include="Filters\Video\Amplify\AmplifyFilterControl.xaml.cs">
       <DependentUpon>AmplifyFilterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Filters\Video\Denoise\DenoiseFilter.cs" />
+    <Compile Include="Filters\Video\Denoise\DenoiseFilterControl.xaml.cs">
+      <DependentUpon>DenoiseFilterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Video\Denoise\DenoiseFilterViewModel.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateEnums.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateFilter.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateFilterControl.xaml.cs">
@@ -111,6 +116,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Filters\Video\Amplify\AmplifyFilterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\Video\Denoise\DenoiseFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

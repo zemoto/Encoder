@@ -11,5 +11,11 @@ namespace Encoder.Filters
          newValue = Math.Min( max, Math.Max( min, newValue ) );
          return SetProperty( ref property, newValue, propertyName );
       }
+
+      protected bool SetClampedProperty( ref double property, double newValue, double min, double max, [CallerMemberName] string propertyName = null )
+      {
+         newValue = Math.Min( max, Math.Max( min, newValue ) );
+         return SetProperty( ref property, newValue, propertyName );
+      }
    }
 }

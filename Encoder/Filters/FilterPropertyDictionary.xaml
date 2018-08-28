@@ -44,7 +44,7 @@
       <Setter Property="Width"
               Value="45" />
       <Setter Property="Height"
-              Value="20" />
+              Value="24" />
    </Style>
 
 </ResourceDictionary>

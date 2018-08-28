@@ -6,6 +6,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:filters="clr-namespace:Encoder.Filters"
              mc:Ignorable="d">
+   
+   <UserControl.Resources>
+      <ResourceDictionary Source="FilterPropertyDictionary.xaml" />
+   </UserControl.Resources>
+
    <UserControl.Template>
       <ControlTemplate TargetType="{x:Type filters:FilterPropertyControl}">
          <Grid>

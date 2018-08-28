@@ -9,10 +9,6 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:AmplifyFilterViewModel}}">
 
-   <UserControl.Resources>
-      <ResourceDictionary Source="../../FilterPropertyDictionary.xaml" />
-   </UserControl.Resources>
-
    <Grid>
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto" />
@@ -23,27 +19,27 @@
       </Grid.RowDefinitions>
 
       <filters:FilterPropertyControl Grid.Row="0"
-                                     Label="Radius:">
+                                     Label="Frame Radius:">
          <TextBox Text="{Binding Radius}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="1"
-                                     Label="Factor:">
+                                     Label="Amplify Factor:">
          <TextBox Text="{Binding Factor}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="2"
-                                     Label="Threshold:">
+                                     Label="Difference Threshold:">
          <TextBox Text="{Binding Threshold}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="3"
-                                     Label="Low:">
+                                     Label="Pixel Change Lower Limit:">
          <TextBox Text="{Binding Low}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="4"
-                                     Label="High:">
+                                     Label="Pixel Change Upper Limit:">
          <TextBox Text="{Binding High}" />
       </filters:FilterPropertyControl>
 
