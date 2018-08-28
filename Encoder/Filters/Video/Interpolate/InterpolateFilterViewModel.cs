@@ -75,9 +75,9 @@
          set => SetProperty( ref _sceneChangeDetectionAlgorithm, value );
       }
 
-      private float _sceneChangeThreshold = 5.0f;
+      private double _sceneChangeThreshold = 5.0;
       [FilterParameterName( "scd_threshold" )]
-      public float SceneChangeThreshold
+      public double SceneChangeThreshold
       {
          get => _sceneChangeThreshold;
          set => SetProperty( ref _sceneChangeThreshold, value );

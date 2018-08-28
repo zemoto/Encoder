@@ -8,7 +8,7 @@
       public int Radius
       {
          get => _radius;
-         set => SetClampedProperty( ref _radius, value, 1, 63 );
+         set => SetProperty( ref _radius, value );
       }
 
       private int _factor = 2;
@@ -16,7 +16,7 @@
       public int Factor
       {
          get => _factor;
-         set => SetClampedProperty( ref _factor, value, 0, 65535 );
+         set => SetProperty( ref _factor, value );
       }
 
       private int _threshold = 10;
@@ -24,7 +24,7 @@
       public int Threshold
       {
          get => _threshold;
-         set => SetClampedProperty( ref _threshold, value, 0, 65525 );
+         set => SetProperty( ref _threshold, value );
       }
 
       private int _low = 65535;
@@ -32,7 +32,7 @@
       public int Low
       {
          get => _low;
-         set => SetClampedProperty( ref _low, value, 0, 65535 );
+         set => SetProperty( ref _low, value );
       }
 
       private int _high = 65535;
@@ -40,7 +40,7 @@
       public int High
       {
          get => _high;
-         set => SetClampedProperty( ref _high, value, 0, 65535 );
+         set => SetProperty( ref _high, value );
       }
    }
 }

@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:filters="clr-namespace:Encoder.Filters"
              xmlns:local="clr-namespace:Encoder.Filters.Video.Denoise"
+             xmlns:utils="clr-namespace:Encoder.Utils"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type local:DenoiseFilterViewModel}}">
 
@@ -28,37 +29,37 @@
 
       <filters:FilterPropertyControl Grid.Row="1"
                                      Label="Threshold 0A:">
-         <TextBox Text="{Binding ZeroA}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding ZeroA, 0, 0.3}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="2"
                                      Label="Threshold 0B:">
-         <TextBox Text="{Binding ZeroB}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding ZeroB, 0, 5}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="3"
                                      Label="Threshold 1A:">
-         <TextBox Text="{Binding OneA}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding OneA, 0, 0.3}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="4"
                                      Label="Threshold 1B:">
-         <TextBox Text="{Binding OneB}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding OneB, 0, 5}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="5"
                                      Label="Threshold 2A:">
-         <TextBox Text="{Binding TwoA}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding TwoA, 0, 0.3}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="6"
                                      Label="Threshold 2B:">
-         <TextBox Text="{Binding TwoB}" />
+         <TextBox Text="{utils:DoubleMinMaxBinding TwoB, 0, 5}" />
       </filters:FilterPropertyControl>
       
       <filters:FilterPropertyControl Grid.Row="7"
                                      Label="Frames to Average:">
-         <TextBox Text="{Binding FramesToAverage}" />
+         <TextBox Text="{utils:IntMinMaxBinding FramesToAverage, 5, 129}" />
       </filters:FilterPropertyControl>
 
    </Grid>
