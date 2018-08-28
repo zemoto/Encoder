@@ -9,8 +9,10 @@ namespace Encoder
          ChildProcessWatcher.Initialize();
          TotalCpuMonitor.Initialize();
 
-         var main = new Main();
-         main.ShowDialog();
+         using ( var main = new Main() )
+         {
+            main.ShowDialog();
+         }
       }
    }
 }
