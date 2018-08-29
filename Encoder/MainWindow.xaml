@@ -32,14 +32,17 @@
             <RowDefinition Height="*" />
          </Grid.RowDefinitions>
 
-         <taskCreation:TaskCreationControl Grid.Row="0" 
-                                           DataContext="{Binding TaskCreationVm}"
-                                           HorizontalAlignment="Center"
-                                           Margin="8" />
-
+         <Border Grid.Row="0" 
+                 HorizontalAlignment="Center"
+                 Margin="8"
+                 Padding="2"
+                 BorderThickness="1"
+                 BorderBrush="LightGray">
+            <taskCreation:TaskCreationControl DataContext="{Binding TaskCreationVm}" />
+         </Border>
+         
          <DataGrid Grid.Row="1"
                    ItemsSource="{Binding EncodingVm.Tasks}"
-                   Margin="0,8"
                    AutoGenerateColumns="False"
                    HeadersVisibility="Column"
                    RowHeight="20">
