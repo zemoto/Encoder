@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Encoder.Encoding;
 using Encoder.Filters;
 using Encoder.Utils;
 
@@ -7,6 +10,15 @@ namespace Encoder.TaskCreation
    internal sealed class TaskCreationViewModel : ViewModelBase
    {
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
+
+      public IEnumerable<EncodingTaskViewModel> GetTasks()
+      {
+         var files = SelectedFiles.ToList();
+         var tasks = files.Select( x => new EncodingTaskViewModel( x, Filter ) );
+         SelectedFiles.Clear();
+
+         return tasks;
+      }
 
       private FilterType _selectedFilter = FilterType.None;
       public FilterType SelectedFilter

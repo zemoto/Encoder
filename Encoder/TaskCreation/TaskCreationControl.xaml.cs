@@ -1,8 +1,8 @@
 ﻿namespace Encoder.TaskCreation
 {
-   internal partial class TaskCreationWindow
+   internal partial class TaskCreationControl
    {
-      public TaskCreationWindow()
+      public TaskCreationControl()
       {
          InitializeComponent();
       }

@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Encoder"
         xmlns:encoding="clr-namespace:Encoder.Encoding"
+        xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         mc:Ignorable="d"
         x:Name="Root"
         WindowStyle="ToolWindow"
@@ -14,6 +15,7 @@
         SizeToContent="WidthAndHeight"
         Title="Interpolator"
         MinWidth="360"
+        Width="500"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
    <Window.Resources>
       <ResourceDictionary>
@@ -30,13 +32,10 @@
             <RowDefinition Height="*" />
          </Grid.RowDefinitions>
 
-         <Button Grid.Row="0"
-                 Height="24"
-                 Width="80"
-                 HorizontalAlignment="Center"
-                 Margin="8"
-                 Content="Create Tasks"
-                 Command="{Binding NewTasksCommand}" />
+         <taskCreation:TaskCreationControl Grid.Row="0" 
+                                           DataContext="{Binding TaskCreationVm}"
+                                           HorizontalAlignment="Center"
+                                           Margin="8" />
 
          <DataGrid Grid.Row="1"
                    ItemsSource="{Binding EncodingVm.Tasks}"

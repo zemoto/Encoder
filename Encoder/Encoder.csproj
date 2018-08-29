@@ -91,10 +91,9 @@
     </Compile>
     <Compile Include="Filters\Video\Interpolate\InterpolateFilterViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
-    <Compile Include="TaskCreation\TaskCreationWindow.xaml.cs">
-      <DependentUpon>TaskCreationWindow.xaml</DependentUpon>
+    <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
+      <DependentUpon>TaskCreationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskCreation\TaskCreationWizard.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="UIUtils\GetEnumValuesExtension.cs" />
     <Compile Include="UIUtils\MinMaxValidationRule.cs" />
@@ -128,7 +127,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaskCreation\TaskCreationWindow.xaml">
+    <Page Include="TaskCreation\TaskCreationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Encoder.Encoding;
 using Encoder.TaskCreation;
 using Encoder.Utils;
+using Microsoft.Win32;
 
 namespace Encoder
 {
@@ -17,9 +19,16 @@ namespace Encoder
       {
          _encodingManager = new EncodingManager();
 
-         _model = new MainWindowViewModel( _encodingManager.Model )
+         var taskCreationModel = new TaskCreationViewModel
          {
-            NewTasksCommand = new RelayCommand( CreateAndStartNewTasks ),
+            SelectFilesCommand = new RelayCommand( SelectFiles )
+         };
+
+         taskCreationModel.RemoveFileCommand = new RelayCommand<string>( file => taskCreationModel.SelectedFiles.Remove( file ) );
+         taskCreationModel.CreateTasksCommand = new RelayCommand( CreateAndStartNewTasks, taskCreationModel.SelectedFiles.Any );
+
+         _model = new MainWindowViewModel( _encodingManager.Model, taskCreationModel )
+         {
             CancelTaskCommand = new RelayCommand<EncodingTaskViewModel>( _encodingManager.CancelTask )
          };
       }
@@ -65,10 +74,29 @@ namespace Encoder
 
       private async void CreateAndStartNewTasks()
       {
-         var taskWizard = new TaskCreationWizard();
-         var tasks = taskWizard.CreateEncodingTasks();
+         var tasks = _model.TaskCreationVm.GetTasks();
 
          await _encodingManager.EnqueueTasksAsync( tasks );
+      }
+
+      private void SelectFiles()
+      {
+         var dlg = new OpenFileDialog
+         {
+            Filter = "Video Files (*.mp4;*.wmv;*.webm;*.swf;*.mkv)|*.mp4;*.wmv;*.webm;*.swf;*.mkv|All files (*.*)|*.*",
+            Multiselect = true
+         };
+
+         if ( dlg.ShowDialog( Application.Current.MainWindow ) == true )
+         {
+            foreach( var file in dlg.FileNames )
+            {
+               if ( !_model.TaskCreationVm.SelectedFiles.Contains( file ) )
+               {
+                  _model.TaskCreationVm.SelectedFiles.Add( file );
+               }
+            }
+         }
       }
    }
 }
