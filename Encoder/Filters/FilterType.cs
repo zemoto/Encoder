@@ -4,6 +4,7 @@
    {
       None,
       Amplify,
+      Blur,
       Denoise,
       Interpolate
    }

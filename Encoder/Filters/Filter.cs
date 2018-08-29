@@ -1,5 +1,6 @@
 ﻿using System;
 using Encoder.Filters.Video.Amplify;
+using Encoder.Filters.Video.Blur;
 using Encoder.Filters.Video.Denoise;
 using Encoder.Filters.Video.Interpolate;
 
@@ -31,6 +32,8 @@ namespace Encoder.Filters
          {
             case FilterType.Amplify:
                return new AmplifyFilter();
+            case FilterType.Blur:
+               return new BlurFilter();
             case FilterType.Denoise:
                return new DenoiseFilter();
             case FilterType.Interpolate:

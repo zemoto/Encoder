@@ -56,6 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Filters\Video\Blur\BlurFilter.cs" />
+    <Compile Include="Filters\Video\Blur\BlurFilterControl.xaml.cs">
+      <DependentUpon>BlurFilterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Video\Blur\BlurFilterViewModel.cs" />
     <Compile Include="UIUtils\Converters.cs" />
     <Compile Include="Encoding\EncodingManager.cs" />
     <Compile Include="Encoding\EncodingManagerViewModel.cs" />
@@ -116,6 +121,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Filters\Video\Amplify\AmplifyFilterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\Video\Blur\BlurFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
