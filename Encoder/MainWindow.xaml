@@ -28,7 +28,6 @@
          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Button Grid.Row="0"
@@ -103,9 +102,6 @@
 
             </DataGrid.Columns>
          </DataGrid>
-         
-         <TextBlock Grid.Row="2" 
-                    Text="{Binding EncodingVm.TimeRemainingString, Mode=OneWay, StringFormat='Time Remaining: {0}'}" /> 
 
       </Grid>
    </Grid>
