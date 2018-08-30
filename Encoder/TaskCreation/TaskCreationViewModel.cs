@@ -16,6 +16,7 @@ namespace Encoder.TaskCreation
          var files = SelectedFiles.ToList();
          var tasks = files.Select( x => new EncodingTaskViewModel( x, Filter ) );
          SelectedFiles.Clear();
+         SelectedFilter = FilterType.None;
 
          return tasks;
       }
