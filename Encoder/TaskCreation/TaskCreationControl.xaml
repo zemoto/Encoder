@@ -21,6 +21,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0"
@@ -45,17 +46,23 @@
             </ScrollViewer>
          </Border>
 
-         <filters:FilterSelectorControl Grid.Row="1"
-                                        Margin="0,0,0,8" />
+         <CheckBox Grid.Row="1"
+                   Margin="0,0,0,8"
+                   Content="Re-encode"
+                   IsChecked="{Binding Reencode}" />
 
-         <Button Grid.Row="2"
+         <filters:FilterSelectorControl Grid.Row="2"
+                                        Margin="0,0,0,8"
+                                        IsEnabled="{Binding Reencode}"/>
+
+         <Button Grid.Row="3"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="2"
+         <Button Grid.Row="3"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"

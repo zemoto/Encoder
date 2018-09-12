@@ -16,6 +16,18 @@
       
    </UserControl.Resources>
 
+   <UserControl.Style>
+      <Style TargetType="{x:Type UserControl}">
+         <Style.Triggers>
+            <Trigger Property="IsEnabled"
+                     Value="False">
+               <Setter Property="Opacity"
+                       Value="0.6" />
+            </Trigger>
+         </Style.Triggers>
+      </Style>
+   </UserControl.Style>
+
    <Grid>
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto" />

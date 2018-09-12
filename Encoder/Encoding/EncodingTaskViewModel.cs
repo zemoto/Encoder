@@ -10,14 +10,16 @@ namespace Encoder.Encoding
    internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
       private readonly Filter _filter;
+      private bool _reencode;
       private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
       public CancellationTokenSource CancelToken { get; }
 
-      public EncodingTaskViewModel( string sourceFile, Filter filter )
+      public EncodingTaskViewModel( string sourceFile, bool reencode, Filter filter )
       {
          SourceFile = sourceFile;
          _filter = filter;
+         _reencode = reencode;
 
          CancelToken = new CancellationTokenSource();
       }
@@ -27,9 +29,22 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      private bool ShouldApplyFilter() => _filter != null && _filter.ShouldApplyFilter();
+      private bool ShouldApplyFilter() => _reencode && _filter != null && _filter.ShouldApplyFilter();
 
-      public string GetEncodingArguments() => ShouldApplyFilter() ? FilterArgumentBuilder.GetFilterArguments( _filter ) : null;
+      public string GetEncodingArguments()
+      {
+         if ( ShouldApplyFilter() )
+         {
+            return FilterArgumentBuilder.GetFilterArguments( _filter );
+         }
+
+         if ( _reencode )
+         {
+            return "-c:v libx264";
+         }
+
+         return "-c:v copy";
+      }
 
       public bool Initialize()
       {
