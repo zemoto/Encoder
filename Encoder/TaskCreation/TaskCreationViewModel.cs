@@ -13,19 +13,17 @@ namespace Encoder.TaskCreation
 
       public IEnumerable<EncodingTaskViewModel> GetTasks()
       {
-         var files = SelectedFiles.ToList();
-         var tasks = files.Select( x => new EncodingTaskViewModel( x, Reencode, Filter ) );
+         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, ReEncode, Filter ) ).ToList();
          SelectedFiles.Clear();
          SelectedFilter = FilterType.None;
-
          return tasks;
       }
 
-      private bool _reencode = true;
-      public bool Reencode
+      private bool _reEncode = true;
+      public bool ReEncode
       {
-         get => _reencode;
-         set => SetProperty( ref _reencode, value );
+         get => _reEncode;
+         set => SetProperty( ref _reEncode, value );
       }
 
       private FilterType _selectedFilter = FilterType.None;

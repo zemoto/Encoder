@@ -49,11 +49,11 @@
          <CheckBox Grid.Row="1"
                    Margin="0,0,0,8"
                    Content="Re-encode"
-                   IsChecked="{Binding Reencode}" />
+                   IsChecked="{Binding ReEncode}" />
 
          <filters:FilterSelectorControl Grid.Row="2"
                                         Margin="0,0,0,8"
-                                        IsEnabled="{Binding Reencode}"/>
+                                        IsEnabled="{Binding ReEncode}"/>
 
          <Button Grid.Row="3"
                  Height="24"
