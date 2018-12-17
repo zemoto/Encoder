@@ -1,19 +1,24 @@
-﻿using Encoder.Utils;
+﻿using System.Windows;
+using Encoder.Utils;
 
 namespace Encoder
 {
    internal partial class App
    {
-      public App()
+      private Main _main;
+
+      protected override void OnStartup( StartupEventArgs e )
       {
          ChildProcessWatcher.Initialize();
          TotalCpuMonitor.Initialize();
 
-         using ( var main = new Main() )
-         {
-            main.ShowDialog();
-         }
+         _main = new Main();
+         _main.Show();
+      }
 
+      protected override void OnExit( ExitEventArgs e )
+      {
+         _main.Dispose();
          EmbeddedFfmpegManager.Cleanup();
       }
    }

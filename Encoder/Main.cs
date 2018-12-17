@@ -38,11 +38,11 @@ namespace Encoder
          _encodingManager?.Dispose();
       }
 
-      public void ShowDialog()
+      public void Show()
       {
          var window = new MainWindow( _model );
          window.Closing += OnMainWindowClosing;
-         window.ShowDialog();
+         window.Show();
       }
 
       private async void OnMainWindowClosing( object sender, CancelEventArgs e )
