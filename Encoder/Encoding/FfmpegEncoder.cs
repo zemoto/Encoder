@@ -6,7 +6,7 @@ using Encoder.Utils;
 
 namespace Encoder.Encoding
 {
-   internal sealed class FfmpegEncoder
+   internal sealed class FfmpegEncoder : IDisposable
    {
       private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
       private const string QualityArgs = "-crf 18 -preset slow";
@@ -96,6 +96,13 @@ namespace Encoder.Encoding
       public void AwaitCompletion()
       {
          _currentffmpegProcess?.WaitForExit();
+      }
+
+      public void Dispose()
+      {
+         _encodingTask?.Dispose();
+         _currentffmpegProcess?.Dispose();
+         _cpuUsageMonitor?.Dispose();
       }
    }
 }
