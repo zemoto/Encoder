@@ -8,7 +8,6 @@
         xmlns:encoding="clr-namespace:Encoder.Encoding"
         xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         mc:Ignorable="d"
-        x:Name="Root"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"

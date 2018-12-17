@@ -103,12 +103,12 @@
     <Compile Include="Main.cs" />
     <Compile Include="UIUtils\GetEnumValuesExtension.cs" />
     <Compile Include="UIUtils\MinMaxValidationRule.cs" />
-    <Compile Include="Utils\RelayCommand.cs" />
+    <Compile Include="UIUtils\RelayCommand.cs" />
     <Compile Include="Utils\ChildProcessWatcher.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
     <Compile Include="Utils\ProcessCpuMonitor.cs" />
     <Compile Include="Utils\UtilityMethods.cs" />
-    <Compile Include="Utils\ViewModelBase.cs" />
+    <Compile Include="UIUtils\ViewModelBase.cs" />
     <Page Include="Filters\FilterPropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

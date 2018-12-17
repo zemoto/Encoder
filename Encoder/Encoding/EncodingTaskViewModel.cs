@@ -10,7 +10,7 @@ namespace Encoder.Encoding
    internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
       private readonly Filter _filter;
-      private bool _reEncode;
+      private readonly bool _reEncode;
       private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
       public CancellationTokenSource CancelToken { get; }

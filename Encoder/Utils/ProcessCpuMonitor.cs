@@ -18,6 +18,8 @@ namespace Encoder.Utils
       }
 
       public static int GetCurrentCpuUsage() => (int)CpuUsageCounter.NextValue();
+
+      public static void Dispose() => CpuUsageCounter?.Dispose();
    }
 
    internal sealed class ProcessCpuMonitor : IDisposable
