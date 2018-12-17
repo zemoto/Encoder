@@ -17,7 +17,7 @@ namespace Encoder.Filters.Video
          SourceDuration = sourceDuration;
       }
 
-      public virtual bool ShouldApplyFilter() => true;
+      public virtual bool CanApplyFilter() => true;
       public virtual int GetTargetFrameCount() => (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
    }
 }

@@ -9,7 +9,7 @@ namespace Encoder.Filters.Video
    {
       public static string GetFilterArguments( VideoFilter filter )
       {
-         if ( !filter.ShouldApplyFilter() )
+         if ( !filter.CanApplyFilter() )
          {
             return new CopyVideoFilter().CustomFilterArguments;
          }
