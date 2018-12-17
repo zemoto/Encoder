@@ -13,6 +13,8 @@ namespace Encoder
          {
             main.ShowDialog();
          }
+
+         EmbeddedFfmpegManager.Cleanup();
       }
    }
 }

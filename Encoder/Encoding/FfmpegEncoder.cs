@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Encoder.Utils;
@@ -23,8 +21,7 @@ namespace Encoder.Encoding
 
       static FfmpegEncoder()
       {
-         var executingDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-         FfmpegExeLocation = Path.Combine( executingDir, "ffmpeg.exe" );
+         FfmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
       }
 
       public FfmpegEncoder( EncodingTaskViewModel encodingTask )

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using Encoder.Utils;
 
 namespace Encoder.Encoding
@@ -14,8 +12,7 @@ namespace Encoder.Encoding
 
       static VideoMetadataReader()
       {
-         var executingDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-         FfprobeExeLocation = Path.Combine( executingDir, "ffprobe.exe" );
+         FfprobeExeLocation = EmbeddedFfmpegManager.GetFfprobeExecutableFilePath();
       }
 
       public static bool GetVideoInfo( string file, out double frameRate, out TimeSpan duration )
