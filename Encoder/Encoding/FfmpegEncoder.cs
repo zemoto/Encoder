@@ -31,12 +31,14 @@ namespace Encoder.Encoding
 
       public void StartEncoding( CancellationToken token )
       {
+         var arguments = EncodingArgs;
+         Debug.WriteLine( $"Starting ffmpeg with: \"{arguments}\"" );
          _currentffmpegProcess = new Process
          {
             StartInfo = new ProcessStartInfo
             {
                FileName = FfmpegExeLocation,
-               Arguments = EncodingArgs,
+               Arguments = arguments,
                UseShellExecute = false,
                RedirectStandardError = true,
                CreateNoWindow = true,

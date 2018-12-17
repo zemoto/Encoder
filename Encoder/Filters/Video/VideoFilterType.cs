@@ -2,7 +2,8 @@
 {
    internal enum VideoFilterType
    {
-      None,
+      Copy,
+      Encode,
       Amplify,
       Blur,
       Denoise,

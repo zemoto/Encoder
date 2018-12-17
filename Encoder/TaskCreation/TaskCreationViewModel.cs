@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Encoder.Encoding;
 using Encoder.Filters.Video;
+using Encoder.Filters.Video.Copy;
 using Encoder.Utils;
 
 namespace Encoder.TaskCreation
@@ -13,20 +14,13 @@ namespace Encoder.TaskCreation
 
       public IEnumerable<EncodingTaskViewModel> GetTasks()
       {
-         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, ReEncode, VideoFilter ) ).ToList();
+         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, VideoFilter ) ).ToList();
          SelectedFiles.Clear();
-         SelectedFilter = VideoFilterType.None;
+         SelectedFilter = VideoFilterType.Copy;
          return tasks;
       }
 
-      private bool _reEncode = true;
-      public bool ReEncode
-      {
-         get => _reEncode;
-         set => SetProperty( ref _reEncode, value );
-      }
-
-      private VideoFilterType _selectedFilter = VideoFilterType.None;
+      private VideoFilterType _selectedFilter = VideoFilterType.Copy;
       public VideoFilterType SelectedFilter
       {
          get => _selectedFilter;
@@ -39,7 +33,7 @@ namespace Encoder.TaskCreation
          }
       }
 
-      private VideoFilter _videoFilter;
+      private VideoFilter _videoFilter = new CopyVideoFilter();
       public VideoFilter VideoFilter
       {
          get => _videoFilter;

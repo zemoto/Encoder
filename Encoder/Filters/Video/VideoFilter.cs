@@ -1,7 +1,9 @@
 ﻿using System;
 using Encoder.Filters.Video.Amplify;
 using Encoder.Filters.Video.Blur;
+using Encoder.Filters.Video.Copy;
 using Encoder.Filters.Video.Denoise;
+using Encoder.Filters.Video.Encode;
 using Encoder.Filters.Video.Interpolate;
 
 namespace Encoder.Filters.Video
@@ -13,6 +15,7 @@ namespace Encoder.Filters.Video
 
       public abstract VideoFilterViewModel ViewModel { get; }
       public abstract string FilterName { get; }
+      public virtual string CustomFilterArguments { get; } = null;
 
       public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
       {
@@ -30,6 +33,10 @@ namespace Encoder.Filters.Video
       {
          switch ( type )
          {
+            case VideoFilterType.Copy:
+               return new CopyVideoFilter();
+            case VideoFilterType.Encode:
+               return new EncodeVideoFilter();
             case VideoFilterType.Amplify:
                return new AmplifyVideoFilter();
             case VideoFilterType.Blur:

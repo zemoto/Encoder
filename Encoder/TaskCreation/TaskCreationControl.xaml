@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
-             xmlns:filters="clr-namespace:Encoder.Filters" 
              xmlns:video="clr-namespace:Encoder.Filters.Video"
              mc:Ignorable="d"
              x:Name="Root"
@@ -20,7 +19,6 @@
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
@@ -47,23 +45,16 @@
             </ScrollViewer>
          </Border>
 
-         <CheckBox Grid.Row="1"
-                   Margin="0,0,0,8"
-                   Content="Re-encode"
-                   IsChecked="{Binding ReEncode}" />
+         <video:VideoFilterSelectorControl Grid.Row="1" />
 
-         <video:VideoFilterSelectorControl Grid.Row="2"
-                                        Margin="0,0,0,8"
-                                        IsEnabled="{Binding ReEncode}"/>
-
-         <Button Grid.Row="3"
+         <Button Grid.Row="2"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="3"
+         <Button Grid.Row="2"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"

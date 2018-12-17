@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Linq;
-using Encoder.Filters.Video;
+using Encoder.Filters.Video.Copy;
 using Encoder.Utils;
 
-namespace Encoder.Filters
+namespace Encoder.Filters.Video
 {
    internal static class VideoFilterArgumentBuilder
    {
       public static string GetFilterArguments( VideoFilter filter )
       {
+         if ( !filter.ShouldApplyFilter() )
+         {
+            return new CopyVideoFilter().CustomFilterArguments;
+         }
+         if ( !string.IsNullOrEmpty( filter.CustomFilterArguments ) )
+         {
+            return filter.CustomFilterArguments;
+         }
+
          var filterString = "-filter:v ";
 
          var filterName = filter.ViewModel.GetType().GetAttribute<FilterAttribute>().FilterName;

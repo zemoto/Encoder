@@ -56,6 +56,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Filters\Video\Copy\CopyVideoFilter.cs" />
+    <Compile Include="Filters\Video\Encode\EncodeVideoFilter.cs" />
     <Compile Include="Utils\EmbeddedFfmpegManager.cs" />
     <Compile Include="Filters\Video\Blur\BlurVideoFilter.cs" />
     <Compile Include="Filters\Video\Blur\BlurVideoFilterControl.xaml.cs">

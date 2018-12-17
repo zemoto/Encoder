@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Encoder.Filters;
 using Encoder.Filters.Video;
 using Encoder.Utils;
 
@@ -11,16 +10,13 @@ namespace Encoder.Encoding
    internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
       private readonly VideoFilter _videoFilter;
-      private readonly bool _reEncode;
-      private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
       public CancellationTokenSource CancelToken { get; }
 
-      public EncodingTaskViewModel( string sourceFile, bool reEncode, VideoFilter videoFilter )
+      public EncodingTaskViewModel( string sourceFile, VideoFilter videoFilter )
       {
          SourceFile = sourceFile;
          _videoFilter = videoFilter;
-         _reEncode = reEncode;
 
          CancelToken = new CancellationTokenSource();
       }
@@ -30,22 +26,7 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      private bool ShouldApplyFilter() => _reEncode && _videoFilter != null && _videoFilter.ShouldApplyFilter();
-
-      public string GetEncodingArguments()
-      {
-         if ( ShouldApplyFilter() )
-         {
-            return VideoFilterArgumentBuilder.GetFilterArguments( _videoFilter );
-         }
-
-         if ( _reEncode )
-         {
-            return "-c:v libx264";
-         }
-
-         return "-c:v copy";
-      }
+      public string GetEncodingArguments() => VideoFilterArgumentBuilder.GetFilterArguments( _videoFilter );
 
       public bool Initialize()
       {
@@ -56,11 +37,10 @@ namespace Encoder.Encoding
             return false;
          }
 
-         _sourceFrameRate = sourceFrameRate;
          _sourceDuration = sourceDuration;
          TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
 
-         _videoFilter?.Initialize( sourceFrameRate, sourceDuration );
+         _videoFilter.Initialize( sourceFrameRate, sourceDuration );
          
          OnPropertyChanged( null );
 
@@ -80,14 +60,14 @@ namespace Encoder.Encoding
          OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
-      public string FilterName => ShouldApplyFilter() ? _videoFilter.FilterName : "None";
+      public string FilterName => _videoFilter.FilterName;
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
       public bool HasNoDurationData => _sourceDuration == TimeSpan.Zero && !Finished;
 
       public string TargetFile { get; private set; }
 
-      public int TargetTotalFrames => ShouldApplyFilter() ? _videoFilter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
+      public int TargetTotalFrames => _videoFilter.GetTargetFrameCount();
 
       private DateTime _startTime;
       private TimeSpan _timeRemaining = TimeSpan.Zero;
