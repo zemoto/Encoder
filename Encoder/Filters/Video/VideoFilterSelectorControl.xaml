@@ -50,7 +50,7 @@
       </StackPanel>
       
       <ContentPresenter Grid.Row="1" 
-                        Margin="0,8"
+                        Margin="16,8,0,0"
                         ContentTemplateSelector="{StaticResource FilterDataTemplateSelector}"
                         Content="{Binding VideoFilter.ViewModel}" />
    </Grid>

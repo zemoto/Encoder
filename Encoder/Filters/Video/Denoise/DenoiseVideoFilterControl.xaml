@@ -8,9 +8,10 @@
              xmlns:local="clr-namespace:Encoder.Filters.Video.Denoise"
              xmlns:uiUtils="clr-namespace:Encoder.UIUtils"
              mc:Ignorable="d"
+             x:Name="Root"
              d:DataContext="{d:DesignInstance Type={x:Type local:DenoiseVideoFilterViewModel}}">
 
-   <Grid>
+   <Grid Margin="0,0,0,8">
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto" />
          <RowDefinition Height="Auto" />
@@ -24,7 +25,8 @@
       
       <TextBlock Grid.Row="0"
                  TextWrapping="Wrap"
-                 Margin="8,0,8,8"
+                 Margin="0,0,0,8"
+                 MaxWidth="{Binding ElementName=Root, Path=ActualWidth}"
                  Text="Threshold A is designed to react on abrupt changes in the input signal and threshold B is designed to react on continuous changes in the input signal." />
 
       <filters:FilterPropertyControl Grid.Row="1"

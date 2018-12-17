@@ -8,7 +8,6 @@
              xmlns:video="clr-namespace:Encoder.Filters.Video"
              mc:Ignorable="d"
              x:Name="Root"
-             Width="360"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
 
    <UserControl.Resources>

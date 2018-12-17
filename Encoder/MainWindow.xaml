@@ -32,8 +32,7 @@
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0" 
-                 HorizontalAlignment="Center"
-                 Margin="8"
+                 Margin="0,8"
                  Padding="2"
                  BorderThickness="1"
                  BorderBrush="LightGray">
