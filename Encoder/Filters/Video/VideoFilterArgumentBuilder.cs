@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Encoder.Filters.Video;
 using Encoder.Utils;
 
 namespace Encoder.Filters
 {
-   internal static class FilterArgumentBuilder
+   internal static class VideoFilterArgumentBuilder
    {
-      public static string GetFilterArguments( Filter filter )
+      public static string GetFilterArguments( VideoFilter filter )
       {
          var filterString = "-filter:v ";
 

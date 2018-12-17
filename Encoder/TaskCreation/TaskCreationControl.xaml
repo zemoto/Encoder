@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
-             xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:filters="clr-namespace:Encoder.Filters" 
+             xmlns:video="clr-namespace:Encoder.Filters.Video"
              mc:Ignorable="d"
              x:Name="Root"
              Width="360"
@@ -51,7 +52,7 @@
                    Content="Re-encode"
                    IsChecked="{Binding ReEncode}" />
 
-         <filters:FilterSelectorControl Grid.Row="2"
+         <video:VideoFilterSelectorControl Grid.Row="2"
                                         Margin="0,0,0,8"
                                         IsEnabled="{Binding ReEncode}"/>
 

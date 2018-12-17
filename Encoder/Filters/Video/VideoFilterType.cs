@@ -1,6 +1,6 @@
-﻿namespace Encoder.Filters
+﻿namespace Encoder.Filters.Video
 {
-   internal enum FilterType
+   internal enum VideoFilterType
    {
       None,
       Amplify,

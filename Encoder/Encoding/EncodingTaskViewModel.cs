@@ -3,22 +3,23 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using Encoder.Filters;
+using Encoder.Filters.Video;
 using Encoder.Utils;
 
 namespace Encoder.Encoding
 {
    internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
-      private readonly Filter _filter;
+      private readonly VideoFilter _videoFilter;
       private readonly bool _reEncode;
       private double _sourceFrameRate;
       private TimeSpan _sourceDuration;
       public CancellationTokenSource CancelToken { get; }
 
-      public EncodingTaskViewModel( string sourceFile, bool reEncode, Filter filter )
+      public EncodingTaskViewModel( string sourceFile, bool reEncode, VideoFilter videoFilter )
       {
          SourceFile = sourceFile;
-         _filter = filter;
+         _videoFilter = videoFilter;
          _reEncode = reEncode;
 
          CancelToken = new CancellationTokenSource();
@@ -29,13 +30,13 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      private bool ShouldApplyFilter() => _reEncode && _filter != null && _filter.ShouldApplyFilter();
+      private bool ShouldApplyFilter() => _reEncode && _videoFilter != null && _videoFilter.ShouldApplyFilter();
 
       public string GetEncodingArguments()
       {
          if ( ShouldApplyFilter() )
          {
-            return FilterArgumentBuilder.GetFilterArguments( _filter );
+            return VideoFilterArgumentBuilder.GetFilterArguments( _videoFilter );
          }
 
          if ( _reEncode )
@@ -59,7 +60,7 @@ namespace Encoder.Encoding
          _sourceDuration = sourceDuration;
          TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
 
-         _filter?.Initialize( sourceFrameRate, sourceDuration );
+         _videoFilter?.Initialize( sourceFrameRate, sourceDuration );
          
          OnPropertyChanged( null );
 
@@ -79,14 +80,14 @@ namespace Encoder.Encoding
          OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
-      public string FilterName => ShouldApplyFilter() ? _filter.FilterName : "None";
+      public string FilterName => ShouldApplyFilter() ? _videoFilter.FilterName : "None";
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
       public bool HasNoDurationData => _sourceDuration == TimeSpan.Zero && !Finished;
 
       public string TargetFile { get; private set; }
 
-      public int TargetTotalFrames => ShouldApplyFilter() ? _filter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
+      public int TargetTotalFrames => ShouldApplyFilter() ? _videoFilter.GetTargetFrameCount() : (int)( _sourceDuration.TotalSeconds * _sourceFrameRate );
 
       private DateTime _startTime;
       private TimeSpan _timeRemaining = TimeSpan.Zero;

@@ -1,8 +1,8 @@
 ﻿namespace Encoder.Filters.Video.Blur
 {
-   internal partial class BlurFilterControl
+   internal partial class BlurVideoFilterControl
    {
-      public BlurFilterControl()
+      public BlurVideoFilterControl()
       {
          InitializeComponent();
       }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Encoder.Filters.Video.Interpolate.InterpolateFilterControl"
+﻿<UserControl x:Class="Encoder.Filters.Video.Interpolate.InterpolateVideoFilterControl"
              x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:Encoder.Filters.Video.Interpolate"
              xmlns:uiUtils="clr-namespace:Encoder.UIUtils"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateFilterViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type local:InterpolateVideoFilterViewModel}}">
 
    <UserControl.Resources>
       <ResourceDictionary Source="../../FilterPropertyDictionary.xaml" />

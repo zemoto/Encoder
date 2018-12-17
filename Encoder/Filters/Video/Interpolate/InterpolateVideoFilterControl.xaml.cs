@@ -1,8 +1,8 @@
 ﻿namespace Encoder.Filters.Video.Interpolate
 {
-   internal partial class InterpolateFilterControl
+   internal partial class InterpolateVideoFilterControl
    {
-      public InterpolateFilterControl()
+      public InterpolateVideoFilterControl()
       {
          InitializeComponent();
       }

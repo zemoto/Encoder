@@ -1,8 +1,8 @@
 ﻿namespace Encoder.Filters.Video.Denoise
 {
-   internal  partial class DenoiseFilterControl
+   internal  partial class DenoiseVideoFilterControl
    {
-      public DenoiseFilterControl()
+      public DenoiseVideoFilterControl()
       {
          InitializeComponent();
       }

@@ -4,14 +4,14 @@ using Encoder.Filters.Video.Blur;
 using Encoder.Filters.Video.Denoise;
 using Encoder.Filters.Video.Interpolate;
 
-namespace Encoder.Filters
+namespace Encoder.Filters.Video
 {
-   internal abstract class Filter
+   internal abstract class VideoFilter
    {
       protected double SourceFrameRate { get; private set; }
       protected TimeSpan SourceDuration { get; private set; }
 
-      public abstract FilterViewModel ViewModel { get; }
+      public abstract VideoFilterViewModel ViewModel { get; }
       public abstract string FilterName { get; }
 
       public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
@@ -24,20 +24,20 @@ namespace Encoder.Filters
       public virtual int GetTargetFrameCount() => (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
    }
 
-   internal static class FilterProvider
+   internal static class VideoFilterProvider
    {
-      public static Filter GetFilterForType( FilterType type )
+      public static VideoFilter GetFilterForType( VideoFilterType type )
       {
          switch ( type )
          {
-            case FilterType.Amplify:
-               return new AmplifyFilter();
-            case FilterType.Blur:
-               return new BlurFilter();
-            case FilterType.Denoise:
-               return new DenoiseFilter();
-            case FilterType.Interpolate:
-               return new InterpolateFilter();
+            case VideoFilterType.Amplify:
+               return new AmplifyVideoFilter();
+            case VideoFilterType.Blur:
+               return new BlurVideoFilter();
+            case VideoFilterType.Denoise:
+               return new DenoiseVideoFilter();
+            case VideoFilterType.Interpolate:
+               return new InterpolateVideoFilter();
             default:
                return null;
          }

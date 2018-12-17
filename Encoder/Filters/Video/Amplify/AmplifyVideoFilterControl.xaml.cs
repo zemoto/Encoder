@@ -1,8 +1,8 @@
 ﻿namespace Encoder.Filters.Video.Amplify
 {
-   internal partial class AmplifyFilterControl
+   internal partial class AmplifyVideoFilterControl
    {
-      public AmplifyFilterControl()
+      public AmplifyVideoFilterControl()
       {
          InitializeComponent();
       }

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Encoder.Encoding;
-using Encoder.Filters;
+using Encoder.Filters.Video;
 using Encoder.Utils;
 
 namespace Encoder.TaskCreation
@@ -13,9 +13,9 @@ namespace Encoder.TaskCreation
 
       public IEnumerable<EncodingTaskViewModel> GetTasks()
       {
-         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, ReEncode, Filter ) ).ToList();
+         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, ReEncode, VideoFilter ) ).ToList();
          SelectedFiles.Clear();
-         SelectedFilter = FilterType.None;
+         SelectedFilter = VideoFilterType.None;
          return tasks;
       }
 
@@ -26,24 +26,24 @@ namespace Encoder.TaskCreation
          set => SetProperty( ref _reEncode, value );
       }
 
-      private FilterType _selectedFilter = FilterType.None;
-      public FilterType SelectedFilter
+      private VideoFilterType _selectedFilter = VideoFilterType.None;
+      public VideoFilterType SelectedFilter
       {
          get => _selectedFilter;
          set
          {
             if ( SetProperty( ref _selectedFilter, value ) )
             {
-               Filter = FilterProvider.GetFilterForType( value );
+               VideoFilter = VideoFilterProvider.GetFilterForType( value );
             }
          }
       }
 
-      private Filter _filter;
-      public Filter Filter
+      private VideoFilter _videoFilter;
+      public VideoFilter VideoFilter
       {
-         get => _filter;
-         private set => SetProperty( ref _filter, value );
+         get => _videoFilter;
+         private set => SetProperty( ref _videoFilter, value );
       }
 
       public RelayCommand SelectFilesCommand { get; set; }

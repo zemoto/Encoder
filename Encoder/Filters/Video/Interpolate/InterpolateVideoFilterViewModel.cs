@@ -1,7 +1,7 @@
 ﻿namespace Encoder.Filters.Video.Interpolate
 {
-   [Filter( "minterpolate", typeof( InterpolateFilterControl ) )]
-   internal sealed class InterpolateFilterViewModel : FilterViewModel
+   [Filter( "minterpolate", typeof( InterpolateVideoFilterControl ) )]
+   internal sealed class InterpolateVideoFilterViewModel : VideoFilterViewModel
    {
       private double _targetFrameRate = 60;
       [FilterParameterName( "fps" )]

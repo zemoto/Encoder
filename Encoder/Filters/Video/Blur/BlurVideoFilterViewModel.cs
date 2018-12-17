@@ -1,7 +1,7 @@
 ﻿namespace Encoder.Filters.Video.Blur
 {
-   [Filter( "avgblur", typeof( BlurFilterControl ) )]
-   internal sealed class BlurFilterViewModel : FilterViewModel
+   [Filter( "avgblur", typeof( BlurVideoFilterControl ) )]
+   internal sealed class BlurVideoFilterViewModel : VideoFilterViewModel
    {
       private int _horizontalRadius = 3;
       [FilterParameterName( "sizeX" )]

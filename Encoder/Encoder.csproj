@@ -57,11 +57,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utils\EmbeddedFfmpegManager.cs" />
-    <Compile Include="Filters\Video\Blur\BlurFilter.cs" />
-    <Compile Include="Filters\Video\Blur\BlurFilterControl.xaml.cs">
-      <DependentUpon>BlurFilterControl.xaml</DependentUpon>
+    <Compile Include="Filters\Video\Blur\BlurVideoFilter.cs" />
+    <Compile Include="Filters\Video\Blur\BlurVideoFilterControl.xaml.cs">
+      <DependentUpon>BlurVideoFilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Video\Blur\BlurFilterViewModel.cs" />
+    <Compile Include="Filters\Video\Blur\BlurVideoFilterViewModel.cs" />
     <Compile Include="UIUtils\Converters.cs" />
     <Compile Include="Encoding\EncodingManager.cs" />
     <Compile Include="Encoding\EncodingManagerViewModel.cs" />
@@ -69,33 +69,33 @@
     <Compile Include="Encoding\EncodingTaskViewModel.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
     <Compile Include="Filters\FilterDataTemplateSelector.cs" />
-    <Compile Include="Filters\Video\Amplify\AmplifyFilter.cs" />
-    <Compile Include="Filters\Filter.cs" />
-    <Compile Include="Filters\FilterArgumentBuilder.cs" />
+    <Compile Include="Filters\Video\Amplify\AmplifyVideoFilter.cs" />
+    <Compile Include="Filters\Video\VideoFilter.cs" />
+    <Compile Include="Filters\Video\VideoFilterArgumentBuilder.cs" />
     <Compile Include="Filters\FilterAttributes.cs" />
     <Compile Include="Filters\FilterPropertyControl.xaml.cs">
       <DependentUpon>FilterPropertyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\FilterSelectorControl.xaml.cs">
-      <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
+    <Compile Include="Filters\Video\VideoFilterSelectorControl.xaml.cs">
+      <DependentUpon>VideoFilterSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\FilterType.cs" />
-    <Compile Include="Filters\FilterViewModel.cs" />
-    <Compile Include="Filters\Video\Amplify\AmplifyFilterViewModel.cs" />
-    <Compile Include="Filters\Video\Amplify\AmplifyFilterControl.xaml.cs">
-      <DependentUpon>AmplifyFilterControl.xaml</DependentUpon>
+    <Compile Include="Filters\Video\VideoFilterType.cs" />
+    <Compile Include="Filters\Video\VideoFilterViewModel.cs" />
+    <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterViewModel.cs" />
+    <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterControl.xaml.cs">
+      <DependentUpon>AmplifyVideoFilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Video\Denoise\DenoiseFilter.cs" />
-    <Compile Include="Filters\Video\Denoise\DenoiseFilterControl.xaml.cs">
-      <DependentUpon>DenoiseFilterControl.xaml</DependentUpon>
+    <Compile Include="Filters\Video\Denoise\DenoiseVideoFilter.cs" />
+    <Compile Include="Filters\Video\Denoise\DenoiseVideoFilterControl.xaml.cs">
+      <DependentUpon>DenoiseVideoFilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Video\Denoise\DenoiseFilterViewModel.cs" />
+    <Compile Include="Filters\Video\Denoise\DenoiseVideoFilterViewModel.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateEnums.cs" />
-    <Compile Include="Filters\Video\Interpolate\InterpolateFilter.cs" />
-    <Compile Include="Filters\Video\Interpolate\InterpolateFilterControl.xaml.cs">
-      <DependentUpon>InterpolateFilterControl.xaml</DependentUpon>
+    <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilter.cs" />
+    <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterControl.xaml.cs">
+      <DependentUpon>InterpolateVideoFilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Video\Interpolate\InterpolateFilterViewModel.cs" />
+    <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>
@@ -117,23 +117,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\FilterSelectorControl.xaml">
+    <Page Include="Filters\Video\VideoFilterSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\Amplify\AmplifyFilterControl.xaml">
+    <Page Include="Filters\Video\Amplify\AmplifyVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\Blur\BlurFilterControl.xaml">
+    <Page Include="Filters\Video\Blur\BlurVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\Denoise\DenoiseFilterControl.xaml">
+    <Page Include="Filters\Video\Denoise\DenoiseVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\Interpolate\InterpolateFilterControl.xaml">
+    <Page Include="Filters\Video\Interpolate\InterpolateVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

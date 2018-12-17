@@ -50,7 +50,7 @@
                                    Binding="{Binding FileName, Mode=OneWay}"
                                    IsReadOnly="True" />
 
-               <DataGridTextColumn Header="Filter"
+               <DataGridTextColumn Header="VideoFilter"
                                    Binding="{Binding FilterName, Mode=OneWay}"
                                    IsReadOnly="True"
                                    MinWidth="100" />
