@@ -10,7 +10,6 @@ namespace Encoder
       protected override void OnStartup( StartupEventArgs e )
       {
          ChildProcessWatcher.Initialize();
-         TotalCpuMonitor.Initialize();
 
          _main = new Main();
          _main.Show();

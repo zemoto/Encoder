@@ -9,8 +9,6 @@ namespace Encoder.Utils
    {
       private static readonly PerformanceCounter CpuUsageCounter;
 
-      public static void Initialize() { /*Ensures the static constructor is called*/ }
-
       static TotalCpuMonitor()
       {
          CpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
