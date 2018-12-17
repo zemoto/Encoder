@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Encoder.Filters.Video;
 
 namespace Encoder.Utils
 {
@@ -23,6 +24,18 @@ namespace Encoder.Utils
       {
          var attribute = property.GetCustomAttributes( typeof( T ), false ).FirstOrDefault();
          return attribute as T;
+      }
+
+      public static VideoFilter GetFilterForType( this VideoFilterType type )
+      {
+         var filterName = type.ToString();
+         var filterType = Type.GetType( $"Encoder.Filters.Video.{filterName}.{filterName}VideoFilter" );
+         if ( filterType != null )
+         {
+            return (VideoFilter)Activator.CreateInstance( filterType );
+         }
+
+         throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
       }
    }
 }

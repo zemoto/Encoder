@@ -28,7 +28,7 @@ namespace Encoder.TaskCreation
          {
             if ( SetProperty( ref _selectedFilter, value ) )
             {
-               VideoFilter = VideoFilterProvider.GetFilterForType( value );
+               VideoFilter = value.GetFilterForType();
             }
          }
       }
