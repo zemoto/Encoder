@@ -58,6 +58,10 @@
     </ApplicationDefinition>
     <Compile Include="Filters\Video\Copy\CopyVideoFilter.cs" />
     <Compile Include="Filters\Video\Encode\EncodeVideoFilter.cs" />
+    <Compile Include="Filters\Video\Encode\EncodeVideoFilterControl.xaml.cs">
+      <DependentUpon>EncodeVideoFilterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Video\Encode\EncodeVideoFilterViewModel.cs" />
     <Compile Include="Utils\EmbeddedFfmpegManager.cs" />
     <Compile Include="Filters\Video\Blur\BlurVideoFilter.cs" />
     <Compile Include="Filters\Video\Blur\BlurVideoFilterControl.xaml.cs">
@@ -116,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Filters\FilterPropertyDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\Video\Encode\EncodeVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

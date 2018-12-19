@@ -30,10 +30,9 @@ namespace Encoder.Filters.Video
 
             string filterParamValue;
             var propertyValue = property.GetValue( filter.ViewModel );
-            if ( propertyValue is Enum )
+            if ( propertyValue is Enum enumValue )
             {
-               var enumMember = propertyValue.GetType().GetMember( propertyValue.ToString() ).First();
-               filterParamValue = enumMember.GetAttribute<FilterParameterValueAttribute>().ParameterValue;
+               filterParamValue = enumValue.GetAttribute<FilterParameterValueAttribute>().ParameterValue;
             }
             else if ( propertyValue is bool boolValue )
             {

@@ -20,6 +20,12 @@ namespace Encoder.Utils
          collection.ToList().ForEach( action );
       }
 
+      public static T GetAttribute<T>( this Enum enumValue ) where T : Attribute
+      {
+         var enumValueInfo = enumValue.GetType().GetMember( enumValue.ToString() ).First();
+         return GetAttribute<T>( enumValueInfo );
+      }
+
       public static T GetAttribute<T>( this ICustomAttributeProvider property ) where T : Attribute
       {
          var attribute = property.GetCustomAttributes( typeof( T ), false ).FirstOrDefault();
