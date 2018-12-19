@@ -25,7 +25,7 @@ namespace Encoder.Filters.Video
          var filterProperties = filter.ViewModel.GetType().GetProperties();
          foreach( var property in filterProperties )
          {
-            var filterParamName = property.GetAttribute<FilterParameterAttribute>().ArgumentValue;
+            var filterParamName = property.GetAttribute<FilterParameterAttribute>().ArgumentParam;
 
             string filterParamValue;
             var propertyValue = property.GetValue( filter.ViewModel );

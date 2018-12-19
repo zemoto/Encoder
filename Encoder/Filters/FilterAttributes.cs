@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Encoder.Filters
 {
@@ -19,31 +20,54 @@ namespace Encoder.Filters
    internal sealed class FilterParameterAttribute : Attribute
    {
       public string ParameterLabel { get; }
-      public string ArgumentValue { get; }
+      public string ArgumentParam { get; }
+      public string PropertyDependency { get; }
+      public object DependencyValue { get; }
+      public bool HasDependency { get; }
       public double Min { get; }
       public double Max { get; }
-      public bool HasMinMax => Math.Abs( Min - Max ) > 0.001;
+      public bool HasMinMax { get; }
 
-      public FilterParameterAttribute( string argumentValue )
+      public FilterParameterAttribute( string argumentParam )
       {
-         ArgumentValue = argumentValue;
+         ArgumentParam = argumentParam;
       }
 
-      public FilterParameterAttribute( string label, string argumentValue, double min = 0, double max = 0 )
+      public FilterParameterAttribute( string label, string argumentParam )
+         : this( argumentParam )
       {
          ParameterLabel = label;
-         ArgumentValue = argumentValue;
+      }
+
+      public FilterParameterAttribute( string label, string argumentParam, double min, double max )
+         : this( label, argumentParam )
+      {
          Min = min;
          Max = max;
+         HasMinMax = true;
+      }
+
+      public FilterParameterAttribute( string label, string argumentParam, string propertyDependency, object dependencyValue )
+         : this( label, argumentParam )
+      {
+         PropertyDependency = propertyDependency;
+         DependencyValue = dependencyValue;
+         HasDependency = true;
       }
    }
 
    [AttributeUsage( AttributeTargets.Field )]
-   internal sealed class FilterEnumValueAttribute : Attribute
+   internal sealed class FilterEnumValueAttribute : DescriptionAttribute
    {
       public string ParameterValue { get; }
 
       public FilterEnumValueAttribute( string parameterValue )
+      {
+         ParameterValue = parameterValue;
+      }
+
+      public FilterEnumValueAttribute( string label, string parameterValue )
+         : base( label )
       {
          ParameterValue = parameterValue;
       }

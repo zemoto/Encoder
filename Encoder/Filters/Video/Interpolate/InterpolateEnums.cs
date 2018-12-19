@@ -10,15 +10,13 @@ namespace Encoder.Filters.Video.Interpolate
       [FilterEnumValue( "blend" )]
       Blend,
 
-      [FilterEnumValue( "mci" )]
-      [Description( "Motion Compensated" )]
+      [FilterEnumValue( "Motion Compensated", "mci" )]
       MotionCompensated
    }
 
    internal enum MotionCompensationMode
    {
-      [FilterEnumValue( "obmc" )]
-      [Description( "Overlapped Block" )]
+      [FilterEnumValue( "Overlapped Block", "obmc" )]
       OverlappedBlock,
 
       [FilterEnumValue( "aobmc" )]
@@ -43,16 +41,13 @@ namespace Encoder.Filters.Video.Interpolate
       [Description( "Three Step" )]
       ThreeStep,
 
-      [FilterEnumValue( "tdls" )]
-      [Description( "Two Dimensional" )]
+      [FilterEnumValue( "Two Dimensional", "tdls" )]
       TwoDimensional,
 
-      [FilterEnumValue( "ntss" )]
-      [Description( "New Three Step" )]
+      [FilterEnumValue( "New Three Step", "ntss" )]
       NewThreeStep,
 
-      [FilterEnumValue( "fss" )]
-      [Description( "Four Step" )]
+      [FilterEnumValue( "Four Step", "fss" )]
       FourStep,
 
       [FilterEnumValue( "ds" )]
@@ -64,8 +59,7 @@ namespace Encoder.Filters.Video.Interpolate
       [FilterEnumValue( "epzs" )]
       Predictive,
 
-      [FilterEnumValue( "umh" )]
-      [Description( "Uneven Multi-Hexagon" )]
+      [FilterEnumValue( "Uneven Multi-Hexagon", "umh" )]
       UnevenMultiHexagon
    }
 
@@ -74,8 +68,7 @@ namespace Encoder.Filters.Video.Interpolate
       [FilterEnumValue( "none" )]
       None,
 
-      [FilterEnumValue( "fdiff" )]
-      [Description( "Frame Difference" )]
+      [FilterEnumValue( "Frame Difference", "fdiff" )]
       FrameDifference
    }
 }
