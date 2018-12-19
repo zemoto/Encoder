@@ -42,7 +42,9 @@ namespace Encoder.Filters
          for ( int i = 0; i < properties.Count; i++ )
          {
             int row = i;
-            gridFactory.AppendChild( new FrameworkElementFactory( typeof( RowDefinition ) ) );
+            var rowDef = new FrameworkElementFactory( typeof( RowDefinition ) );
+            rowDef.SetValue( RowDefinition.HeightProperty, new GridLength( 0, GridUnitType.Auto ) );
+            gridFactory.AppendChild( rowDef );
 
             var property = properties[i];
             var propertyAttribute = property.GetAttribute<FilterParameterAttribute>();
@@ -50,8 +52,10 @@ namespace Encoder.Filters
             FrameworkElementFactory elementFactory;
             if ( propertyAttribute.HasDependency && !ignoreDependency )
             {
+               // Take every adjacent property dependent on the same property and next them in a grid
                var dependentProperties = new List<PropertyInfo>();
-               for ( int j = i; j < properties.Count; j++ )
+               int j = i;
+               for ( ; j < properties.Count; j++ )
                {
                   var otherPropertyAttribute = properties[j].GetAttribute<FilterParameterAttribute>();
                   if ( propertyAttribute.SharesDependencyWith( otherPropertyAttribute ) )
@@ -60,14 +64,11 @@ namespace Encoder.Filters
                   }
                   else
                   {
-                     i = j - 1;
                      break;
                   }
-                  if ( j == properties.Count - 1 )
-                  {
-                     i = j;
-                  }
                }
+               i = j - 1; // Skip the properties we are about to nest in another grid
+
                elementFactory = CreateGridFactory( dependentProperties, true );
                elementFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 16, 0, 0, 0 ) );
 
@@ -78,8 +79,10 @@ namespace Encoder.Filters
                };
                elementFactory.SetBinding( UIElement.VisibilityProperty, visibilityBinding );
 
+               // Add a thin rectangle on the left side of the nested grid for styling
                var indentIndicatorFactory = CreateIndentIndicatorFactory();
                indentIndicatorFactory.SetValue( Grid.RowProperty, row );
+               indentIndicatorFactory.SetBinding( UIElement.VisibilityProperty, visibilityBinding );
                gridFactory.AppendChild( indentIndicatorFactory );
             }
             else
