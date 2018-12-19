@@ -19,8 +19,8 @@ namespace Encoder.Filters
    {
       public string ParameterLabel { get; }
       public string ArgumentParam { get; }
-      public string PropertyDependency { get; }
-      public object DependencyValue { get; }
+      public string PropertyBeingDependedOn { get; }
+      public object PropertyValueBeingDependedOn { get; }
       public bool HasDependency { get; }
       public double Min { get; }
       public double Max { get; }
@@ -45,17 +45,18 @@ namespace Encoder.Filters
          HasMinMax = true;
       }
 
-      public FilterParameterAttribute( string label, string argumentParam, string propertyDependency, object dependencyValue )
+      public FilterParameterAttribute( string label, string argumentParam, string propertyBeingDependedOn, object propertyValueBeingDependedOn )
          : this( label, argumentParam )
       {
-         PropertyDependency = propertyDependency;
-         DependencyValue = dependencyValue;
+         PropertyBeingDependedOn = propertyBeingDependedOn;
+         PropertyValueBeingDependedOn = propertyValueBeingDependedOn;
          HasDependency = true;
       }
 
       public bool SharesDependencyWith( FilterParameterAttribute other )
       {
-         return string.Equals( PropertyDependency, other.PropertyDependency ) && Equals( DependencyValue, other.DependencyValue );
+         return string.Equals( PropertyBeingDependedOn, other.PropertyBeingDependedOn ) && 
+                       Equals( PropertyValueBeingDependedOn, other.PropertyValueBeingDependedOn );
       }
    }
 

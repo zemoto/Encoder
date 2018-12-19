@@ -72,10 +72,10 @@ namespace Encoder.Filters
                elementFactory = CreateGridFactory( dependentProperties, true );
                elementFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 16, 0, 0, 0 ) );
 
-               var visibilityBinding = new Binding( propertyAttribute.PropertyDependency )
+               var visibilityBinding = new Binding( propertyAttribute.PropertyBeingDependedOn )
                {
                   Converter = new EqualityToVisibilityConverter(),
-                  ConverterParameter = propertyAttribute.DependencyValue
+                  ConverterParameter = propertyAttribute.PropertyValueBeingDependedOn
                };
                elementFactory.SetBinding( UIElement.VisibilityProperty, visibilityBinding );
 

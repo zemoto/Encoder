@@ -30,8 +30,8 @@ namespace Encoder.Filters.Video
 
             if ( filterParamAttribute.HasDependency )
             {
-               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, filterParamAttribute.PropertyDependency ) );
-               if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), filterParamAttribute.DependencyValue) )
+               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, filterParamAttribute.PropertyBeingDependedOn ) );
+               if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), filterParamAttribute.PropertyValueBeingDependedOn) )
                {
                   continue;
                }
