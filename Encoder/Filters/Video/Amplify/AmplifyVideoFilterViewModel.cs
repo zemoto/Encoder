@@ -1,10 +1,10 @@
 ﻿namespace Encoder.Filters.Video.Amplify
 {
-   [Filter( "amplify", typeof( AmplifyVideoFilterControl ) )]
+   [Filter( "amplify" )]
    internal sealed class AmplifyVideoFilterViewModel : VideoFilterViewModel
    {
       private int _radius = 2;
-      [FilterParameterName( "radius" )]
+      [FilterParameter( "Frame Radius", "radius", 1, 63 )]
       public int Radius
       {
          get => _radius;
@@ -12,7 +12,7 @@
       }
 
       private int _factor = 2;
-      [FilterParameterName( "factor" )]
+      [FilterParameter( "Amplify Factor", "factor", 0, 65535 )]
       public int Factor
       {
          get => _factor;
@@ -20,7 +20,7 @@
       }
 
       private int _threshold = 10;
-      [FilterParameterName( "threshold" )]
+      [FilterParameter( "Difference Threshold", "threshold", 0, 65535 )]
       public int Threshold
       {
          get => _threshold;
@@ -28,7 +28,7 @@
       }
 
       private int _low = 65535;
-      [FilterParameterName( "low" )]
+      [FilterParameter( "Pixel Change Lower Limit", "low", 0, 65535 )]
       public int Low
       {
          get => _low;
@@ -36,7 +36,7 @@
       }
 
       private int _high = 65535;
-      [FilterParameterName( "high" )]
+      [FilterParameter( "Pixel Change Upper Limit", "high", 0, 65535 )]
       public int High
       {
          get => _high;

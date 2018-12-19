@@ -4,7 +4,7 @@
    internal sealed class InterpolateVideoFilterViewModel : VideoFilterViewModel
    {
       private double _targetFrameRate = 60;
-      [FilterParameterName( "fps" )]
+      [FilterParameter( "fps" )]
       public double TargetFrameRate
       {
          get => _targetFrameRate;
@@ -12,7 +12,7 @@
       }
 
       private InterpolationMode _interpolationMode = InterpolationMode.MotionCompensated;
-      [FilterParameterName( "mi_mode" )]
+      [FilterParameter( "mi_mode" )]
       public InterpolationMode InterpolationMode
       {
          get => _interpolationMode;
@@ -20,7 +20,7 @@
       }
 
       private MotionCompensationMode _motionCompensationMode = MotionCompensationMode.Adaptive;
-      [FilterParameterName( "mc_mode" )]
+      [FilterParameter( "mc_mode" )]
       public MotionCompensationMode MotionCompensationMode
       {
          get => _motionCompensationMode;
@@ -28,7 +28,7 @@
       }
 
       private MotionEstimationMode _motionEstimationMode = MotionEstimationMode.Bidirectional;
-      [FilterParameterName( "me_mode" )]
+      [FilterParameter( "me_mode" )]
       public MotionEstimationMode MotionEstimationMode
       {
          get => _motionEstimationMode;
@@ -36,7 +36,7 @@
       }
 
       private MotionEstimationAlgorithm _motionEstimationAlgorithm = MotionEstimationAlgorithm.Predictive;
-      [FilterParameterName( "me" )]
+      [FilterParameter( "me" )]
       public MotionEstimationAlgorithm MotionEstimationAlgorithm
       {
          get => _motionEstimationAlgorithm;
@@ -44,7 +44,7 @@
       }
 
       private int _macroblockSize = 16;
-      [FilterParameterName( "mb_size" )]
+      [FilterParameter( "mb_size" )]
       public int MacroblockSize
       {
          get => _macroblockSize;
@@ -52,7 +52,7 @@
       }
 
       private int _searchParameter = 32;
-      [FilterParameterName( "search_param" )]
+      [FilterParameter( "search_param" )]
       public int SearchParameter
       {
          get => _searchParameter;
@@ -60,7 +60,7 @@
       }
 
       private bool _variableSizeCompensation = false;
-      [FilterParameterName( "vsbmc" )]
+      [FilterParameter( "vsbmc" )]
       public bool VariableSizeCompensation
       {
          get => _variableSizeCompensation;
@@ -68,7 +68,7 @@
       }
 
       private SceneChangeDetectionAlgorithm _sceneChangeDetectionAlgorithm = SceneChangeDetectionAlgorithm.FrameDifference;
-      [FilterParameterName( "scd" )]
+      [FilterParameter( "scd" )]
       public SceneChangeDetectionAlgorithm SceneChangeDetectionAlgorithm
       {
          get => _sceneChangeDetectionAlgorithm;
@@ -76,7 +76,7 @@
       }
 
       private double _sceneChangeThreshold = 5.0;
-      [FilterParameterName( "scd_threshold" )]
+      [FilterParameter( "scd_threshold" )]
       public double SceneChangeThreshold
       {
          get => _sceneChangeThreshold;

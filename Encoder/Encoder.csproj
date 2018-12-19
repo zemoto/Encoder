@@ -56,17 +56,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Filters\FilterDataTemplateFactory.cs" />
     <Compile Include="Filters\Video\Copy\CopyVideoFilter.cs" />
     <Compile Include="Filters\Video\Encode\EncodeVideoFilter.cs" />
-    <Compile Include="Filters\Video\Encode\EncodeVideoFilterControl.xaml.cs">
-      <DependentUpon>EncodeVideoFilterControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\Encode\EncodeVideoFilterViewModel.cs" />
     <Compile Include="Utils\EmbeddedFfmpegManager.cs" />
     <Compile Include="Filters\Video\Blur\BlurVideoFilter.cs" />
-    <Compile Include="Filters\Video\Blur\BlurVideoFilterControl.xaml.cs">
-      <DependentUpon>BlurVideoFilterControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\Blur\BlurVideoFilterViewModel.cs" />
     <Compile Include="UIUtils\Converters.cs" />
     <Compile Include="Encoding\EncodingManager.cs" />
@@ -88,13 +83,7 @@
     <Compile Include="Filters\Video\VideoFilterType.cs" />
     <Compile Include="Filters\Video\VideoFilterViewModel.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterViewModel.cs" />
-    <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterControl.xaml.cs">
-      <DependentUpon>AmplifyVideoFilterControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\Denoise\DenoiseVideoFilter.cs" />
-    <Compile Include="Filters\Video\Denoise\DenoiseVideoFilterControl.xaml.cs">
-      <DependentUpon>DenoiseVideoFilterControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\Denoise\DenoiseVideoFilterViewModel.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateEnums.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilter.cs" />
@@ -123,23 +112,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\Encode\EncodeVideoFilterControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Filters\Video\VideoFilterSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Filters\Video\Amplify\AmplifyVideoFilterControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Filters\Video\Blur\BlurVideoFilterControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Filters\Video\Denoise\DenoiseVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,7 +8,7 @@ namespace Encoder.Filters
       public string FilterName { get; }
       public Type ControlType { get; }
 
-      public FilterAttribute( string filterName, Type controlType )
+      public FilterAttribute( string filterName = "", Type controlType = null )
       {
          FilterName = filterName;
          ControlType = controlType;
@@ -16,22 +16,34 @@ namespace Encoder.Filters
    }
 
    [AttributeUsage( AttributeTargets.Property )]
-   internal sealed class FilterParameterNameAttribute : Attribute
+   internal sealed class FilterParameterAttribute : Attribute
    {
-      public string ParameterName { get; }
+      public string ParameterLabel { get; }
+      public string ArgumentValue { get; }
+      public double Min { get; }
+      public double Max { get; }
+      public bool HasMinMax => Math.Abs( Min - Max ) > 0.001;
 
-      public FilterParameterNameAttribute( string parameterName )
+      public FilterParameterAttribute( string argumentValue )
       {
-         ParameterName = parameterName;
+         ArgumentValue = argumentValue;
+      }
+
+      public FilterParameterAttribute( string label, string argumentValue, double min = 0, double max = 0 )
+      {
+         ParameterLabel = label;
+         ArgumentValue = argumentValue;
+         Min = min;
+         Max = max;
       }
    }
 
    [AttributeUsage( AttributeTargets.Field )]
-   internal sealed class FilterParameterValueAttribute : Attribute
+   internal sealed class FilterEnumValueAttribute : Attribute
    {
       public string ParameterValue { get; }
 
-      public FilterParameterValueAttribute( string parameterValue )
+      public FilterEnumValueAttribute( string parameterValue )
       {
          ParameterValue = parameterValue;
       }

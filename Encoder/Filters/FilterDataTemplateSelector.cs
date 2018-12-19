@@ -8,20 +8,18 @@ namespace Encoder.Filters
    {
       public override DataTemplate SelectTemplate( object item, DependencyObject container )
       {
-         if ( item == null )
+         var filterAttribute = item?.GetType().GetAttribute<FilterAttribute>();
+         if ( filterAttribute == null )
          {
             return null;
          }
 
-         var template = new DataTemplate();
-
-         var filterAttribute = item.GetType().GetAttribute<FilterAttribute>();
-         if ( filterAttribute != null )
+         if ( filterAttribute.ControlType != null )
          {
-            template.VisualTree = new FrameworkElementFactory( filterAttribute.ControlType );
+            return new DataTemplate { VisualTree = new FrameworkElementFactory( filterAttribute.ControlType ) };
          }
 
-         return template;
+         return FilterDataTemplateFactory.ConstructDataTemplate( item as ViewModelBase );
       }
    }
 }

@@ -1,10 +1,10 @@
 ﻿namespace Encoder.Filters.Video.Blur
 {
-   [Filter( "avgblur", typeof( BlurVideoFilterControl ) )]
+   [Filter( "avgblur" )]
    internal sealed class BlurVideoFilterViewModel : VideoFilterViewModel
    {
       private int _horizontalRadius = 3;
-      [FilterParameterName( "sizeX" )]
+      [FilterParameter( "Horizontal Radius", "sizeX", 0, 10000 )]
       public int HorizontalRadius
       {
          get => _horizontalRadius;
@@ -12,7 +12,7 @@
       }
 
       private int _verticalRadius = 3;
-      [FilterParameterName( "sizeY" )]
+      [FilterParameter( "Vertical Radius", "sizeY", 0, 10000 )]
       public int VerticalRadius
       {
          get => _verticalRadius;

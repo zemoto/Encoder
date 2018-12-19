@@ -2,14 +2,17 @@
 {
    internal enum VideoFileFormat
    {
-      [FilterParameterValue( "libx264" )]
-      MP4
+      [FilterEnumValue( "libx264" )]
+      H264,
+      [FilterEnumValue( "libx265" )]
+      H265
    }
 
-   [Filter( "encode", typeof( EncodeVideoFilterControl ) )]
+   [Filter]
    internal sealed class EncodeVideoFilterViewModel : VideoFilterViewModel
    {
-      private VideoFileFormat _fileFormat = VideoFileFormat.MP4;
+      private VideoFileFormat _fileFormat = VideoFileFormat.H264;
+      [FilterParameter( "File Format", "" )]
       public VideoFileFormat FileFormat
       {
          get => _fileFormat;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Encoder.Filters.Video.Copy;
 using Encoder.Utils;
 
@@ -26,13 +25,13 @@ namespace Encoder.Filters.Video
          var filterProperties = filter.ViewModel.GetType().GetProperties();
          foreach( var property in filterProperties )
          {
-            var filterParamName = property.GetAttribute<FilterParameterNameAttribute>().ParameterName;
+            var filterParamName = property.GetAttribute<FilterParameterAttribute>().ArgumentValue;
 
             string filterParamValue;
             var propertyValue = property.GetValue( filter.ViewModel );
             if ( propertyValue is Enum enumValue )
             {
-               filterParamValue = enumValue.GetAttribute<FilterParameterValueAttribute>().ParameterValue;
+               filterParamValue = enumValue.GetAttribute<FilterEnumValueAttribute>().ParameterValue;
             }
             else if ( propertyValue is bool boolValue )
             {

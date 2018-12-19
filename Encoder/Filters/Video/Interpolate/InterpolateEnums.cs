@@ -4,77 +4,77 @@ namespace Encoder.Filters.Video.Interpolate
 {
    internal enum InterpolationMode
    {
-      [FilterParameterValue( "dup" )]
+      [FilterEnumValue( "dup" )]
       Duplicate,
 
-      [FilterParameterValue( "blend" )]
+      [FilterEnumValue( "blend" )]
       Blend,
 
-      [FilterParameterValue( "mci" )]
+      [FilterEnumValue( "mci" )]
       [Description( "Motion Compensated" )]
       MotionCompensated
    }
 
    internal enum MotionCompensationMode
    {
-      [FilterParameterValue( "obmc" )]
+      [FilterEnumValue( "obmc" )]
       [Description( "Overlapped Block" )]
       OverlappedBlock,
 
-      [FilterParameterValue( "aobmc" )]
+      [FilterEnumValue( "aobmc" )]
       Adaptive
    }
 
    internal enum MotionEstimationMode
    {
-      [FilterParameterValue( "bidir" )]
+      [FilterEnumValue( "bidir" )]
       Bidirectional,
 
-      [FilterParameterValue( "bilat" )]
+      [FilterEnumValue( "bilat" )]
       Bilateral
    }
 
    internal enum MotionEstimationAlgorithm
    {
-      [FilterParameterValue( "esa" )]
+      [FilterEnumValue( "esa" )]
       Exhaustive,
 
-      [FilterParameterValue( "tss" )]
+      [FilterEnumValue( "tss" )]
       [Description( "Three Step" )]
       ThreeStep,
 
-      [FilterParameterValue( "tdls" )]
+      [FilterEnumValue( "tdls" )]
       [Description( "Two Dimensional" )]
       TwoDimensional,
 
-      [FilterParameterValue( "ntss" )]
+      [FilterEnumValue( "ntss" )]
       [Description( "New Three Step" )]
       NewThreeStep,
 
-      [FilterParameterValue( "fss" )]
+      [FilterEnumValue( "fss" )]
       [Description( "Four Step" )]
       FourStep,
 
-      [FilterParameterValue( "ds" )]
+      [FilterEnumValue( "ds" )]
       Diamond,
 
-      [FilterParameterValue( "hexbs" )]
+      [FilterEnumValue( "hexbs" )]
       Hexagon,
 
-      [FilterParameterValue( "epzs" )]
+      [FilterEnumValue( "epzs" )]
       Predictive,
 
-      [FilterParameterValue( "umh" )]
+      [FilterEnumValue( "umh" )]
       [Description( "Uneven Multi-Hexagon" )]
       UnevenMultiHexagon
    }
 
    internal enum SceneChangeDetectionAlgorithm
    {
-      [FilterParameterValue( "none" )]
+      [FilterEnumValue( "none" )]
       None,
 
-      [FilterParameterValue( "fdiff" )]
+      [FilterEnumValue( "fdiff" )]
       [Description( "Frame Difference" )]
       FrameDifference
    }

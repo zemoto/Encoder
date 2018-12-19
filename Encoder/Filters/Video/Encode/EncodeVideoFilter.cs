@@ -12,7 +12,7 @@ namespace Encoder.Filters.Video.Encode
          get
          {
             var fileFormat = ( (EncodeVideoFilterViewModel)ViewModel ).FileFormat;
-            return $"-c:v {fileFormat.GetAttribute<FilterParameterValueAttribute>().ParameterValue}";
+            return $"-c:v {fileFormat.GetAttribute<FilterEnumValueAttribute>().ParameterValue}";
          }
       }
    }
