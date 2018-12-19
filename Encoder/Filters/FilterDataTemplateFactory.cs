@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Encoder.UIUtils;
 using Encoder.Utils;
 
@@ -15,51 +17,118 @@ namespace Encoder.Filters
    {
       public static DataTemplate ConstructDataTemplate( ViewModelBase filterViewModel )
       {
+         if ( filterViewModel == null )
+         {
+            return null;
+         }
+
          var template = new DataTemplate { DataType = filterViewModel.GetType() };
 
-         var mainGridFactory = CreateGridFactory( filterViewModel.GetType().GetProperties() );
-         mainGridFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 0, 0, 8 ) );
-
-         template.VisualTree = mainGridFactory;
+         var properties = filterViewModel.GetType().GetProperties();
+         if ( properties.Length > 0 )
+         {
+            var mainGridFactory = CreateGridFactory( properties, false );
+            mainGridFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 0, 0, 8 ) );
+            template.VisualTree = mainGridFactory;
+         }
+         
          return template;
       }
 
-      private static FrameworkElementFactory CreateGridFactory( IReadOnlyList<PropertyInfo> properties )
+      private static FrameworkElementFactory CreateGridFactory( IReadOnlyList<PropertyInfo> properties, bool ignoreDependency )
       {
          var gridFactory = new FrameworkElementFactory( typeof( Grid ) );
 
          for ( int i = 0; i < properties.Count; i++ )
          {
+            int row = i;
             gridFactory.AppendChild( new FrameworkElementFactory( typeof( RowDefinition ) ) );
 
             var property = properties[i];
-            var propertyControlFactory = new FrameworkElementFactory( typeof( FilterPropertyControl ) );
             var propertyAttribute = property.GetAttribute<FilterParameterAttribute>();
-            propertyControlFactory.SetValue( FilterPropertyControl.LabelProperty, propertyAttribute.ParameterLabel + ":" );
-            propertyControlFactory.SetValue( Grid.RowProperty, i );
 
-            if ( property.PropertyType.IsEnum )
+            FrameworkElementFactory elementFactory;
+            if ( propertyAttribute.HasDependency && !ignoreDependency )
             {
-               propertyControlFactory.AppendChild( ConstructComboBox( property ) );
-            }
-            else if ( property.PropertyType == typeof( bool ) )
-            {
-               // TODO
+               var dependentProperties = new List<PropertyInfo>();
+               for ( int j = i; j < properties.Count; j++ )
+               {
+                  var otherPropertyAttribute = properties[j].GetAttribute<FilterParameterAttribute>();
+                  if ( propertyAttribute.SharesDependencyWith( otherPropertyAttribute ) )
+                  {
+                     dependentProperties.Add( properties[j] );
+                  }
+                  else
+                  {
+                     i = j - 1;
+                     break;
+                  }
+                  if ( j == properties.Count - 1 )
+                  {
+                     i = j;
+                  }
+               }
+               elementFactory = CreateGridFactory( dependentProperties, true );
+               elementFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 16, 0, 0, 0 ) );
+
+               var visibilityBinding = new Binding( propertyAttribute.PropertyDependency )
+               {
+                  Converter = new EqualityToVisibilityConverter(),
+                  ConverterParameter = propertyAttribute.DependencyValue
+               };
+               elementFactory.SetBinding( UIElement.VisibilityProperty, visibilityBinding );
+
+               var indentIndicatorFactory = CreateIndentIndicatorFactory();
+               indentIndicatorFactory.SetValue( Grid.RowProperty, row );
+               gridFactory.AppendChild( indentIndicatorFactory );
             }
             else
             {
-               propertyControlFactory.AppendChild( ConstructTextBox( property, propertyAttribute ) );
+               elementFactory = ConstructFilterPropertyControl( property, propertyAttribute );
             }
-            gridFactory.AppendChild( propertyControlFactory );
+            elementFactory.SetValue( Grid.RowProperty, row );
+            
+            gridFactory.AppendChild( elementFactory );
          }
 
          return gridFactory;
       }
 
+      private static FrameworkElementFactory ConstructFilterPropertyControl( PropertyInfo property, FilterParameterAttribute propertyAttribute )
+      {
+         var propertyControlFactory = new FrameworkElementFactory( typeof( FilterPropertyControl ) );
+         propertyControlFactory.SetValue( FilterPropertyControl.LabelProperty, propertyAttribute.ParameterLabel + ":" );
+
+         if ( property.PropertyType.IsEnum )
+         {
+            propertyControlFactory.AppendChild( ConstructComboBox( property ) );
+         }
+         else if ( property.PropertyType == typeof( bool ) )
+         {
+            propertyControlFactory.AppendChild( ConstructCheckBox( property ) );
+         }
+         else
+         {
+            propertyControlFactory.AppendChild( ConstructTextBox( property, propertyAttribute ) );
+         }
+         return propertyControlFactory;
+      }
+
+      private static FrameworkElementFactory CreateIndentIndicatorFactory()
+      {
+         var indentIndicatorFactory = new FrameworkElementFactory( typeof( Rectangle ) );
+         indentIndicatorFactory.SetValue( FrameworkElement.WidthProperty, 1.0 );
+         indentIndicatorFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 8, 0, 0, 0 ) );
+         indentIndicatorFactory.SetValue( Shape.StrokeThicknessProperty, 1.0 );
+         indentIndicatorFactory.SetValue( Shape.StrokeProperty, Brushes.DarkGray );
+         indentIndicatorFactory.SetValue( FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left );
+
+         return indentIndicatorFactory;
+      }
+
       private static FrameworkElementFactory ConstructComboBox( PropertyInfo property )
       {
          var comboBoxFactory = new FrameworkElementFactory( typeof( ComboBox ) );
-         comboBoxFactory.SetValue( FrameworkElement.WidthProperty, 100.0 );
          comboBoxFactory.SetBinding( Selector.SelectedValueProperty, new Binding( property.Name ) );
 
          var enumValues = Enum.GetValues( property.PropertyType );
@@ -68,7 +137,23 @@ namespace Encoder.Filters
          comboBoxFactory.SetValue( ItemsControl.DisplayMemberPathProperty, "Display" );
          comboBoxFactory.SetValue( ItemsControl.ItemsSourceProperty, enumMembers );
 
+         comboBoxFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 4, 0, 4 ) );
+         comboBoxFactory.SetValue( Control.VerticalContentAlignmentProperty, VerticalAlignment.Center );
+         comboBoxFactory.SetValue( FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center );
+         comboBoxFactory.SetValue( FrameworkElement.HeightProperty, 24.0 );
+         comboBoxFactory.SetValue( Control.PaddingProperty, new Thickness( 8, 0, 0, 0 ) );
+
          return comboBoxFactory;
+      }
+
+      private static FrameworkElementFactory ConstructCheckBox( PropertyInfo property )
+      {
+         var checkBoxFactory = new FrameworkElementFactory( typeof( CheckBox ) );
+
+         checkBoxFactory.SetBinding( ToggleButton.IsCheckedProperty, new Binding( property.Name ) );
+         checkBoxFactory.SetValue( FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center );
+
+         return checkBoxFactory;
       }
 
       private static FrameworkElementFactory ConstructTextBox( PropertyInfo property, FilterParameterAttribute propertyAttribute )
@@ -90,8 +175,16 @@ namespace Encoder.Filters
          }
          else
          {
-            textBoxFactory.SetResourceReference( TextBox.TextProperty, new Binding( property.Name ) );
+            textBoxFactory.SetBinding( TextBox.TextProperty, new Binding( property.Name ) );
          }
+
+         textBoxFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 4, 0, 4 ) );
+         textBoxFactory.SetValue( Control.HorizontalContentAlignmentProperty, HorizontalAlignment.Center );
+         textBoxFactory.SetValue( Control.VerticalContentAlignmentProperty, VerticalAlignment.Center );
+         textBoxFactory.SetValue( FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left );
+         textBoxFactory.SetValue( FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center );
+         textBoxFactory.SetValue( FrameworkElement.WidthProperty, 45.0 );
+         textBoxFactory.SetValue( FrameworkElement.HeightProperty, 24.0 );
 
          return textBoxFactory;
       }

@@ -87,9 +87,6 @@
     <Compile Include="Filters\Video\Denoise\DenoiseVideoFilterViewModel.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateEnums.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilter.cs" />
-    <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterControl.xaml.cs">
-      <DependentUpon>InterpolateVideoFilterControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
@@ -108,15 +105,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\FilterPropertyDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Filters\Video\VideoFilterSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Filters\Video\Interpolate\InterpolateVideoFilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

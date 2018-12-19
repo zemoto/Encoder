@@ -7,12 +7,10 @@ namespace Encoder.Filters
    internal sealed class FilterAttribute : Attribute
    {
       public string FilterName { get; }
-      public Type ControlType { get; }
 
-      public FilterAttribute( string filterName = "", Type controlType = null )
+      public FilterAttribute( string filterName = "" )
       {
          FilterName = filterName;
-         ControlType = controlType;
       }
    }
 
@@ -53,6 +51,11 @@ namespace Encoder.Filters
          PropertyDependency = propertyDependency;
          DependencyValue = dependencyValue;
          HasDependency = true;
+      }
+
+      public bool SharesDependencyWith( FilterParameterAttribute other )
+      {
+         return string.Equals( PropertyDependency, other.PropertyDependency ) && Equals( DependencyValue, other.DependencyValue );
       }
    }
 
