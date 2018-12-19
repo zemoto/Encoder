@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Encoder.Filters.Video.Copy;
 using Encoder.Utils;
 
@@ -25,7 +26,16 @@ namespace Encoder.Filters.Video
          var filterProperties = filter.ViewModel.GetType().GetProperties();
          foreach( var property in filterProperties )
          {
-            var filterParamName = property.GetAttribute<FilterParameterAttribute>().ArgumentParam;
+            var filterParamAttribute = property.GetAttribute<FilterParameterAttribute>();
+
+            if ( filterParamAttribute.HasDependency )
+            {
+               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, filterParamAttribute.PropertyDependency ) );
+               if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), filterParamAttribute.DependencyValue) )
+               {
+                  continue;
+               }
+            }
 
             string filterParamValue;
             var propertyValue = property.GetValue( filter.ViewModel );
@@ -42,7 +52,7 @@ namespace Encoder.Filters.Video
                filterParamValue = propertyValue.ToString();
             }
 
-            filterString += $"{filterParamName}={filterParamValue}:";
+            filterString += $"{filterParamAttribute.ArgumentParam}={filterParamValue}:";
          }
 
          filterString = filterString.TrimEnd( ':' );
