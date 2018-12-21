@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -53,7 +53,14 @@ namespace Encoder.Encoding
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
 
-         _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
+         // Give the process time to spool up
+         Thread.Sleep( 100 );
+
+         // In case the process finished very quickly
+         if ( _currentffmpegProcess?.HasExited == false )
+         {
+            _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
+         }
 
          _encodingTask.Started = true;
       }
