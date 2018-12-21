@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
 
 namespace Encoder.Utils
@@ -39,6 +40,18 @@ namespace Encoder.Utils
          if ( filterType != null )
          {
             return (VideoFilter)Activator.CreateInstance( filterType );
+         }
+
+         throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
+      }
+
+      public static AudioFilter GetFilterForType( this AudioFilterType type )
+      {
+         var filterName = type.ToString();
+         var filterType = Type.GetType( $"Encoder.Filters.Audio.{filterName}.{filterName}AudioFilter" );
+         if ( filterType != null )
+         {
+            return (AudioFilter)Activator.CreateInstance( filterType );
          }
 
          throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );

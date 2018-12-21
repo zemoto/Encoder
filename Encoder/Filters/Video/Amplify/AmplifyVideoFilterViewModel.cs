@@ -1,7 +1,7 @@
 ﻿namespace Encoder.Filters.Video.Amplify
 {
    [Filter( "amplify" )]
-   internal sealed class AmplifyVideoFilterViewModel : VideoFilterViewModel
+   internal sealed class AmplifyVideoFilterViewModel : FilterViewModel
    {
       private int _radius = 2;
       [FilterParameter( "Frame Radius", "radius", 1, 63 )]

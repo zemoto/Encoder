@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Encoder.Filters.Video.VideoFilterSelectorControl"
+﻿<UserControl x:Class="Encoder.Filters.Audio.AudioFilterSelectorControl"
              x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:filters="clr-namespace:Encoder.Filters"
              xmlns:uiUtils="clr-namespace:Encoder.UIUtils" 
-             xmlns:video="clr-namespace:Encoder.Filters.Video"
+             xmlns:audio="clr-namespace:Encoder.Filters.Audio"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
 
@@ -38,12 +38,12 @@
       <StackPanel Grid.Row="0"
                   Orientation="Horizontal">
 
-         <TextBlock Text="Video Codec Operation:"
+         <TextBlock Text="Audio Codec Operation:"
                     Margin="0,0,8,0"
                     VerticalAlignment="Center" />
 
-         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type video:VideoFilterType}}"
-                   SelectedValue="{Binding VideoFilterType}"
+         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type audio:AudioFilterType}}"
+                   SelectedValue="{Binding AudioFilterType}"
                    Width="100"
                    Height="24" />
          
@@ -52,6 +52,6 @@
       <ContentPresenter Grid.Row="1" 
                         Margin="16,8,0,0"
                         ContentTemplateSelector="{StaticResource FilterDataTemplateSelector}"
-                        Content="{Binding VideoFilter.ViewModel}" />
+                        Content="{Binding AudioFilter.ViewModel}" />
    </Grid>
 </UserControl>

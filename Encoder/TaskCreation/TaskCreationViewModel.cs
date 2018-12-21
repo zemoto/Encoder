@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Encoder.Encoding;
+using Encoder.Filters.Audio;
+using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Encoder.Utils;
@@ -14,19 +16,19 @@ namespace Encoder.TaskCreation
 
       public IEnumerable<EncodingTaskViewModel> GetTasks()
       {
-         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, VideoFilter ) ).ToList();
+         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, VideoFilter, AudioFilter ) ).ToList();
          SelectedFiles.Clear();
-         SelectedFilter = VideoFilterType.Copy;
+         VideoFilterType = VideoFilterType.Copy;
          return tasks;
       }
 
-      private VideoFilterType _selectedFilter = VideoFilterType.Copy;
-      public VideoFilterType SelectedFilter
+      private VideoFilterType _videoFilterType = VideoFilterType.Copy;
+      public VideoFilterType VideoFilterType
       {
-         get => _selectedFilter;
+         get => _videoFilterType;
          set
          {
-            if ( SetProperty( ref _selectedFilter, value ) )
+            if ( SetProperty( ref _videoFilterType, value ) )
             {
                VideoFilter = value.GetFilterForType();
             }
@@ -38,6 +40,26 @@ namespace Encoder.TaskCreation
       {
          get => _videoFilter;
          private set => SetProperty( ref _videoFilter, value );
+      }
+
+      private AudioFilterType _audioFilterType = AudioFilterType.Copy;
+      public AudioFilterType AudioFilterType
+      {
+         get => _audioFilterType;
+         set
+         {
+            if ( SetProperty( ref _audioFilterType, value ) )
+            {
+               AudioFilter = value.GetFilterForType();
+            }
+         }
+      }
+
+      private AudioFilter _audioFilter = new CopyAudioFilter();
+      public AudioFilter AudioFilter
+      {
+         get => _audioFilter;
+         private set => SetProperty( ref _audioFilter, value );
       }
 
       public RelayCommand SelectFilesCommand { get; set; }

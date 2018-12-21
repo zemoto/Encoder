@@ -2,6 +2,8 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
+using Encoder.Filters;
+using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
 using Encoder.Utils;
 
@@ -10,13 +12,15 @@ namespace Encoder.Encoding
    internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
    {
       private readonly VideoFilter _videoFilter;
+      private readonly AudioFilter _audioFilter;
       private TimeSpan _sourceDuration;
       public CancellationTokenSource CancelToken { get; }
 
-      public EncodingTaskViewModel( string sourceFile, VideoFilter videoFilter )
+      public EncodingTaskViewModel( string sourceFile, VideoFilter videoFilter, AudioFilter audioFilter )
       {
          SourceFile = sourceFile;
          _videoFilter = videoFilter;
+         _audioFilter = audioFilter;
 
          CancelToken = new CancellationTokenSource();
       }
@@ -26,7 +30,8 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      public string GetEncodingArguments() => VideoFilterArgumentBuilder.GetFilterArguments( _videoFilter );
+      public string GetVideoArguments() => FilterArgumentBuilder.GetFilterArguments( _videoFilter );
+      public string GetAudioArguments() => FilterArgumentBuilder.GetFilterArguments( _audioFilter );
 
       public bool Initialize()
       {

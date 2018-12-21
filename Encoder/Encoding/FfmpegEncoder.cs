@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -10,7 +10,7 @@ namespace Encoder.Encoding
    {
       private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
       private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.GetEncodingArguments()} \"{_encodingTask.TargetFile}\"";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.GetVideoArguments()} {_encodingTask.GetAudioArguments()} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string FfmpegExeLocation;
 

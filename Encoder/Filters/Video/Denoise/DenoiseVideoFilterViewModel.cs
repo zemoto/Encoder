@@ -1,7 +1,7 @@
 ﻿namespace Encoder.Filters.Video.Denoise
 {
    [Filter( "atadenoise" )]
-   internal sealed class DenoiseVideoFilterViewModel : VideoFilterViewModel
+   internal sealed class DenoiseVideoFilterViewModel : FilterViewModel
    {
       private double _zeroA = 0.02;
       [FilterParameter( "Threshold 0A", "0a", 0, 0.3 )]

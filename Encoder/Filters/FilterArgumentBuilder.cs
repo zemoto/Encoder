@@ -1,24 +1,29 @@
 ﻿using System;
 using System.Linq;
-using Encoder.Filters.Video.Copy;
+using Encoder.Filters.Audio;
+using Encoder.Filters.Video;
 using Encoder.Utils;
 
-namespace Encoder.Filters.Video
+namespace Encoder.Filters
 {
-   internal static class VideoFilterArgumentBuilder
+   internal static class FilterArgumentBuilder
    {
-      public static string GetFilterArguments( VideoFilter filter )
+      public static string GetFilterArguments( VideoFilter filter ) => GetFilterArguments( filter, "v" );
+
+      public static string GetFilterArguments( AudioFilter filter ) => GetFilterArguments( filter, "a" );
+
+      private static string GetFilterArguments( Filter filter, string filterType )
       {
          if ( !filter.CanApplyFilter() )
          {
-            return new CopyVideoFilter().CustomFilterArguments;
+            return $"-c:{filterType} copy";
          }
          if ( !string.IsNullOrEmpty( filter.CustomFilterArguments ) )
          {
             return filter.CustomFilterArguments;
          }
 
-         var filterString = "-filter:v ";
+         var filterString = $"-filter:{filterType} ";
 
          var filterName = filter.ViewModel.GetType().GetAttribute<FilterAttribute>().FilterName;
          filterString += $"\"{filterName}='";

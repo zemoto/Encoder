@@ -9,7 +9,7 @@
    }
 
    [Filter]
-   internal sealed class EncodeVideoFilterViewModel : VideoFilterViewModel
+   internal sealed class EncodeVideoFilterViewModel : FilterViewModel
    {
       private VideoFileFormat _fileFormat = VideoFileFormat.H264;
       [FilterParameter( "File Format", "" )]

@@ -2,7 +2,7 @@
 {
    internal sealed class AmplifyVideoFilter : VideoFilter
    {
-      public override VideoFilterViewModel ViewModel { get; } = new AmplifyVideoFilterViewModel();
+      public override FilterViewModel ViewModel { get; } = new AmplifyVideoFilterViewModel();
       public override string FilterName { get; } = "Amplify";
    }
 }

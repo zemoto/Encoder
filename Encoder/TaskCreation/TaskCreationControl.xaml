@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
-             xmlns:video="clr-namespace:Encoder.Filters.Video"
+             xmlns:video="clr-namespace:Encoder.Filters.Video" 
+             xmlns:audio="clr-namespace:Encoder.Filters.Audio"
              mc:Ignorable="d"
              x:Name="Root"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
@@ -18,6 +19,7 @@
       <Grid Margin="8,0,8,8">
          <Grid.RowDefinitions>
             <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
@@ -45,15 +47,16 @@
          </Border>
 
          <video:VideoFilterSelectorControl Grid.Row="1" />
+         <audio:AudioFilterSelectorControl Grid.Row="2" />
 
-         <Button Grid.Row="2"
+         <Button Grid.Row="3"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="2"
+         <Button Grid.Row="3"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"
