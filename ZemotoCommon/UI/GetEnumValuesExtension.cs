@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using Encoder.Utils;
+using ZemotoCommon.Utils;
 
-namespace Encoder.UIUtils
+namespace ZemotoCommon.UI
 {
-   internal sealed class BoundEnumMember
+   public sealed class BoundEnumMember
    {
       public BoundEnumMember( object value )
       {
@@ -33,7 +33,7 @@ namespace Encoder.UIUtils
       }
    }
 
-   internal sealed class GetEnumValuesExtension : MarkupExtension
+   public sealed class GetEnumValuesExtension : MarkupExtension
    {
       private readonly Type _type;
       public GetEnumValuesExtension( Type type )

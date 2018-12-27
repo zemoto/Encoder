@@ -2,9 +2,9 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Encoder.UIUtils
+namespace ZemotoCommon.UI
 {
-   internal sealed class IntMinMaxBinding : Binding
+   public sealed class IntMinMaxBinding : Binding
    {
       private sealed class IntMinMaxValidationRule : ValidationRule
       {
@@ -34,7 +34,7 @@ namespace Encoder.UIUtils
       }
    }
 
-   internal sealed class DoubleMinMaxBinding : Binding
+   public sealed class DoubleMinMaxBinding : Binding
    {
       private sealed class DoubleMinMaxValidationRule : ValidationRule
       {

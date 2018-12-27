@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Encoder.Utils;
+using ZemotoCommon.UI;
 
 namespace Encoder.Filters
 {

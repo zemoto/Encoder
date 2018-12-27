@@ -14,5 +14,17 @@ namespace Encoder.Filters.Video
       }
 
       public virtual int GetTargetFrameCount() => (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
+
+      public static VideoFilter GetFilterForType( VideoFilterType type )
+      {
+         var filterName = type.ToString();
+         var filterType = Type.GetType( $"Encoder.Filters.Video.{filterName}.{filterName}VideoFilter" );
+         if ( filterType != null )
+         {
+            return (VideoFilter)Activator.CreateInstance( filterType );
+         }
+
+         throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
+      }
    }
 }

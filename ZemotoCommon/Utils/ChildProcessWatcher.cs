@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Encoder.Utils
+namespace ZemotoCommon.Utils
 {
    // This class creates a "job" and allows the rest of the app to add child processes to it.
    // When the job goes out of scope (program crashes, closes, exits, etc), all added child
    // processes are closed with it.
-   internal static class ChildProcessWatcher
+   public static class ChildProcessWatcher
    {
       private static readonly IntPtr Handle;
 

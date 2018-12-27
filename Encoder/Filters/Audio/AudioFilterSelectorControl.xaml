@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:filters="clr-namespace:Encoder.Filters"
-             xmlns:uiUtils="clr-namespace:Encoder.UIUtils" 
+             xmlns:ui="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon" 
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
@@ -42,7 +42,7 @@
                     Margin="0,0,8,0"
                     VerticalAlignment="Center" />
 
-         <ComboBox ItemsSource="{uiUtils:GetEnumValues {x:Type audio:AudioFilterType}}"
+         <ComboBox ItemsSource="{ui:GetEnumValues {x:Type audio:AudioFilterType}}"
                    SelectedValue="{Binding AudioFilterType}"
                    Width="100"
                    Height="24" />

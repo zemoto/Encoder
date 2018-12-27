@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Encoder.Utils
+namespace ZemotoCommon.UI
 {
-   internal sealed class RelayCommand : ICommand
+   public sealed class RelayCommand : ICommand
    {
       readonly Action _execute;
       readonly Func<bool> _canExecute;
@@ -28,7 +28,7 @@ namespace Encoder.Utils
       }
    }
 
-   internal sealed class RelayCommand<T> : ICommand
+   public sealed class RelayCommand<T> : ICommand
    {
       readonly Action<T> _execute;
       readonly Func<T, bool> _canExecute;

@@ -1,4 +1,4 @@
-﻿using Encoder.Utils;
+﻿using ZemotoCommon.Utils;
 
 namespace Encoder.Filters.Video.Encode
 {

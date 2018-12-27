@@ -8,8 +8,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Encoder.UIUtils;
-using Encoder.Utils;
+using ZemotoCommon.UI;
+using ZemotoCommon.Utils;
 
 namespace Encoder.Filters
 {

@@ -1,6 +1,6 @@
 ﻿using Encoder.Encoding;
 using Encoder.TaskCreation;
-using Encoder.Utils;
+using ZemotoCommon.UI;
 
 namespace Encoder
 {

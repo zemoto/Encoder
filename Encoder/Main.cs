@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using Encoder.Encoding;
 using Encoder.TaskCreation;
-using Encoder.Utils;
 using Microsoft.Win32;
+using ZemotoCommon.UI;
 
 namespace Encoder
 {

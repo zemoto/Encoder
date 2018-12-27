@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Encoder.Utils
+namespace ZemotoCommon.UI
 {
-   internal abstract class ViewModelBase : INotifyPropertyChanged
+   public abstract class ViewModelBase : INotifyPropertyChanged
    {
       public event PropertyChangedEventHandler PropertyChanged;
 

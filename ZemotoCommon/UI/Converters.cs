@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Encoder.UIUtils
+namespace ZemotoCommon.UI
 {
-   internal sealed class EqualityToVisibilityConverter : IValueConverter
+   public sealed class EqualityToVisibilityConverter : IValueConverter
    {
       public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
       {

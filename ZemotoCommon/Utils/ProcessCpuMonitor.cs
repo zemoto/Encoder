@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Encoder.Utils
+namespace ZemotoCommon.Utils
 {
    internal static class TotalCpuMonitor
    {

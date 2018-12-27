@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
+using ZemotoCommon.Utils;
 
-namespace Encoder.Utils
+namespace Encoder.ffmpeg
 {
    internal static class EmbeddedFfmpegManager
    {

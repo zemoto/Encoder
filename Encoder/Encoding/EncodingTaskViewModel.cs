@@ -5,7 +5,7 @@ using System.Windows;
 using Encoder.Filters;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
-using Encoder.Utils;
+using ZemotoCommon.UI;
 
 namespace Encoder.Encoding
 {

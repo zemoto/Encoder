@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using Encoder.Utils;
+using ZemotoCommon.Utils;
 using Timer = System.Timers.Timer;
 
 namespace Encoder.Encoding

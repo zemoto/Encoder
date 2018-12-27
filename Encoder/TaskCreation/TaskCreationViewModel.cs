@@ -6,7 +6,7 @@ using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
-using Encoder.Utils;
+using ZemotoCommon.UI;
 
 namespace Encoder.TaskCreation
 {
@@ -30,7 +30,7 @@ namespace Encoder.TaskCreation
          {
             if ( SetProperty( ref _videoFilterType, value ) )
             {
-               VideoFilter = value.GetFilterForType();
+               VideoFilter = VideoFilter.GetFilterForType( value );
             }
          }
       }
@@ -50,7 +50,7 @@ namespace Encoder.TaskCreation
          {
             if ( SetProperty( ref _audioFilterType, value ) )
             {
-               AudioFilter = value.GetFilterForType();
+               AudioFilter =  AudioFilter.GetFilterForType( value );
             }
          }
       }
