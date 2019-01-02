@@ -97,7 +97,7 @@ namespace Encoder.Encoding
             return true;
          }
 
-         var currentTotalCpuUsage = TotalCpuMonitor.GetCurrentCpuUsage();
+         var currentTotalCpuUsage = ProcessCpuMonitor.GetTotalCpuUsage();
          var averageTaskCpuUsage = Model.Tasks.Where( x => x.Started ).Average( x => x.CpuUsage );
 
          return averageTaskCpuUsage < 100 - currentTotalCpuUsage;

@@ -20,7 +20,6 @@ namespace Encoder
       {
          _main.Dispose();
          EmbeddedFfmpegManager.Cleanup();
-         TotalCpuMonitor.Dispose();
       }
    }
 }

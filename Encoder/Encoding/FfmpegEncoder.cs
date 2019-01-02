@@ -83,7 +83,7 @@ namespace Encoder.Encoding
             }
          }
 
-         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCurrentCpuUsage();
+         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCpuUsage();
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )

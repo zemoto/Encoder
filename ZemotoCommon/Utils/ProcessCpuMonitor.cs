@@ -5,24 +5,16 @@ using System.Linq;
 
 namespace ZemotoCommon.Utils
 {
-   internal static class TotalCpuMonitor
+   public sealed class ProcessCpuMonitor : IDisposable
    {
-      private static readonly PerformanceCounter CpuUsageCounter;
-
-      static TotalCpuMonitor()
-      {
-         CpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
-         CpuUsageCounter.NextValue();
-      }
-
-      public static int GetCurrentCpuUsage() => (int)CpuUsageCounter.NextValue();
-
-      public static void Dispose() => CpuUsageCounter?.Dispose();
-   }
-
-   internal sealed class ProcessCpuMonitor : IDisposable
-   {
+      private static readonly PerformanceCounter TotalCpuUsageCounter;
       private readonly PerformanceCounter _cpuUsageCounter;
+
+      static ProcessCpuMonitor()
+      {
+         TotalCpuUsageCounter = new PerformanceCounter( "Processor Information", "% Processor Time", "_Total", true );
+         TotalCpuUsageCounter.NextValue();
+      }
 
       public ProcessCpuMonitor( Process process )
       {
@@ -35,7 +27,7 @@ namespace ZemotoCommon.Utils
          _cpuUsageCounter?.Dispose();
       }
 
-      public int GetCurrentCpuUsage()
+      public int GetCpuUsage()
       {
          try
          {
@@ -46,6 +38,8 @@ namespace ZemotoCommon.Utils
             return 0;
          }
       }
+
+      public static int GetTotalCpuUsage() => (int)TotalCpuUsageCounter.NextValue();
 
       private static string GetInstanceName( Process process )
       {
