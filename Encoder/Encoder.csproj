@@ -153,12 +153,11 @@
     <EmbeddedResource Include="ffmpeg\ffprobe.exe" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZemotoCommon\ZemotoCommon.csproj">
+    <ProjectReference Include="..\ZemotoCommon\ZemotoCommon\ZemotoCommon.csproj">
       <Project>{7a432672-e6da-46c5-a63f-b65034d598f0}</Project>
       <Name>ZemotoCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.3.3.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

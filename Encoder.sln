@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encoder", "Encoder\Encoder.csproj", "{5D4A3B10-C923-4FE6-B53B-B7AEB780F4BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZemotoCommon", "ZemotoCommon\ZemotoCommon.csproj", "{7A432672-E6DA-46C5-A63F-B65034D598F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZemotoCommon", "ZemotoCommon\ZemotoCommon\ZemotoCommon.csproj", "{7A432672-E6DA-46C5-A63F-B65034D598F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
