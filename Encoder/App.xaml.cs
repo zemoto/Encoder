@@ -10,6 +10,7 @@ namespace Encoder
 
       protected override void OnStartup( StartupEventArgs e )
       {
+         EmbeddedFfmpegManager.BeginExtracting();
          ChildProcessWatcher.Initialize();
 
          _main = new Main();

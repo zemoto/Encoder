@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using ZemotoCommon.Utils;
 
 namespace Encoder.ffmpeg
@@ -13,37 +14,40 @@ namespace Encoder.ffmpeg
       public static string GetFfmpegExecutableFilePath() => GetExecutableFilePath( FfmpegFileName );
       public static string GetFfprobeExecutableFilePath() => GetExecutableFilePath( FfprobeFileName );
 
+      private static Task _extractingTask;
+      public static void BeginExtracting()
+      {
+         _extractingTask = Task.Run( () =>
+         {
+            ExtractResource( FfmpegFileName );
+            ExtractResource( FfprobeFileName );
+         } );
+      }
+
       public static void Cleanup()
       {
-         UtilityMethods.SafeDeleteFile( GetFfmpegExecutableFilePath() );
-         UtilityMethods.SafeDeleteFile( GetFfprobeExecutableFilePath() );
+         _extractingTask.Wait();
+         UtilityMethods.SafeDeleteFile( FfmpegFileName );
+         UtilityMethods.SafeDeleteFile( FfprobeFileName );
       }
 
       private static string GetExecutableFilePath( string executableName )
       {
-         if ( !File.Exists( executableName ) )
-         {
-            ExtractResource( executableName );
-         }
+         _extractingTask.Wait();
          return Path.GetFullPath( executableName );
       }
 
       private static void ExtractResource( string resourceName )
       {
-         using ( var stream = GetResourceStream( resourceName ) )
+         var assembly = Assembly.GetExecutingAssembly();
+         string fullResourceName = assembly.GetManifestResourceNames().First( s => s.EndsWith( resourceName ) );
+         using ( var stream = assembly.GetManifestResourceStream( fullResourceName ) )
          {
             using ( var file = File.OpenWrite( resourceName ) )
             {
                stream?.CopyTo( file );
             }
          }
-      }
-
-      private static Stream GetResourceStream( string resourceName )
-      {
-         var assembly = Assembly.GetExecutingAssembly();
-         string fullResourceName = assembly.GetManifestResourceNames().First( s => s.EndsWith( resourceName ) );
-         return assembly.GetManifestResourceStream( fullResourceName );
       }
    }
 }
