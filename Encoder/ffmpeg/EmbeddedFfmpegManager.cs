@@ -39,6 +39,11 @@ namespace Encoder.ffmpeg
 
       private static void ExtractResource( string resourceName )
       {
+         if ( File.Exists( resourceName ) )
+         {
+            return;
+         }
+
          var assembly = Assembly.GetExecutingAssembly();
          string fullResourceName = assembly.GetManifestResourceNames().First( s => s.EndsWith( resourceName ) );
          using ( var stream = assembly.GetManifestResourceStream( fullResourceName ) )
