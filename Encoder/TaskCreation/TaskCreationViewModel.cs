@@ -19,6 +19,7 @@ namespace Encoder.TaskCreation
          var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, VideoFilter, AudioFilter ) ).ToList();
          SelectedFiles.Clear();
          VideoFilterType = VideoFilterType.Copy;
+         AudioFilterType = AudioFilterType.Copy;
          return tasks;
       }
 
