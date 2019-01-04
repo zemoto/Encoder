@@ -25,7 +25,7 @@
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0"
-                 Margin="0,8"
+                 Margin="0,4"
                  BorderThickness="1"
                  BorderBrush="Gray"
                  Height="100">
@@ -46,8 +46,8 @@
             </ScrollViewer>
          </Border>
 
-         <video:VideoFilterSelectorControl Grid.Row="1" />
-         <audio:AudioFilterSelectorControl Grid.Row="2" />
+         <video:VideoFilterSelectorControl Grid.Row="1" Margin="0,4" />
+         <audio:AudioFilterSelectorControl Grid.Row="2" Margin="0,4,0,8" />
 
          <Button Grid.Row="3"
                  Height="24"

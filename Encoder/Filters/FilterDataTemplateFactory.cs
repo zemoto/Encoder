@@ -28,7 +28,8 @@ namespace Encoder.Filters
          if ( properties.Length > 0 )
          {
             var mainGridFactory = CreateGridFactory( properties, false );
-            mainGridFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 0, 0, 8 ) );
+            mainGridFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 0, 8, 0, 0 ) );
+            mainGridFactory.SetValue( Grid.IsSharedSizeScopeProperty, true );
             template.VisualTree = mainGridFactory;
          }
          

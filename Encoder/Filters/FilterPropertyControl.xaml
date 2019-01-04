@@ -11,7 +11,7 @@
       <ControlTemplate TargetType="{x:Type filters:FilterPropertyControl}">
          <Grid>
             <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="135" />
+               <ColumnDefinition Width="Auto" SharedSizeGroup="FilterLabel" />
                <ColumnDefinition Width="8" />
                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
