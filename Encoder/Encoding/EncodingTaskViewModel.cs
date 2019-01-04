@@ -6,6 +6,7 @@ using Encoder.Filters;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
 using ZemotoCommon.UI;
+using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding
 {
@@ -43,7 +44,9 @@ namespace Encoder.Encoding
          }
 
          _sourceDuration = sourceDuration;
-         TargetFile = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
+
+         var fullPath = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
+         TargetFile = UtilityMethods.MakeUniqueFileName( fullPath );
 
          _videoFilter.Initialize( sourceFrameRate, sourceDuration );
          
