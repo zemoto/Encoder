@@ -63,15 +63,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Filters\Audio\AudioFilter.cs" />
-    <Compile Include="Filters\Audio\AudioFilterSelectorControl.xaml.cs">
-      <DependentUpon>AudioFilterSelectorControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
     <Compile Include="Filters\Audio\Copy\CopyAudioFilter.cs" />
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilter.cs" />
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterDataTemplateFactory.cs" />
+    <Compile Include="Filters\FilterSelectorControl.xaml.cs">
+      <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Filters\FilterViewModel.cs" />
     <Compile Include="Filters\Video\Copy\CopyVideoFilter.cs" />
     <Compile Include="Filters\Video\Encode\EncodeVideoFilter.cs" />
@@ -92,9 +92,6 @@
     <Compile Include="Filters\FilterPropertyControl.xaml.cs">
       <DependentUpon>FilterPropertyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Video\VideoFilterSelectorControl.xaml.cs">
-      <DependentUpon>VideoFilterSelectorControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Video\VideoFilterType.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterViewModel.cs" />
     <Compile Include="Filters\Video\Denoise\DenoiseVideoFilter.cs" />
@@ -107,15 +104,11 @@
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
-    <Page Include="Filters\Audio\AudioFilterSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Filters\FilterPropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\Video\VideoFilterSelectorControl.xaml">
+    <Page Include="Filters\FilterSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

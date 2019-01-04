@@ -7,6 +7,8 @@
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:video="clr-namespace:Encoder.Filters.Video" 
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
+             xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:ui="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
              mc:Ignorable="d"
              x:Name="Root"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
@@ -46,8 +48,19 @@
             </ScrollViewer>
          </Border>
 
-         <video:VideoFilterSelectorControl Grid.Row="1" Margin="0,4" />
-         <audio:AudioFilterSelectorControl Grid.Row="2" Margin="0,4,0,8" />
+         <filters:FilterSelectorControl Grid.Row="1" 
+                                        Margin="0,4"
+                                        Label="Video Codec Operation:"
+                                        ItemsSource="{ui:GetEnumValues {x:Type video:VideoFilterType}}"
+                                        SelectedValue="{Binding VideoFilterType}"
+                                        OptionsContext="{Binding VideoFilter.ViewModel}" />
+
+         <filters:FilterSelectorControl Grid.Row="2" 
+                                        Margin="0,4,0,8"
+                                        Label="Audio Codec Operation:"
+                                        ItemsSource="{ui:GetEnumValues {x:Type audio:AudioFilterType}}"
+                                        SelectedValue="{Binding AudioFilterType}"
+                                        OptionsContext="{Binding AudioFilter.ViewModel}" />
 
          <Button Grid.Row="3"
                  Height="24"
