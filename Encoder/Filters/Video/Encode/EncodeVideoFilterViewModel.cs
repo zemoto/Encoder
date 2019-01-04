@@ -1,6 +1,6 @@
 ﻿namespace Encoder.Filters.Video.Encode
 {
-   internal enum VideoFileFormat
+   internal enum VideoCodec
    {
       [FilterEnumValue( "libx264" )]
       H264,
@@ -11,12 +11,12 @@
    [Filter]
    internal sealed class EncodeVideoFilterViewModel : FilterViewModel
    {
-      private VideoFileFormat _fileFormat = VideoFileFormat.H264;
-      [FilterParameter( "File Format", "" )]
-      public VideoFileFormat FileFormat
+      private VideoCodec _codec = VideoCodec.H264;
+      [FilterParameter( "Video Codec", "" )]
+      public VideoCodec Codec
       {
-         get => _fileFormat;
-         set => SetProperty( ref _fileFormat, value );
+         get => _codec;
+         set => SetProperty( ref _codec, value );
       }
    }
 }
