@@ -55,7 +55,7 @@ namespace Encoder.Encoding
          token.Register( () => _currentffmpegProcess?.Kill() );
 
          // Give the process time to spool up
-         Thread.Sleep( 100 );
+         Thread.Sleep( 300 );
 
          // In case the process finished very quickly
          if ( _currentffmpegProcess?.HasExited == false )
