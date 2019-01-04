@@ -68,6 +68,8 @@
     </Compile>
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
     <Compile Include="Filters\Audio\Copy\CopyAudioFilter.cs" />
+    <Compile Include="Filters\Audio\Encode\EncodeAudioFilter.cs" />
+    <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterDataTemplateFactory.cs" />
     <Compile Include="Filters\FilterViewModel.cs" />
