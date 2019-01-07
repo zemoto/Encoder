@@ -3,6 +3,7 @@
    internal enum AudioFilterType
    {
       Copy,
+      Remove,
       Encode
    }
 }

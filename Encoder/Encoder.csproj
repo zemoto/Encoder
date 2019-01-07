@@ -67,6 +67,7 @@
     <Compile Include="Filters\Audio\Copy\CopyAudioFilter.cs" />
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilter.cs" />
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
+    <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterDataTemplateFactory.cs" />
     <Compile Include="Filters\FilterSelectorControl.xaml.cs">
@@ -86,6 +87,7 @@
     <Compile Include="Encoding\VideoMetadataReader.cs" />
     <Compile Include="Filters\FilterDataTemplateSelector.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilter.cs" />
+    <Compile Include="Filters\Video\Remove\RemoveVideoFilter.cs" />
     <Compile Include="Filters\Video\VideoFilter.cs" />
     <Compile Include="Filters\FilterArgumentBuilder.cs" />
     <Compile Include="Filters\FilterAttributes.cs" />
