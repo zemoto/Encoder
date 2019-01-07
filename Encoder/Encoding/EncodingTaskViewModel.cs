@@ -31,8 +31,8 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      public string GetVideoArguments() => FilterArgumentBuilder.GetFilterArguments( _videoFilter );
-      public string GetAudioArguments() => FilterArgumentBuilder.GetFilterArguments( _audioFilter );
+      public string GetEncodingArgs() =>
+         $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )} \"{TargetFile}\"";
 
       public bool Initialize()
       {
