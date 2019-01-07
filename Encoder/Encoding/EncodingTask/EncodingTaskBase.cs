@@ -2,28 +2,20 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Encoder.Filters;
-using Encoder.Filters.Audio;
-using Encoder.Filters.Video;
 using ZemotoCommon.UI;
 using ZemotoCommon.Utils;
 
-namespace Encoder.Encoding
+namespace Encoder.Encoding.EncodingTask
 {
-   internal sealed class EncodingTaskViewModel : ViewModelBase, IDisposable
+   internal abstract class EncodingTaskBase : ViewModelBase, IDisposable
    {
-      private readonly VideoFilter _videoFilter;
-      private readonly AudioFilter _audioFilter;
-      private TimeSpan _sourceDuration;
-      public CancellationTokenSource CancelToken { get; }
+      protected TimeSpan SourceDuration;
+      protected double SourceFrameRate;
+      public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
 
-      public EncodingTaskViewModel( string sourceFile, VideoFilter videoFilter, AudioFilter audioFilter )
+      protected EncodingTaskBase( string sourceFile )
       {
          SourceFile = sourceFile;
-         _videoFilter = videoFilter;
-         _audioFilter = audioFilter;
-
-         CancelToken = new CancellationTokenSource();
       }
 
       public void Dispose()
@@ -31,10 +23,9 @@ namespace Encoder.Encoding
          CancelToken?.Dispose();
       }
 
-      public string GetEncodingArgs() =>
-         $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )} \"{TargetFile}\"";
+      public abstract string GetEncodingArgs();
 
-      public bool Initialize()
+      public virtual bool Initialize()
       {
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
          if ( !success )
@@ -43,14 +34,12 @@ namespace Encoder.Encoding
             return false;
          }
 
-         _sourceDuration = sourceDuration;
+         SourceFrameRate = sourceFrameRate;
+         SourceDuration = sourceDuration;
+         TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
 
          var fullPath = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
          TargetFile = UtilityMethods.MakeUniqueFileName( fullPath );
-
-         _videoFilter.Initialize( sourceFrameRate, sourceDuration );
-         
-         OnPropertyChanged( null );
 
          return true;
       }
@@ -68,14 +57,12 @@ namespace Encoder.Encoding
          OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
-      public string FilterName => _videoFilter.FilterName;
+      public abstract string TaskName { get; }
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
-      public bool HasNoDurationData => _sourceDuration == TimeSpan.Zero && !Finished;
-
+      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero && !Finished;
       public string TargetFile { get; private set; }
-
-      public int TargetTotalFrames => _videoFilter.GetTargetFrameCount();
+      public int TargetTotalFrames { get; protected set; }
 
       private DateTime _startTime;
       private TimeSpan _timeRemaining = TimeSpan.Zero;

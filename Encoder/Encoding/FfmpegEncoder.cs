@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Encoder.Encoding.EncodingTask;
 using Encoder.ffmpeg;
 using ZemotoCommon.Utils;
 
@@ -15,7 +16,7 @@ namespace Encoder.Encoding
 
       private static readonly string FfmpegExeLocation;
 
-      private readonly EncodingTaskViewModel _encodingTask;
+      private readonly EncodingTaskBase _encodingTask;
 
       private Process _currentffmpegProcess;
       private ProcessCpuMonitor _cpuUsageMonitor;
@@ -25,7 +26,7 @@ namespace Encoder.Encoding
          FfmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
       }
 
-      public FfmpegEncoder( EncodingTaskViewModel encodingTask )
+      public FfmpegEncoder( EncodingTaskBase encodingTask )
       {
          _encodingTask = encodingTask;
       }

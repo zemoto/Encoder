@@ -1,4 +1,5 @@
 ﻿using Encoder.Encoding;
+using Encoder.Encoding.EncodingTask;
 using Encoder.TaskCreation;
 using ZemotoCommon.UI;
 
@@ -15,6 +16,6 @@ namespace Encoder
       public EncodingManagerViewModel EncodingVm { get; }
       public TaskCreationViewModel TaskCreationVm { get; }
 
-      public RelayCommand<EncodingTaskViewModel> CancelTaskCommand { get; set; }
+      public RelayCommand<EncodingTaskBase> CancelTaskCommand { get; set; }
    }
 }

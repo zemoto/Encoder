@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Encoder.Encoding;
+using Encoder.Encoding.EncodingTask;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
@@ -14,9 +14,9 @@ namespace Encoder.TaskCreation
    {
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
 
-      public IEnumerable<EncodingTaskViewModel> GetTasks()
+      public IEnumerable<EncodingTaskBase> GetTasks()
       {
-         var tasks = SelectedFiles.Select( x => new EncodingTaskViewModel( x, VideoFilter, AudioFilter ) ).ToList();
+         var tasks = SelectedFiles.Select( x => new EncodeWithFiltersTask( x, VideoFilter, AudioFilter ) ).ToList();
          SelectedFiles.Clear();
          VideoFilterType = VideoFilterType.Copy;
          AudioFilterType = AudioFilterType.Copy;

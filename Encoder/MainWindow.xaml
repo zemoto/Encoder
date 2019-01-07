@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Encoder"
         xmlns:encoding="clr-namespace:Encoder.Encoding"
         xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
+        xmlns:encodingTask="clr-namespace:Encoder.Encoding.EncodingTask"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
@@ -50,7 +51,7 @@
                                    IsReadOnly="True" />
 
                <DataGridTextColumn Header="VideoFilter"
-                                   Binding="{Binding FilterName, Mode=OneWay}"
+                                   Binding="{Binding TaskName, Mode=OneWay}"
                                    IsReadOnly="True"
                                    MinWidth="100" />
                
@@ -65,7 +66,7 @@
                <DataGridTemplateColumn Header="Progress"
                                        Width="100">
                   <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                     <DataTemplate DataType="{x:Type encodingTask:EncodingTaskBase}">
                         <Grid>
                            <ProgressBar Value="{Binding Progress, Mode=OneWay}"
                                         IsIndeterminate="{Binding HasNoDurationData}"
@@ -91,7 +92,7 @@
 
                <DataGridTemplateColumn Width="24">
                   <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate DataType="{x:Type encoding:EncodingTaskViewModel}">
+                     <DataTemplate DataType="{x:Type encodingTask:EncodingTaskBase}">
                         <Button Content="X"
                                 Height="18"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"

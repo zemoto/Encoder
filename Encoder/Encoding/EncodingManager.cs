@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using Encoder.Encoding.EncodingTask;
 using ZemotoCommon.Utils;
 using Timer = System.Timers.Timer;
 
@@ -21,7 +22,7 @@ namespace Encoder.Encoding
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
 
-      public async Task EnqueueTasksAsync( IEnumerable<EncodingTaskViewModel> tasks )
+      public async Task EnqueueTasksAsync( IEnumerable<EncodingTaskBase> tasks )
       {
          foreach( var task in tasks )
          {
@@ -42,7 +43,7 @@ namespace Encoder.Encoding
          _taskStartTimer.Start();
       }
 
-      private void CleanupTask( EncodingTaskViewModel task )
+      private void CleanupTask( EncodingTaskBase task )
       {
          bool taskWasStarted = task.Started;
 
@@ -108,7 +109,7 @@ namespace Encoder.Encoding
          Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
-      private void DoTask( EncodingTaskViewModel task )
+      private void DoTask( EncodingTaskBase task )
       {
          if ( task == null )
          {
@@ -137,7 +138,7 @@ namespace Encoder.Encoding
          CleanupTask( task );
       }
 
-      public void CancelTask( EncodingTaskViewModel task )
+      public void CancelTask( EncodingTaskBase task )
       {
          task.CancelToken.Cancel();
 
