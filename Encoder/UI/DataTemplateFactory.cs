@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -48,18 +49,17 @@ namespace Encoder.UI
             gridFactory.AppendChild( rowDef );
 
             var property = properties[i];
-            var propertyAttribute = property.GetAttribute<PropertyDescriptionAttribute>();
-
             FrameworkElementFactory elementFactory;
-            if ( propertyAttribute.HasDependency && !ignoreDependency )
+            var dependencyAttributes = property.GetAttributes<PropertyDependencyAttribute>().ToList();
+            if ( !ignoreDependency && dependencyAttributes.Count > 0 )
             {
                // Take every adjacent property dependent on the same property and next them in a grid
                var dependentProperties = new List<PropertyInfo>();
                int j = i;
                for ( ; j < properties.Count; j++ )
                {
-                  var otherPropertyAttribute = properties[j].GetAttribute<PropertyDescriptionAttribute>();
-                  if ( propertyAttribute.SharesDependencyWith( otherPropertyAttribute ) )
+                  var otherDependencyAttributes = properties[j].GetAttributes<PropertyDependencyAttribute>();
+                  if ( dependencyAttributes.SequenceEqual( otherDependencyAttributes ) )
                   {
                      dependentProperties.Add( properties[j] );
                   }
@@ -73,11 +73,7 @@ namespace Encoder.UI
                elementFactory = CreateGridFactory( dependentProperties, true );
                elementFactory.SetValue( FrameworkElement.MarginProperty, new Thickness( 16, 0, 0, 0 ) );
 
-               var visibilityBinding = new Binding( propertyAttribute.PropertyBeingDependedOn )
-               {
-                  Converter = new EqualityToVisibilityConverter(),
-                  ConverterParameter = propertyAttribute.PropertyValueBeingDependedOn
-               };
+               var visibilityBinding = CreateVisibilityBinding( dependencyAttributes );
                elementFactory.SetBinding( UIElement.VisibilityProperty, visibilityBinding );
 
                // Add a thin rectangle on the left side of the nested grid for styling
@@ -88,7 +84,7 @@ namespace Encoder.UI
             }
             else
             {
-               elementFactory = ConstructPropertyControl( property, propertyAttribute );
+               elementFactory = ConstructPropertyControl( property );
             }
             elementFactory.SetValue( Grid.RowProperty, row );
             
@@ -98,10 +94,41 @@ namespace Encoder.UI
          return gridFactory;
       }
 
-      private static FrameworkElementFactory ConstructPropertyControl( PropertyInfo property, PropertyDescriptionAttribute propertyAttribute )
+      private static BindingBase CreateVisibilityBinding( IReadOnlyCollection<PropertyDependencyAttribute> dependencyAttributes )
+      {
+         BindingBase visibilityBinding;
+         if ( dependencyAttributes.Count > 1 )
+         {
+            var multiBinding = new MultiBinding {Converter = new MultiBoolToBoolAndConverter()};
+            foreach ( var dependency in dependencyAttributes )
+            {
+               multiBinding.Bindings.Add( new Binding( dependency.PropertyBeingDependedOn )
+               {
+                  Converter = new EqualityToVisibilityConverter(),
+                  ConverterParameter = dependency.PropertyValueBeingDependedOn
+               } );
+            }
+
+            visibilityBinding = multiBinding;
+         }
+         else
+         {
+            var dependency = dependencyAttributes.First();
+            visibilityBinding = new Binding( dependency.PropertyBeingDependedOn )
+            {
+               Converter = new EqualityToVisibilityConverter(),
+               ConverterParameter = dependency.PropertyValueBeingDependedOn
+            };
+         }
+
+         return visibilityBinding;
+      }
+
+      private static FrameworkElementFactory ConstructPropertyControl( PropertyInfo property )
       {
          var propertyControlFactory = new FrameworkElementFactory( typeof( PropertyControl ) );
-         propertyControlFactory.SetValue( PropertyControl.LabelProperty, propertyAttribute.Description + ":" );
+         var description = property.GetAttribute<DescriptionAttribute>();
+         propertyControlFactory.SetValue( PropertyControl.LabelProperty, description.Description + ":" );
 
          if ( property.PropertyType.IsEnum )
          {
@@ -113,7 +140,7 @@ namespace Encoder.UI
          }
          else
          {
-            propertyControlFactory.AppendChild( ConstructTextBox( property, propertyAttribute ) );
+            propertyControlFactory.AppendChild( ConstructTextBox( property ) );
          }
          return propertyControlFactory;
       }
@@ -160,21 +187,22 @@ namespace Encoder.UI
          return checkBoxFactory;
       }
 
-      private static FrameworkElementFactory ConstructTextBox( PropertyInfo property, PropertyDescriptionAttribute propertyAttribute )
+      private static FrameworkElementFactory ConstructTextBox( PropertyInfo property )
       {
          var textBoxFactory = new FrameworkElementFactory( typeof( TextBox ) );
 
-         if ( propertyAttribute.HasMinMax )
+         var minMax = property.GetAttribute<PropertyMinMaxAttribute>();
+         if ( minMax != null )
          {
             if ( property.PropertyType == typeof( int ) )
             {
                textBoxFactory.SetBinding( TextBox.TextProperty,
-                  new IntMinMaxBinding( property.Name, (int)propertyAttribute.Min, (int)propertyAttribute.Max ) );
+                  new IntMinMaxBinding( property.Name, (int)minMax.Min, (int)minMax.Max ) );
             }
             else
             {
                textBoxFactory.SetBinding( TextBox.TextProperty,
-                  new DoubleMinMaxBinding( property.Name, propertyAttribute.Min, propertyAttribute.Max ) );
+                  new DoubleMinMaxBinding( property.Name, minMax.Min, minMax.Max ) );
             }
          }
          else

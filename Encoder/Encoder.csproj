@@ -111,7 +111,7 @@
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
-    <Compile Include="UI\PropertyDescriptionAttribute.cs" />
+    <Compile Include="UI\PropertyAttributes.cs" />
     <Page Include="UI\PropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

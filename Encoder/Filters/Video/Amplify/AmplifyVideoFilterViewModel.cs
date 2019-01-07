@@ -1,10 +1,13 @@
-﻿namespace Encoder.Filters.Video.Amplify
+﻿using Encoder.UI;
+
+namespace Encoder.Filters.Video.Amplify
 {
    [Filter( "amplify" )]
    internal sealed class AmplifyVideoFilterViewModel : FilterViewModel
    {
       private int _radius = 2;
-      [FilterPropertyDescription( "Frame Radius", "radius", 1, 63 )]
+      [FilterPropertyDescription( "Frame Radius", "radius" )]
+      [PropertyMinMax( 1, 63 )]
       public int Radius
       {
          get => _radius;
@@ -12,7 +15,8 @@
       }
 
       private int _factor = 2;
-      [FilterPropertyDescription( "Amplify Factor", "factor", 0, 65535 )]
+      [FilterPropertyDescription( "Amplify Factor", "factor" )]
+      [PropertyMinMax( 0, 65535 )]
       public int Factor
       {
          get => _factor;
@@ -20,7 +24,8 @@
       }
 
       private int _threshold = 10;
-      [FilterPropertyDescription( "Difference Threshold", "threshold", 0, 65535 )]
+      [FilterPropertyDescription( "Difference Threshold", "threshold" )]
+      [PropertyMinMax( 0, 65535 )]
       public int Threshold
       {
          get => _threshold;
@@ -28,7 +33,8 @@
       }
 
       private int _low = 65535;
-      [FilterPropertyDescription( "Pixel Change Lower Limit", "low", 0, 65535 )]
+      [FilterPropertyDescription( "Pixel Change Lower Limit", "low" )]
+      [PropertyMinMax( 0, 65535 )]
       public int Low
       {
          get => _low;
@@ -36,7 +42,8 @@
       }
 
       private int _high = 65535;
-      [FilterPropertyDescription( "Pixel Change Upper Limit", "high", 0, 65535 )]
+      [FilterPropertyDescription( "Pixel Change Upper Limit", "high" )]
+      [PropertyMinMax( 0, 65535 )]
       public int High
       {
          get => _high;

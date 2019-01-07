@@ -2,6 +2,7 @@
 using System.Linq;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
+using Encoder.UI;
 using ZemotoCommon.Utils;
 
 namespace Encoder.Filters
@@ -31,15 +32,22 @@ namespace Encoder.Filters
          var filterProperties = filter.ViewModel.GetType().GetProperties();
          foreach( var property in filterProperties )
          {
-            var filterParamAttribute = property.GetAttribute<FilterPropertyDescriptionAttribute>();
+            var dependencyAttributes = property.GetAttributes<PropertyDependencyAttribute>();
 
-            if ( filterParamAttribute.HasDependency )
+            bool dependenciesMet = true;
+            foreach ( var dependency in dependencyAttributes )
             {
-               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, filterParamAttribute.PropertyBeingDependedOn ) );
-               if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), filterParamAttribute.PropertyValueBeingDependedOn) )
+               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, dependency.PropertyBeingDependedOn ) );
+               if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), dependency.PropertyValueBeingDependedOn ) )
                {
-                  continue;
+                  dependenciesMet = false;
+                  break;
                }
+            }
+
+            if ( !dependenciesMet )
+            {
+               continue;
             }
 
             string filterParamValue;
@@ -57,6 +65,7 @@ namespace Encoder.Filters
                filterParamValue = propertyValue.ToString();
             }
 
+            var filterParamAttribute = property.GetAttribute<FilterPropertyDescriptionAttribute>();
             filterString += $"{filterParamAttribute.ArgumentParam}={filterParamValue}:";
          }
 
