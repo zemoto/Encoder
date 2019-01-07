@@ -11,20 +11,20 @@ using System.Windows.Shapes;
 using ZemotoCommon.UI;
 using ZemotoCommon.Utils;
 
-namespace Encoder.Filters
+namespace Encoder.UI
 {
-   internal static class FilterDataTemplateFactory
+   internal static class DataTemplateFactory
    {
-      public static DataTemplate ConstructDataTemplate( ViewModelBase filterViewModel )
+      public static DataTemplate ConstructDataTemplate( ViewModelBase viewModel )
       {
-         if ( filterViewModel == null )
+         if ( viewModel == null )
          {
             return null;
          }
 
-         var template = new DataTemplate { DataType = filterViewModel.GetType() };
+         var template = new DataTemplate { DataType = viewModel.GetType() };
 
-         var properties = filterViewModel.GetType().GetProperties();
+         var properties = viewModel.GetType().GetProperties();
          if ( properties.Length > 0 )
          {
             var mainGridFactory = CreateGridFactory( properties, false );
@@ -48,7 +48,7 @@ namespace Encoder.Filters
             gridFactory.AppendChild( rowDef );
 
             var property = properties[i];
-            var propertyAttribute = property.GetAttribute<FilterParameterAttribute>();
+            var propertyAttribute = property.GetAttribute<PropertyDescriptionAttribute>();
 
             FrameworkElementFactory elementFactory;
             if ( propertyAttribute.HasDependency && !ignoreDependency )
@@ -58,7 +58,7 @@ namespace Encoder.Filters
                int j = i;
                for ( ; j < properties.Count; j++ )
                {
-                  var otherPropertyAttribute = properties[j].GetAttribute<FilterParameterAttribute>();
+                  var otherPropertyAttribute = properties[j].GetAttribute<PropertyDescriptionAttribute>();
                   if ( propertyAttribute.SharesDependencyWith( otherPropertyAttribute ) )
                   {
                      dependentProperties.Add( properties[j] );
@@ -88,7 +88,7 @@ namespace Encoder.Filters
             }
             else
             {
-               elementFactory = ConstructFilterPropertyControl( property, propertyAttribute );
+               elementFactory = ConstructPropertyControl( property, propertyAttribute );
             }
             elementFactory.SetValue( Grid.RowProperty, row );
             
@@ -98,10 +98,10 @@ namespace Encoder.Filters
          return gridFactory;
       }
 
-      private static FrameworkElementFactory ConstructFilterPropertyControl( PropertyInfo property, FilterParameterAttribute propertyAttribute )
+      private static FrameworkElementFactory ConstructPropertyControl( PropertyInfo property, PropertyDescriptionAttribute propertyAttribute )
       {
-         var propertyControlFactory = new FrameworkElementFactory( typeof( FilterPropertyControl ) );
-         propertyControlFactory.SetValue( FilterPropertyControl.LabelProperty, propertyAttribute.ParameterLabel + ":" );
+         var propertyControlFactory = new FrameworkElementFactory( typeof( PropertyControl ) );
+         propertyControlFactory.SetValue( PropertyControl.LabelProperty, propertyAttribute.Description + ":" );
 
          if ( property.PropertyType.IsEnum )
          {
@@ -160,7 +160,7 @@ namespace Encoder.Filters
          return checkBoxFactory;
       }
 
-      private static FrameworkElementFactory ConstructTextBox( PropertyInfo property, FilterParameterAttribute propertyAttribute )
+      private static FrameworkElementFactory ConstructTextBox( PropertyInfo property, PropertyDescriptionAttribute propertyAttribute )
       {
          var textBoxFactory = new FrameworkElementFactory( typeof( TextBox ) );
 

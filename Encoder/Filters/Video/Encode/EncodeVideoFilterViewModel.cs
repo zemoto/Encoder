@@ -12,7 +12,7 @@
    internal sealed class EncodeVideoFilterViewModel : FilterViewModel
    {
       private VideoCodec _codec = VideoCodec.H264;
-      [FilterParameter( "Video Codec", "" )]
+      [FilterPropertyDescription( "Video Codec", "" )]
       public VideoCodec Codec
       {
          get => _codec;

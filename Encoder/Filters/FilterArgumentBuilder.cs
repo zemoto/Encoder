@@ -31,7 +31,7 @@ namespace Encoder.Filters
          var filterProperties = filter.ViewModel.GetType().GetProperties();
          foreach( var property in filterProperties )
          {
-            var filterParamAttribute = property.GetAttribute<FilterParameterAttribute>();
+            var filterParamAttribute = property.GetAttribute<FilterPropertyDescriptionAttribute>();
 
             if ( filterParamAttribute.HasDependency )
             {

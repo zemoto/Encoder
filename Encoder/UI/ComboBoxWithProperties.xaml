@@ -1,14 +1,14 @@
-﻿<ComboBox x:Class="Encoder.Filters.FilterSelectorControl"
+﻿<ComboBox x:Class="Encoder.UI.ComboBoxWithProperties"
           x:ClassModifier="internal"
           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:filters="clr-namespace:Encoder.Filters"
+          xmlns:ui="clr-namespace:Encoder.UI"
           mc:Ignorable="d">
 
    <ComboBox.Resources>
-      <filters:FilterDataTemplateSelector x:Key="FilterDataTemplateSelector" />
+      <ui:GeneratedDataTemplateSelector x:Key="GeneratedDataTemplateSelector" />
    </ComboBox.Resources>
 
    <ComboBox.Style>
@@ -24,7 +24,7 @@
    </ComboBox.Style>
 
    <ComboBox.Template>
-      <ControlTemplate TargetType="{x:Type filters:FilterSelectorControl}">
+      <ControlTemplate TargetType="{x:Type ui:ComboBoxWithProperties}">
          <Grid>
             <Grid.RowDefinitions>
                <RowDefinition Height="Auto" />
@@ -49,7 +49,7 @@
 
             <ContentPresenter Grid.Row="1"
                               Margin="16,0,0,0"
-                              ContentTemplateSelector="{StaticResource FilterDataTemplateSelector}"
+                              ContentTemplateSelector="{StaticResource GeneratedDataTemplateSelector}"
                               Content="{TemplateBinding OptionsContext}" />
          </Grid>
       </ControlTemplate>

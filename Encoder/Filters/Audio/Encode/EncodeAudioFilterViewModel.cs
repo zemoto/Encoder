@@ -28,7 +28,7 @@
    internal sealed class EncodeAudioFilterViewModel : FilterViewModel
    {
       private AudioCodec _codec = AudioCodec.Aac;
-      [FilterParameter( "Audio Codec", "" )]
+      [FilterPropertyDescription( "Audio Codec", "" )]
       public AudioCodec Codec
       {
          get => _codec;

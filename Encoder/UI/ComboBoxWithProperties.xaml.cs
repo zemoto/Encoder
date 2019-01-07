@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using ZemotoCommon.UI;
 
-namespace Encoder.Filters
+namespace Encoder.UI
 {
-   internal partial class FilterSelectorControl
+   internal partial class ComboBoxWithProperties
    {
       public static readonly DependencyProperty LabelProperty = DependencyProperty.Register( 
          nameof( Label ),
          typeof( string ),
-         typeof( FilterSelectorControl ),
+         typeof( ComboBoxWithProperties ),
          new PropertyMetadata( string.Empty ) );
 
       public string Label
@@ -20,7 +20,7 @@ namespace Encoder.Filters
       public static readonly DependencyProperty OptionsContextProperty = DependencyProperty.Register( 
          nameof( OptionsContext ),
          typeof( ViewModelBase ),
-         typeof( FilterSelectorControl ),
+         typeof( ComboBoxWithProperties ),
          new PropertyMetadata( null ) );
 
       public ViewModelBase OptionsContext
@@ -29,7 +29,7 @@ namespace Encoder.Filters
          set => SetValue( OptionsContextProperty, value );
       }
 
-      public FilterSelectorControl()
+      public ComboBoxWithProperties()
       {
          InitializeComponent();
       }

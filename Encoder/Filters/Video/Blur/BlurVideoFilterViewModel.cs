@@ -4,7 +4,7 @@
    internal sealed class BlurVideoFilterViewModel : FilterViewModel
    {
       private int _horizontalRadius = 3;
-      [FilterParameter( "Horizontal Radius", "sizeX", 0, 10000 )]
+      [FilterPropertyDescription( "Horizontal Radius", "sizeX", 0, 10000 )]
       public int HorizontalRadius
       {
          get => _horizontalRadius;
@@ -12,7 +12,7 @@
       }
 
       private int _verticalRadius = 3;
-      [FilterParameter( "Vertical Radius", "sizeY", 0, 10000 )]
+      [FilterPropertyDescription( "Vertical Radius", "sizeY", 0, 10000 )]
       public int VerticalRadius
       {
          get => _verticalRadius;

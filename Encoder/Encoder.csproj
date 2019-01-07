@@ -70,9 +70,9 @@
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
-    <Compile Include="Filters\FilterDataTemplateFactory.cs" />
-    <Compile Include="Filters\FilterSelectorControl.xaml.cs">
-      <DependentUpon>FilterSelectorControl.xaml</DependentUpon>
+    <Compile Include="UI\DataTemplateFactory.cs" />
+    <Compile Include="UI\ComboBoxWithProperties.xaml.cs">
+      <DependentUpon>ComboBoxWithProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\FilterViewModel.cs" />
     <Compile Include="Filters\Video\Copy\CopyVideoFilter.cs" />
@@ -86,14 +86,14 @@
     <Compile Include="Encoding\FfmpegEncoder.cs" />
     <Compile Include="Encoding\EncodingTask\EncodingTaskBase.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
-    <Compile Include="Filters\FilterDataTemplateSelector.cs" />
+    <Compile Include="UI\GeneratedDataTemplateSelector.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilter.cs" />
     <Compile Include="Filters\Video\Remove\RemoveVideoFilter.cs" />
     <Compile Include="Filters\Video\VideoFilter.cs" />
     <Compile Include="Filters\FilterArgumentBuilder.cs" />
     <Compile Include="Filters\FilterAttributes.cs" />
-    <Compile Include="Filters\FilterPropertyControl.xaml.cs">
-      <DependentUpon>FilterPropertyControl.xaml</DependentUpon>
+    <Compile Include="UI\PropertyControl.xaml.cs">
+      <DependentUpon>PropertyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\Video\VideoFilterType.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilterViewModel.cs" />
@@ -111,11 +111,12 @@
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
-    <Page Include="Filters\FilterPropertyControl.xaml">
+    <Compile Include="UI\PropertyDescriptionAttribute.cs" />
+    <Page Include="UI\PropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Filters\FilterSelectorControl.xaml">
+    <Page Include="UI\ComboBoxWithProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

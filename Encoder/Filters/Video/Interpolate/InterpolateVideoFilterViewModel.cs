@@ -4,7 +4,7 @@
    internal sealed class InterpolateVideoFilterViewModel : FilterViewModel
    {
       private double _targetFrameRate = 60;
-      [FilterParameter( "Target Frame Rate", "fps" )]
+      [FilterPropertyDescription( "Target Frame Rate", "fps" )]
       public double TargetFrameRate
       {
          get => _targetFrameRate;
@@ -12,7 +12,7 @@
       }
 
       private SceneChangeDetectionAlgorithm _sceneChangeDetectionAlgorithm = SceneChangeDetectionAlgorithm.FrameDifference;
-      [FilterParameter( "Scene Change Algorithm", "scd" )]
+      [FilterPropertyDescription( "Scene Change Algorithm", "scd" )]
       public SceneChangeDetectionAlgorithm SceneChangeDetectionAlgorithm
       {
          get => _sceneChangeDetectionAlgorithm;
@@ -20,7 +20,7 @@
       }
 
       private double _sceneChangeThreshold = 5.0;
-      [FilterParameter( "Scene Change Threshold", "scd_threshold", nameof( SceneChangeDetectionAlgorithm ), Interpolate.SceneChangeDetectionAlgorithm.FrameDifference )]
+      [FilterPropertyDescription( "Scene Change Threshold", "scd_threshold", nameof( SceneChangeDetectionAlgorithm ), Interpolate.SceneChangeDetectionAlgorithm.FrameDifference )]
       public double SceneChangeThreshold
       {
          get => _sceneChangeThreshold;
@@ -28,7 +28,7 @@
       }
 
       private InterpolationMode _interpolationMode = InterpolationMode.MotionCompensated;
-      [FilterParameter( "Interpolation Mode", "mi_mode" )]
+      [FilterPropertyDescription( "Interpolation Mode", "mi_mode" )]
       public InterpolationMode InterpolationMode
       {
          get => _interpolationMode;
@@ -36,7 +36,7 @@
       }
 
       private MotionCompensationMode _motionCompensationMode = MotionCompensationMode.Adaptive;
-      [FilterParameter( "Motion Compensation", "mc_mode", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Motion Compensation", "mc_mode", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public MotionCompensationMode MotionCompensationMode
       {
          get => _motionCompensationMode;
@@ -44,7 +44,7 @@
       }
 
       private MotionEstimationMode _motionEstimationMode = MotionEstimationMode.Bidirectional;
-      [FilterParameter( "Motion Estimation", "me_mode", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Motion Estimation", "me_mode", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public MotionEstimationMode MotionEstimationMode
       {
          get => _motionEstimationMode;
@@ -52,7 +52,7 @@
       }
 
       private MotionEstimationAlgorithm _motionEstimationAlgorithm = MotionEstimationAlgorithm.Predictive;
-      [FilterParameter( "Estimation Algorithm", "me", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Estimation Algorithm", "me", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public MotionEstimationAlgorithm MotionEstimationAlgorithm
       {
          get => _motionEstimationAlgorithm;
@@ -60,7 +60,7 @@
       }
 
       private int _macroblockSize = 16;
-      [FilterParameter( "Macroblock Size", "mb_size", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Macroblock Size", "mb_size", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public int MacroblockSize
       {
          get => _macroblockSize;
@@ -68,7 +68,7 @@
       }
 
       private int _searchParameter = 32;
-      [FilterParameter( "Algorithm Parameter", "search_param", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Algorithm Parameter", "search_param", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public int SearchParameter
       {
          get => _searchParameter;
@@ -76,7 +76,7 @@
       }
 
       private bool _variableSizeCompensation;
-      [FilterParameter( "Variable Block Size", "vsbmc", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
+      [FilterPropertyDescription( "Variable Block Size", "vsbmc", nameof( InterpolationMode ), Interpolate.InterpolationMode.MotionCompensated )]
       public bool VariableSizeCompensation
       {
          get => _variableSizeCompensation;

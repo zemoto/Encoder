@@ -1,17 +1,17 @@
-﻿<UserControl x:Class="Encoder.Filters.FilterPropertyControl"
+﻿<UserControl x:Class="Encoder.UI.PropertyControl"
              x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:filters="clr-namespace:Encoder.Filters"
+             xmlns:controls="clr-namespace:Encoder.UI"
              mc:Ignorable="d">
    
    <UserControl.Template>
-      <ControlTemplate TargetType="{x:Type filters:FilterPropertyControl}">
+      <ControlTemplate TargetType="{x:Type controls:PropertyControl}">
          <Grid>
             <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="Auto" SharedSizeGroup="FilterLabel" />
+               <ColumnDefinition Width="Auto" SharedSizeGroup="PropertyLabel" />
                <ColumnDefinition Width="8" />
                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>

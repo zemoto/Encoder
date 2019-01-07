@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Encoder.UI;
 
 namespace Encoder.Filters
 {
@@ -15,48 +16,26 @@ namespace Encoder.Filters
    }
 
    [AttributeUsage( AttributeTargets.Property )]
-   internal sealed class FilterParameterAttribute : Attribute
+   internal sealed class FilterPropertyDescriptionAttribute : PropertyDescriptionAttribute
    {
-      public string ParameterLabel { get; }
       public string ArgumentParam { get; }
-      public string PropertyBeingDependedOn { get; }
-      public object PropertyValueBeingDependedOn { get; }
-      public bool HasDependency { get; }
-      public double Min { get; }
-      public double Max { get; }
-      public bool HasMinMax { get; }
-
-      public FilterParameterAttribute( string argumentParam )
+      
+      public FilterPropertyDescriptionAttribute( string label, string argumentParam )
+         : base( label )
       {
          ArgumentParam = argumentParam;
       }
 
-      public FilterParameterAttribute( string label, string argumentParam )
-         : this( argumentParam )
+      public FilterPropertyDescriptionAttribute( string label, string argumentParam, double min, double max )
+         : base( label, min, max )
       {
-         ParameterLabel = label;
+         ArgumentParam = argumentParam;
       }
 
-      public FilterParameterAttribute( string label, string argumentParam, double min, double max )
-         : this( label, argumentParam )
+      public FilterPropertyDescriptionAttribute( string label, string argumentParam, string propertyBeingDependedOn, object propertyValueBeingDependedOn )
+         : base( label, propertyBeingDependedOn, propertyValueBeingDependedOn )
       {
-         Min = min;
-         Max = max;
-         HasMinMax = true;
-      }
-
-      public FilterParameterAttribute( string label, string argumentParam, string propertyBeingDependedOn, object propertyValueBeingDependedOn )
-         : this( label, argumentParam )
-      {
-         PropertyBeingDependedOn = propertyBeingDependedOn;
-         PropertyValueBeingDependedOn = propertyValueBeingDependedOn;
-         HasDependency = true;
-      }
-
-      public bool SharesDependencyWith( FilterParameterAttribute other )
-      {
-         return string.Equals( PropertyBeingDependedOn, other.PropertyBeingDependedOn ) && 
-                       Equals( PropertyValueBeingDependedOn, other.PropertyValueBeingDependedOn );
+         ArgumentParam = argumentParam;
       }
    }
 
