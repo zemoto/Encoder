@@ -5,7 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Encoder"
-        xmlns:encoding="clr-namespace:Encoder.Encoding"
         xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         xmlns:encodingTask="clr-namespace:Encoder.Encoding.EncodingTask"
         mc:Ignorable="d"

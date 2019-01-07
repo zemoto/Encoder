@@ -104,7 +104,8 @@
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterViewModel.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationStep.cs" />
-    <Compile Include="Operations\OperationTypes.cs" />
+    <Compile Include="Operations\OperationType.cs" />
+    <Compile Include="Operations\Separate\SeparateOperation.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>
