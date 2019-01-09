@@ -38,8 +38,14 @@ namespace Encoder.Encoding.EncodingTask
          SourceDuration = sourceDuration;
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
 
-         var fullPath = Path.Combine( Path.GetDirectoryName( SourceFile ), $"{Path.GetFileNameWithoutExtension( SourceFile )}_done.mp4" );
+         var dir = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
+         var fullPath = Path.Combine( dir, Path.GetFileName( SourceFile ) );
          TargetFile = UtilityMethods.MakeUniqueFileName( fullPath );
+
+         if ( !Directory.Exists( dir ) )
+         {
+            Directory.CreateDirectory( dir );
+         }
 
          return true;
       }
