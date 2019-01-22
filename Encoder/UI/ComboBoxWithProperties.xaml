@@ -5,10 +5,13 @@
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
           xmlns:ui="clr-namespace:Encoder.UI"
+          xmlns:commonUi="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
           mc:Ignorable="d">
 
    <ComboBox.Resources>
       <ui:GeneratedDataTemplateSelector x:Key="GeneratedDataTemplateSelector" />
+      <commonUi:EqualityToVisibilityConverter x:Key="VisibleIfNotEqual"
+                                              Invert="True" />
    </ComboBox.Resources>
 
    <ComboBox.Style>
@@ -35,6 +38,7 @@
                         Orientation="Horizontal">
 
                <TextBlock Text="{TemplateBinding Label}"
+                          Visibility="{TemplateBinding Label, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter={x:Null}}"
                           Margin="0,0,8,0"
                           VerticalAlignment="Center" />
 
@@ -42,7 +46,7 @@
                          SelectedValuePath="{TemplateBinding SelectedValuePath}"
                          DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
                          SelectedValue="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                         Width="100"
+                         MinWidth="100"
                          Height="24" />
 
             </StackPanel>

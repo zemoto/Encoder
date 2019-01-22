@@ -6,6 +6,7 @@ using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
+using Encoder.Operations;
 using ZemotoCommon.UI;
 
 namespace Encoder.TaskCreation
@@ -16,11 +17,42 @@ namespace Encoder.TaskCreation
 
       public IEnumerable<EncodingTaskBase> GetTasks()
       {
-         var tasks = SelectedFiles.Select( x => new EncodeWithFiltersTask( x, VideoFilter, AudioFilter ) ).ToList();
+         IEnumerable<EncodingTaskBase> tasks;
+         if ( OperationType == OperationType.Filters )
+         {
+            tasks = SelectedFiles.Select( x => new EncodeWithFilters( x, VideoFilter, AudioFilter ) ).ToList();
+         }
+         else
+         {
+            tasks = SelectedFiles.SelectMany( file => Operation.Steps.Select( step => new EncodeWithOperationStep( file, step ) ) ).ToList();
+         }
+
          SelectedFiles.Clear();
+         OperationType = OperationType.Filters;
          VideoFilterType = VideoFilterType.Copy;
          AudioFilterType = AudioFilterType.Copy;
+
          return tasks;
+      }
+
+      private OperationType _operationType;
+      public OperationType OperationType
+      {
+         get => _operationType;
+         set
+         {
+            if ( SetProperty( ref _operationType, value ) )
+            {
+               Operation = Operation.GetOperationForType( value );
+            }
+         }
+      }
+
+      private Operation _operation;
+      public Operation Operation
+      {
+         get => _operation;
+         set => SetProperty( ref _operation, value );
       }
 
       private VideoFilterType _videoFilterType = VideoFilterType.Copy;
@@ -51,7 +83,7 @@ namespace Encoder.TaskCreation
          {
             if ( SetProperty( ref _audioFilterType, value ) )
             {
-               AudioFilter =  AudioFilter.GetFilterForType( value );
+               AudioFilter = AudioFilter.GetFilterForType( value );
             }
          }
       }

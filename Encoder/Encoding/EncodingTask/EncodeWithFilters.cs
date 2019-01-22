@@ -4,20 +4,17 @@ using Encoder.Filters.Video;
 
 namespace Encoder.Encoding.EncodingTask
 {
-   internal sealed class EncodeWithFiltersTask : EncodingTaskBase
+   internal sealed class EncodeWithFilters : EncodingTaskBase
    {
       private readonly VideoFilter _videoFilter;
       private readonly AudioFilter _audioFilter;
 
-      public EncodeWithFiltersTask( string sourceFile, VideoFilter videoFilter, AudioFilter audioFilter ) 
+      public EncodeWithFilters( string sourceFile, VideoFilter videoFilter, AudioFilter audioFilter ) 
          : base( sourceFile )
       {
          _videoFilter = videoFilter;
          _audioFilter = audioFilter;
       }
-
-      public override string GetEncodingArgs() =>
-         $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )} \"{TargetFile}\"";
 
       public override bool Initialize()
       {
@@ -31,6 +28,10 @@ namespace Encoder.Encoding.EncodingTask
          return false;
       }
 
+      public override string EncodingArgs =>
+         $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
+
+      public override string TargetFileExtension => "mp4";
       public override string TaskName => _videoFilter.FilterName;
    }
 }

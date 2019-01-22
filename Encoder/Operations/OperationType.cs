@@ -4,7 +4,9 @@ namespace Encoder.Operations
 {
    internal enum OperationType
    {
-      [Description( "Separate Audio and Video" )]
+      [Description( "Apply Filters" )]
+      Filters,
+      [Description( "Separate Streams" )]
       Separate
    }
 }

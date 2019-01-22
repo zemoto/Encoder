@@ -62,7 +62,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Encoding\EncodingTask\EncodeWithFiltersTask.cs" />
+    <Compile Include="Encoding\EncodingTask\EncodeWithFilters.cs" />
+    <Compile Include="Encoding\EncodingTask\EncodeWithOperationStep.cs" />
     <Compile Include="Filters\Audio\AudioFilter.cs" />
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
     <Compile Include="Filters\Audio\Copy\CopyAudioFilter.cs" />

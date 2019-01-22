@@ -12,7 +12,7 @@ namespace Encoder.Encoding
    {
       private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
       private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.GetEncodingArgs()}";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}.{_encodingTask.TargetFileExtension}\"";
 
       private static readonly string FfmpegExeLocation;
 

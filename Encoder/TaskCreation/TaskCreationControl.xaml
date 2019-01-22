@@ -7,9 +7,9 @@
              xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
              xmlns:video="clr-namespace:Encoder.Filters.Video" 
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
-             xmlns:filters="clr-namespace:Encoder.Filters"
-             xmlns:ui="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
-             xmlns:ui1="clr-namespace:Encoder.UI"
+             xmlns:operations="clr-namespace:Encoder.Operations"
+             xmlns:commonUi="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
+             xmlns:ui="clr-namespace:Encoder.UI"
              mc:Ignorable="d"
              x:Name="Root"
              d:DataContext="{d:DesignInstance Type={x:Type taskCreation:TaskCreationViewModel}}">
@@ -49,19 +49,29 @@
             </ScrollViewer>
          </Border>
 
-         <ui1:ComboBoxWithProperties Grid.Row="1" 
-                                     Margin="0,4"
-                                     Label="Video Codec Operation:"
-                                     ItemsSource="{ui:GetEnumValues {x:Type video:VideoFilterType}}"
-                                     SelectedValue="{Binding VideoFilterType}"
-                                     OptionsContext="{Binding VideoFilter.ViewModel}" />
+         <ui:ComboBoxWithProperties Grid.Row="1" 
+                                    Margin="0,4,0,8"
+                                    ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
+                                    SelectedValue="{Binding OperationType}" />
 
-         <ui1:ComboBoxWithProperties Grid.Row="2" 
-                                     Margin="0,4,0,8"
-                                     Label="Audio Codec Operation:"
-                                     ItemsSource="{ui:GetEnumValues {x:Type audio:AudioFilterType}}"
-                                     SelectedValue="{Binding AudioFilterType}"
-                                     OptionsContext="{Binding AudioFilter.ViewModel}" />
+         <StackPanel Grid.Row="2"
+                     Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Filters}}">
+
+            <ui:ComboBoxWithProperties Margin="0,0,0,4"
+                                       Label="Video Codec:"
+                                       ItemsSource="{commonUi:GetEnumValues {x:Type video:VideoFilterType}}"
+                                       SelectedValue="{Binding VideoFilterType}"
+                                       OptionsContext="{Binding VideoFilter.ViewModel}" />
+
+            <ui:ComboBoxWithProperties Margin="0,4,0,8"
+                                        Label="Audio Codec:"
+                                        ItemsSource="{commonUi:GetEnumValues {x:Type audio:AudioFilterType}}"
+                                        SelectedValue="{Binding AudioFilterType}"
+                                        OptionsContext="{Binding AudioFilter.ViewModel}" />
+
+         </StackPanel>
+
+         
 
          <Button Grid.Row="3"
                  Height="24"

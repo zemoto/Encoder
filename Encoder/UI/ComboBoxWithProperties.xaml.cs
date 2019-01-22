@@ -9,7 +9,7 @@ namespace Encoder.UI
          nameof( Label ),
          typeof( string ),
          typeof( ComboBoxWithProperties ),
-         new PropertyMetadata( string.Empty ) );
+         new PropertyMetadata( null ) );
 
       public string Label
       {

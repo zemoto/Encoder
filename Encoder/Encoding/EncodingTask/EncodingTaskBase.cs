@@ -23,8 +23,6 @@ namespace Encoder.Encoding.EncodingTask
          CancelToken?.Dispose();
       }
 
-      public abstract string GetEncodingArgs();
-
       public virtual bool Initialize()
       {
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
@@ -40,7 +38,7 @@ namespace Encoder.Encoding.EncodingTask
 
          var dir = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
          var fullPath = Path.Combine( dir, Path.GetFileName( SourceFile ) );
-         TargetFile = UtilityMethods.MakeUniqueFileName( fullPath );
+         TargetFile = Path.ChangeExtension( UtilityMethods.MakeUniqueFileName( fullPath ), null );
 
          if ( !Directory.Exists( dir ) )
          {
@@ -63,6 +61,8 @@ namespace Encoder.Encoding.EncodingTask
          OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
+      public abstract string EncodingArgs { get; }
+      public abstract string TargetFileExtension { get; }
       public abstract string TaskName { get; }
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
