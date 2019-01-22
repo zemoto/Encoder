@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -10,7 +10,8 @@ namespace Encoder.Encoding
 {
    internal sealed class FfmpegEncoder : IDisposable
    {
-      private string BasicArgs => $"-hide_banner -i \"{_encodingTask.SourceFile}\"";
+      private const string ErrorIndicator = "[error]";
+      private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
       private const string QualityArgs = "-crf 18 -preset slow";
       private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}.{_encodingTask.TargetFileExtension}\"";
 
@@ -20,6 +21,8 @@ namespace Encoder.Encoding
 
       private Process _currentffmpegProcess;
       private ProcessCpuMonitor _cpuUsageMonitor;
+
+      public string Error { get; private set; }
 
       static FfmpegEncoder()
       {
@@ -55,6 +58,8 @@ namespace Encoder.Encoding
          _currentffmpegProcess.BeginErrorReadLine();
          token.Register( () => _currentffmpegProcess?.Kill() );
 
+         _encodingTask.Started = true;
+
          // Give the process time to spool up
          Thread.Sleep( 300 );
 
@@ -63,13 +68,17 @@ namespace Encoder.Encoding
          {
             _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
          }
-
-         _encodingTask.Started = true;
       }
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( !_encodingTask.Started || _encodingTask.CancelToken.IsCancellationRequested || _encodingTask.Finished || _cpuUsageMonitor == null )
+         if ( e.Data != null && e.Data.StartsWith( ErrorIndicator ) )
+         {
+            Error = e.Data.Substring( ErrorIndicator.Length ).Trim();
+            return;
+         }
+
+         if ( !_encodingTask.Started || _encodingTask.CancelToken.IsCancellationRequested || _cpuUsageMonitor == null )
          {
             return;
          }

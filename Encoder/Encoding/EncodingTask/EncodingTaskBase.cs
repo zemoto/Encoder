@@ -66,7 +66,7 @@ namespace Encoder.Encoding.EncodingTask
       public abstract string TaskName { get; }
       public string SourceFile { get; }
       public string FileName => Path.GetFileName( SourceFile );
-      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero && !Finished;
+      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
       public string TargetFile { get; private set; }
       public int TargetTotalFrames { get; protected set; }
 
@@ -103,24 +103,6 @@ namespace Encoder.Encoding.EncodingTask
       {
          get => _progress;
          private set => SetProperty( ref _progress, value );
-      }
-
-      private bool _finished;
-      public bool Finished
-      {
-         get => _finished;
-         set
-         {
-            if ( SetProperty( ref _finished, value ) )
-            {
-               OnPropertyChanged( nameof( HasNoDurationData ) );
-               if ( value )
-               {
-                  FramesDone = TargetTotalFrames;
-                  Progress = 100;
-               }
-            }
-         }
       }
 
       private bool _started;

@@ -71,8 +71,6 @@
                                         IsIndeterminate="{Binding HasNoDurationData}"
                                         Style="{StaticResource MinimalistProgressBar}"
                                         Visibility="{Binding Started, Converter={StaticResource VisibleIfTrue}}" />
-                           <Rectangle Fill="LightGreen"
-                                      Visibility="{Binding Finished, Converter={StaticResource VisibleIfTrue}}" />
                            <TextBlock HorizontalAlignment="Right">
                               <Run Text="{Binding FramesDone, Mode=OneWay}" />
                               <Run Text="/" />

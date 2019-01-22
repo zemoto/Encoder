@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -127,12 +127,15 @@ namespace Encoder.Encoding
 
          encoder.AwaitCompletion();
 
-         task.Finished = !task.CancelToken.IsCancellationRequested;
-
-         if ( !task.Finished )
+         if ( task.CancelToken.IsCancellationRequested )
          {
             Task.Delay( 300 );
             UtilityMethods.SafeDeleteFile( task.TargetFile );
+         }
+
+         if ( !string.IsNullOrEmpty( encoder.Error ) )
+         {
+            MessageBox.Show( $"Error: {encoder.Error}", task.SourceFile, MessageBoxButton.OK, MessageBoxImage.Error );
          }
 
          CleanupTask( task );
