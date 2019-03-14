@@ -31,6 +31,11 @@ namespace Encoder.Encoding
          var output = process.StandardOutput.ReadToEnd();
          try
          {
+            if ( string.IsNullOrEmpty( output ) )
+            {
+               return false;
+            }
+
             var values = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries );
 
             var fpsFraction = values[0].Split( '/' );
@@ -54,6 +59,8 @@ namespace Encoder.Encoding
 
       public static bool GetKeyframes( string file, out IEnumerable<double> keyFrames )
       {
+         keyFrames = null;
+
          var process = GetProcess( KeyframeArgs( file ) );
          process.StartAsChildProcess();
          process.WaitForExit();
@@ -61,12 +68,16 @@ namespace Encoder.Encoding
          var output = process.StandardOutput.ReadToEnd();
          try
          {
+            if ( string.IsNullOrEmpty( output ) )
+            {
+               return false;
+            }
+
             keyFrames = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Select( x => double.Parse( x ) ).ToList();
             return true;
          }
          catch
          {
-            keyFrames = null;
             return false;
          }
          finally
