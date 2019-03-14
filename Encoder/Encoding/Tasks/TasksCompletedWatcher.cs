@@ -13,7 +13,7 @@ namespace Encoder.Encoding.Tasks
       public TasksCompletedWatcher( IEnumerable<SingleStepTask> tasks )
       {
          Tasks = tasks.ToList();
-         foreach( var task in tasks )
+         foreach( var task in Tasks )
          {
             task.TaskFinished += OnTaskFinished;
          }

@@ -69,7 +69,8 @@ namespace Encoder
             {
                await Task.Delay( 300 );
             }
-            ( sender as Window ).Close();
+
+            ( (Window)sender ).Close();
          }
       }
 
@@ -77,7 +78,7 @@ namespace Encoder
       {
          var tasks = _model.TaskCreationVm.GetTasks();
 
-         await _encodingManager.EnqueueTasksAsync( tasks );
+         await _encodingManager.EnqueueTasksAsync( tasks.ToList() );
       }
 
       private void SelectFiles()

@@ -73,7 +73,7 @@ namespace Encoder.Encoding
                return false;
             }
 
-            keyFrames = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Select( x => double.Parse( x ) ).ToList();
+            keyFrames = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Select( double.Parse ).ToList();
             return true;
          }
          catch

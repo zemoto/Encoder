@@ -2,7 +2,7 @@
 {
    internal abstract class Filter
    {
-      public abstract FilterViewModel ViewModel { get; }
+      public virtual FilterViewModel ViewModel { get; } = null;
       public abstract string FilterName { get; }
       public virtual string CustomFilterArguments { get; } = null;
 

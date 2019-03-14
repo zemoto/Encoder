@@ -20,7 +20,7 @@ namespace Encoder.Encoding.Tasks
 
    internal sealed class MultiStepTask : EncodingTaskBase
    {
-      private int _stepFinished = 0;
+      private int _stepFinished;
       private readonly IEnumerable<TaskStep> _steps;
       private TasksCompletedWatcher _taskWatcher;
 
@@ -33,8 +33,8 @@ namespace Encoder.Encoding.Tasks
 
       public async Task<IEnumerable<SingleStepTask>> GetNextStepAsync()
       {
-         var nextStep = _steps.Where( x => x.Step == _stepFinished + 1 ).Select( x => x.Task );
-         if ( nextStep.Count() == 0 )
+         var nextStep = _steps.Where( x => x.Step == _stepFinished + 1 ).Select( x => x.Task ).ToList();
+         if ( !nextStep.Any() )
          {
             return null;
          }

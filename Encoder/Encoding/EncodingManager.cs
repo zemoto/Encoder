@@ -22,15 +22,15 @@ namespace Encoder.Encoding
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
 
-      public async Task EnqueueTasksAsync( IEnumerable<EncodingTaskBase> tasks )
+      public async Task EnqueueTasksAsync( List<EncodingTaskBase> tasks )
       {
-         await EnqueueMultiStepTasksAsync( tasks.OfType<MultiStepTask>().ToList() );
+         await EnqueueMultiStepTasksAsync( tasks.OfType<MultiStepTask>() );
          await EnqueueSingleStepTasksAsync( tasks.OfType<SingleStepTask>().ToList(), true );
       }
 
-      private async Task EnqueueSingleStepTasksAsync( IEnumerable<SingleStepTask> tasks, bool initializeTasks )
+      private async Task EnqueueSingleStepTasksAsync( IReadOnlyCollection<SingleStepTask> tasks, bool initializeTasks )
       {
-         if ( tasks.Count() == 0 )
+         if ( !tasks.Any() )
          {
             return;
          }
@@ -72,7 +72,7 @@ namespace Encoder.Encoding
             return;
          }
 
-         await EnqueueSingleStepTasksAsync( tasks, false );
+         await EnqueueSingleStepTasksAsync( tasks.ToList(), false );
       }
 
       private async void OnMultiStepTaskCurrentStepFinished( object sender, bool success )
