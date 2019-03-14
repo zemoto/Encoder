@@ -24,9 +24,7 @@ namespace Encoder.TaskCreation
          }
          else
          {
-            tasks = SelectedFiles.Select( file => new MultiStepTask( 
-               Operation.Steps.Select( step => new TaskStep( step.Step, new EncodeWithCustomParams( file, step.Params ) ) ).ToList() 
-               ) ).ToList();
+            tasks = SelectedFiles.Select( Operation.ToMultiStepTask ).ToList();
          }
 
          SelectedFiles.Clear();
