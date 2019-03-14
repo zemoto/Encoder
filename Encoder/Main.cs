@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Encoder.Encoding;
-using Encoder.Encoding.EncodingTask;
+using Encoder.Encoding.Tasks;
 using Encoder.TaskCreation;
 using Microsoft.Win32;
 using ZemotoCommon.UI;
@@ -30,7 +30,7 @@ namespace Encoder
 
          _model = new MainWindowViewModel( _encodingManager.Model, taskCreationModel )
          {
-            CancelTaskCommand = new RelayCommand<EncodingTaskBase>( _encodingManager.CancelTask )
+            CancelTaskCommand = new RelayCommand<SingleStepTask>( _encodingManager.CancelTask )
          };
       }
 

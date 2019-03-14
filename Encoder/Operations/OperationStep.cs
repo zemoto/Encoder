@@ -2,15 +2,13 @@
 {
    internal struct OperationStep
    {
-      public string Name { get; }
-      public string Arguments { get; }
-      public string FileType { get; }
+      public int Step { get; }
+      public EncodingParams Params { get; }
 
-      public OperationStep( string name, string args, string fileType )
+      public OperationStep( int step, EncodingParams encodingParams )
       {
-         Name = name;
-         Arguments = args;
-         FileType = fileType;
+         Step = step;
+         Params = encodingParams;
       }
    }
 }

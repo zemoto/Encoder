@@ -2,18 +2,19 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using ZemotoCommon.UI;
 using ZemotoCommon.Utils;
 
-namespace Encoder.Encoding.EncodingTask
+namespace Encoder.Encoding.Tasks
 {
-   internal abstract class EncodingTaskBase : ViewModelBase, IDisposable
+   internal abstract class SingleStepTask : EncodingTaskBase, IDisposable
    {
       protected TimeSpan SourceDuration;
       protected double SourceFrameRate;
       public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
 
-      protected EncodingTaskBase( string sourceFile )
+      public event EventHandler<bool> TaskFinished;
+
+      protected SingleStepTask( string sourceFile )
       {
          SourceFile = sourceFile;
       }
@@ -38,7 +39,7 @@ namespace Encoder.Encoding.EncodingTask
 
          var dir = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
          var fullPath = Path.Combine( dir, Path.GetFileName( SourceFile ) );
-         TargetFile = Path.ChangeExtension( UtilityMethods.MakeUniqueFileName( fullPath ), null );
+         TargetFile = UtilityMethods.MakeUniqueFileName( Path.ChangeExtension( fullPath, TargetFileExtension ) );
 
          if ( !Directory.Exists( dir ) )
          {
@@ -46,6 +47,11 @@ namespace Encoder.Encoding.EncodingTask
          }
 
          return true;
+      }
+
+      public void SetTaskFinished()
+      {
+         TaskFinished?.Invoke( this, Started && !CancelToken.IsCancellationRequested );
       }
 
       private void UpdateTimeRemaining()

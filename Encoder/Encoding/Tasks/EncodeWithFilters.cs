@@ -2,9 +2,9 @@
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
 
-namespace Encoder.Encoding.EncodingTask
+namespace Encoder.Encoding.Tasks
 {
-   internal sealed class EncodeWithFilters : EncodingTaskBase
+   internal sealed class EncodeWithFilters : SingleStepTask
    {
       private readonly VideoFilter _videoFilter;
       private readonly AudioFilter _audioFilter;

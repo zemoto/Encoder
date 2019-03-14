@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Encoder.Encoding.EncodingTask;
+using Encoder.Encoding.Tasks;
 using Encoder.ffmpeg;
 using ZemotoCommon.Utils;
 
@@ -13,11 +13,11 @@ namespace Encoder.Encoding
       private const string ErrorIndicator = "[error]";
       private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
       private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}.{_encodingTask.TargetFileExtension}\"";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string FfmpegExeLocation;
 
-      private readonly EncodingTaskBase _encodingTask;
+      private readonly SingleStepTask _encodingTask;
 
       private Process _currentffmpegProcess;
       private ProcessCpuMonitor _cpuUsageMonitor;
@@ -29,7 +29,7 @@ namespace Encoder.Encoding
          FfmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
       }
 
-      public FfmpegEncoder( EncodingTaskBase encodingTask )
+      public FfmpegEncoder( SingleStepTask encodingTask )
       {
          _encodingTask = encodingTask;
       }

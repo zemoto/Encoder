@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using Encoder.Encoding.EncodingTask;
+using Encoder.Encoding.Tasks;
 using ZemotoCommon.Utils;
 using Timer = System.Timers.Timer;
 
@@ -24,15 +24,26 @@ namespace Encoder.Encoding
 
       public async Task EnqueueTasksAsync( IEnumerable<EncodingTaskBase> tasks )
       {
-         foreach( var task in tasks )
+         await EnqueueMultiStepTasksAsync( tasks.OfType<MultiStepTask>().ToList() );
+         await EnqueueSingleStepTasksAsync( tasks.OfType<SingleStepTask>().ToList(), true );
+      }
+
+      private async Task EnqueueSingleStepTasksAsync( IEnumerable<SingleStepTask> tasks, bool initializeTasks )
+      {
+         if ( tasks.Count() == 0 )
          {
-            if ( !await Task.Run( () => task.Initialize() ) )
+            return;
+         }
+
+         foreach ( var task in tasks )
+         {
+            if ( initializeTasks && !await Task.Run( () => task.Initialize() ) )
             {
                task.Dispose();
                continue;
             }
 
-            Model.Tasks.Add( task );
+            Application.Current.Dispatcher.Invoke( () => Model.Tasks.Add( task ) );
          }
 
          if ( Model.NoTasksStarted )
@@ -43,9 +54,45 @@ namespace Encoder.Encoding
          _taskStartTimer.Start();
       }
 
-      private void CleanupTask( EncodingTaskBase task )
+      private async Task EnqueueMultiStepTasksAsync( IEnumerable<MultiStepTask> multiStepTasks )
+      {
+         foreach ( var multiStepTask in multiStepTasks )
+         {
+            multiStepTask.CurrentStepFinished += OnMultiStepTaskCurrentStepFinished;
+            await EnqueueNextStep( multiStepTask );
+         }
+      }
+
+      private async Task EnqueueNextStep( MultiStepTask multiStepTask )
+      {
+         var tasks = await multiStepTask.GetNextStepAsync();
+         if ( tasks == null )
+         {
+            multiStepTask.CurrentStepFinished -= OnMultiStepTaskCurrentStepFinished;
+            return;
+         }
+
+         await EnqueueSingleStepTasksAsync( tasks, false );
+      }
+
+      private async void OnMultiStepTaskCurrentStepFinished( object sender, bool success )
+      {
+         var multiStepTask = (MultiStepTask)sender;
+         if ( success )
+         {
+            await EnqueueNextStep( multiStepTask );
+         }
+         else
+         {
+            multiStepTask.Cleanup();
+            multiStepTask.CurrentStepFinished -= OnMultiStepTaskCurrentStepFinished;
+         }
+      }
+
+      private void CleanupTask( SingleStepTask task )
       {
          bool taskWasStarted = task.Started;
+         task.SetTaskFinished();
 
          task.Dispose();
          Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
@@ -109,9 +156,9 @@ namespace Encoder.Encoding
          Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
-      private void DoTask( EncodingTaskBase task )
+      private void DoTask( SingleStepTask task )
       {
-         if ( task == null )
+         if ( task == null || task.Started )
          {
             return;
          }
@@ -141,7 +188,7 @@ namespace Encoder.Encoding
          CleanupTask( task );
       }
 
-      public void CancelTask( EncodingTaskBase task )
+      public void CancelTask( SingleStepTask task )
       {
          task.CancelToken.Cancel();
 

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Encoder.Encoding.EncodingTask;
+using Encoder.Encoding.Tasks;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
@@ -24,7 +24,9 @@ namespace Encoder.TaskCreation
          }
          else
          {
-            tasks = SelectedFiles.SelectMany( file => Operation.Steps.Select( step => new EncodeWithOperationStep( file, step ) ) ).ToList();
+            tasks = SelectedFiles.Select( file => new MultiStepTask( 
+               Operation.Steps.Select( step => new TaskStep( step.Step, new EncodeWithCustomParams( file, step.Params ) ) ).ToList() 
+               ) ).ToList();
          }
 
          SelectedFiles.Clear();
