@@ -25,10 +25,10 @@ namespace Encoder.Encoding
       public async Task EnqueueTasksAsync( List<EncodingTaskBase> tasks )
       {
          await EnqueueMultiStepTasksAsync( tasks.OfType<MultiStepTask>() );
-         await EnqueueSingleStepTasksAsync( tasks.OfType<SingleStepTask>().ToList(), true );
+         await EnqueueSingleStepTasksAsync( tasks.OfType<SingleStepTask>().ToList() );
       }
 
-      private async Task EnqueueSingleStepTasksAsync( IReadOnlyCollection<SingleStepTask> tasks, bool initializeTasks )
+      private async Task EnqueueSingleStepTasksAsync( IReadOnlyCollection<SingleStepTask> tasks )
       {
          if ( !tasks.Any() )
          {
@@ -37,9 +37,9 @@ namespace Encoder.Encoding
 
          foreach ( var task in tasks )
          {
-            if ( initializeTasks && !await Task.Run( () => task.Initialize() ) )
+            if ( !await Task.Run( () => task.Initialize() ) )
             {
-               task.Dispose();
+               task.SetTaskFinished();
                continue;
             }
 
@@ -65,14 +65,14 @@ namespace Encoder.Encoding
 
       private async Task EnqueueNextStep( MultiStepTask multiStepTask )
       {
-         var tasks = await multiStepTask.GetNextStepAsync();
+         var tasks = multiStepTask.GetNextStep();
          if ( tasks == null )
          {
             multiStepTask.CurrentStepFinished -= OnMultiStepTaskCurrentStepFinished;
             return;
          }
 
-         await EnqueueSingleStepTasksAsync( tasks.ToList(), false );
+         await EnqueueTasksAsync( tasks.ToList() );
       }
 
       private async void OnMultiStepTaskCurrentStepFinished( object sender, bool success )
@@ -190,7 +190,7 @@ namespace Encoder.Encoding
 
       public void CancelTask( SingleStepTask task )
       {
-         task.CancelToken.Cancel();
+         task.Cancel();
 
          if ( !task.Started )
          {

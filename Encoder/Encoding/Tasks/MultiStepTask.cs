@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding.Tasks
 {
    internal struct TaskStep
    {
       public int Step { get; }
-      public SingleStepTask Task { get; }
+      public EncodingTaskBase Task { get; }
 
-      public TaskStep( int step, SingleStepTask task )
+      public TaskStep( int step, EncodingTaskBase task )
       {
          Step = step;
          Task = task;
@@ -31,31 +29,11 @@ namespace Encoder.Encoding.Tasks
          _steps = steps;
       }
 
-      public async Task<IEnumerable<SingleStepTask>> GetNextStepAsync()
+      public IEnumerable<EncodingTaskBase> GetNextStep()
       {
          var nextStep = _steps.Where( x => x.Step == _stepFinished + 1 ).Select( x => x.Task ).ToList();
          if ( !nextStep.Any() )
          {
-            return null;
-         }
-
-         bool initialized = true;
-         foreach( var task in nextStep )
-         {
-            if ( !await Task.Run( () => task.Initialize() ) )
-            {
-               initialized = false;
-               break;
-            }
-         }
-
-         if ( !initialized )
-         {
-            foreach ( var task in nextStep )
-            {
-               task.Dispose();
-            }
-            Cleanup();
             return null;
          }
 
@@ -67,20 +45,32 @@ namespace Encoder.Encoding.Tasks
       private void OnCurrentStepFinished( object sender, bool success )
       {
          _stepFinished++;
-         CurrentStepFinished?.Invoke( this, success );
+         if ( _stepFinished >= _steps.Select( x => x.Step ).Max() )
+         {
+            RaiseTaskFinished( success );
+         }
+         else
+         {
+            CurrentStepFinished?.Invoke( this, success );
+         }
       }
 
-      public void Cleanup()
+      public override void Cleanup()
       {
          foreach( var step in _steps.Where( x => x.Step <= _stepFinished ) )
          {
-            UtilityMethods.SafeDeleteFile( step.Task.TargetFile );
+            step.Task.Cleanup();
          }
+         Cancel();
+         _steps.ToList().Clear();
+      }
+
+      public override void Cancel()
+      {
          foreach ( var task in _taskWatcher?.Tasks )
          {
-            task.CancelToken.Cancel();
+            task.Cancel();
          }
-         _steps.ToList().Clear();
       }
    }
 }

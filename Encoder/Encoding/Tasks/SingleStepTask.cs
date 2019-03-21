@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -12,17 +12,21 @@ namespace Encoder.Encoding.Tasks
       protected double SourceFrameRate;
       public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
 
-      public event EventHandler<bool> TaskFinished;
-
       protected SingleStepTask( string sourceFile )
       {
          SourceFile = sourceFile;
       }
 
-      public void Dispose()
+      ~SingleStepTask()
       {
-         CancelToken?.Dispose();
+         Dispose();
       }
+
+      public void Dispose() => CancelToken?.Dispose();
+
+      public override void Cleanup() => UtilityMethods.SafeDeleteFile( TargetFile );
+
+      public override void Cancel() => CancelToken.Cancel();
 
       public virtual bool Initialize()
       {
@@ -49,10 +53,7 @@ namespace Encoder.Encoding.Tasks
          return true;
       }
 
-      public void SetTaskFinished()
-      {
-         TaskFinished?.Invoke( this, Started && !CancelToken.IsCancellationRequested );
-      }
+      public void SetTaskFinished() => RaiseTaskFinished( Started && !CancelToken.IsCancellationRequested );
 
       private void UpdateTimeRemaining()
       {

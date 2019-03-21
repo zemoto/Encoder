@@ -6,11 +6,11 @@ namespace Encoder.Encoding.Tasks
 {
    internal sealed class TasksCompletedWatcher
    {
-      public List<SingleStepTask> Tasks { get; }
+      public List<EncodingTaskBase> Tasks { get; }
 
       public event EventHandler<bool> TasksFinished;
 
-      public TasksCompletedWatcher( IEnumerable<SingleStepTask> tasks )
+      public TasksCompletedWatcher( IEnumerable<EncodingTaskBase> tasks )
       {
          Tasks = tasks.ToList();
          foreach( var task in Tasks )
@@ -28,7 +28,7 @@ namespace Encoder.Encoding.Tasks
             return;
          }
 
-         Tasks.Remove( (SingleStepTask)sender );
+         Tasks.Remove( (EncodingTaskBase)sender );
          if ( Tasks.Count == 0 )
          {
             TasksFinished?.Invoke( this, true );
