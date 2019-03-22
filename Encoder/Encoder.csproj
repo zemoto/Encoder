@@ -62,10 +62,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Encoding\Tasks\AssemblyLine.cs" />
     <Compile Include="Encoding\Tasks\EncodeWithFilters.cs" />
     <Compile Include="Encoding\Tasks\EncodeWithParams.cs" />
     <Compile Include="Encoding\Tasks\EncodingTaskBase.cs" />
-    <Compile Include="Encoding\Tasks\MultiStepTask.cs" />
+    <Compile Include="Encoding\Tasks\IFilePathProvider.cs" />
     <Compile Include="Encoding\Tasks\TasksCompletedWatcher.cs" />
     <Compile Include="Filters\Audio\AudioFilter.cs" />
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Encoding\EncodingManager.cs" />
     <Compile Include="Encoding\EncodingManagerViewModel.cs" />
     <Compile Include="Encoding\FfmpegEncoder.cs" />
-    <Compile Include="Encoding\Tasks\SingleStepTask.cs" />
+    <Compile Include="Encoding\Tasks\EncodingTask.cs" />
     <Compile Include="Encoding\VideoMetadataReader.cs" />
     <Compile Include="UI\GeneratedDataTemplateSelector.cs" />
     <Compile Include="Filters\Video\Amplify\AmplifyVideoFilter.cs" />

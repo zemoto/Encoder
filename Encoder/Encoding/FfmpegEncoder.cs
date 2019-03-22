@@ -17,7 +17,7 @@ namespace Encoder.Encoding
 
       private static readonly string FfmpegExeLocation;
 
-      private readonly SingleStepTask _encodingTask;
+      private readonly EncodingTask _encodingTask;
 
       private Process _currentffmpegProcess;
       private ProcessCpuMonitor _cpuUsageMonitor;
@@ -29,7 +29,7 @@ namespace Encoder.Encoding
          FfmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
       }
 
-      public FfmpegEncoder( SingleStepTask encodingTask )
+      public FfmpegEncoder( EncodingTask encodingTask )
       {
          _encodingTask = encodingTask;
       }

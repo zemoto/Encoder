@@ -4,13 +4,12 @@ using Encoder.Filters.Video;
 
 namespace Encoder.Encoding.Tasks
 {
-   internal sealed class EncodeWithFilters : SingleStepTask
+   internal sealed class EncodeWithFilters : EncodingTask
    {
       private readonly VideoFilter _videoFilter;
       private readonly AudioFilter _audioFilter;
 
-      public EncodeWithFilters( string sourceFile, VideoFilter videoFilter, AudioFilter audioFilter ) 
-         : base( sourceFile )
+      public EncodeWithFilters( VideoFilter videoFilter, AudioFilter audioFilter ) 
       {
          _videoFilter = videoFilter;
          _audioFilter = audioFilter;

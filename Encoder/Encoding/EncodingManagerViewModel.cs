@@ -7,11 +7,11 @@ namespace Encoder.Encoding
 {
    internal sealed class EncodingManagerViewModel : ViewModelBase
    {
-      public ObservableCollection<SingleStepTask> Tasks { get; } = new ObservableCollection<SingleStepTask>();
+      public ObservableCollection<EncodingTask> Tasks { get; } = new ObservableCollection<EncodingTask>();
 
       public bool AnyTasksPending => Tasks.Any();
       public bool NoTasksStarted => Tasks.Any( x => !x.Started );
       public bool AllTasksStarted => Tasks.All( x => x.Started );
-      public SingleStepTask NextPendingTask => Tasks.FirstOrDefault( x => !x.Started );
+      public EncodingTask NextPendingTask => Tasks.FirstOrDefault( x => !x.Started );
    }
 }

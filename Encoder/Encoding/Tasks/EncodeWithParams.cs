@@ -2,10 +2,9 @@
 
 namespace Encoder.Encoding.Tasks
 {
-   internal sealed class EncodeWithCustomParams : SingleStepTask
+   internal sealed class EncodeWithCustomParams : EncodingTask
    {
-      public EncodeWithCustomParams( string sourceFile, EncodingParams encodingParams ) 
-         : base( sourceFile )
+      public EncodeWithCustomParams( EncodingParams encodingParams ) 
       {
          EncodingArgs = encodingParams.Arguments;
          TargetFileExtension = encodingParams.FileType;

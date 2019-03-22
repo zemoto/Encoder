@@ -24,11 +24,11 @@ namespace Encoder.Encoding
 
       public async Task EnqueueTasksAsync( List<EncodingTaskBase> tasks )
       {
-         await EnqueueMultiStepTasksAsync( tasks.OfType<MultiStepTask>() );
-         await EnqueueSingleStepTasksAsync( tasks.OfType<SingleStepTask>().ToList() );
+         await EnqueueAssemblyLinesAsync( tasks.OfType<AssemblyLine>() );
+         await EnqueueEncodingTasksAsync( tasks.OfType<EncodingTask>().ToList() );
       }
 
-      private async Task EnqueueSingleStepTasksAsync( IReadOnlyCollection<SingleStepTask> tasks )
+      private async Task EnqueueEncodingTasksAsync( IReadOnlyCollection<EncodingTask> tasks )
       {
          if ( !tasks.Any() )
          {
@@ -54,42 +54,42 @@ namespace Encoder.Encoding
          _taskStartTimer.Start();
       }
 
-      private async Task EnqueueMultiStepTasksAsync( IEnumerable<MultiStepTask> multiStepTasks )
+      private async Task EnqueueAssemblyLinesAsync( IEnumerable<AssemblyLine> assemblyLines )
       {
-         foreach ( var multiStepTask in multiStepTasks )
+         foreach ( var assemblyLine in assemblyLines )
          {
-            multiStepTask.CurrentStepFinished += OnMultiStepTaskCurrentStepFinished;
-            await EnqueueNextStep( multiStepTask );
+            assemblyLine.CurrentStepFinished += OnAssemblyLineCurrentStepFinished;
+            await EnqueueNextStep( assemblyLine );
          }
       }
 
-      private async Task EnqueueNextStep( MultiStepTask multiStepTask )
+      private async Task EnqueueNextStep( AssemblyLine assemblyLine )
       {
-         var tasks = multiStepTask.GetNextStep();
-         if ( tasks == null )
+         var nextStep = assemblyLine.GetNextStep();
+         if ( nextStep == null )
          {
-            multiStepTask.CurrentStepFinished -= OnMultiStepTaskCurrentStepFinished;
+            assemblyLine.CurrentStepFinished -= OnAssemblyLineCurrentStepFinished;
             return;
          }
 
-         await EnqueueTasksAsync( tasks.ToList() );
+         await EnqueueEncodingTasksAsync( new List<EncodingTask> { nextStep } );
       }
 
-      private async void OnMultiStepTaskCurrentStepFinished( object sender, bool success )
+      private async void OnAssemblyLineCurrentStepFinished( object sender, bool success )
       {
-         var multiStepTask = (MultiStepTask)sender;
+         var assemblyLine = (AssemblyLine)sender;
          if ( success )
          {
-            await EnqueueNextStep( multiStepTask );
+            await EnqueueNextStep( assemblyLine );
          }
          else
          {
-            multiStepTask.Cleanup();
-            multiStepTask.CurrentStepFinished -= OnMultiStepTaskCurrentStepFinished;
+            assemblyLine.Cleanup();
+            assemblyLine.CurrentStepFinished -= OnAssemblyLineCurrentStepFinished;
          }
       }
 
-      private void CleanupTask( SingleStepTask task )
+      private void CleanupTask( EncodingTask task )
       {
          bool taskWasStarted = task.Started;
          task.SetTaskFinished();
@@ -156,7 +156,7 @@ namespace Encoder.Encoding
          Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
-      private void DoTask( SingleStepTask task )
+      private void DoTask( EncodingTask task )
       {
          if ( task == null || task.Started )
          {
@@ -188,7 +188,7 @@ namespace Encoder.Encoding
          CleanupTask( task );
       }
 
-      public void CancelTask( SingleStepTask task )
+      public void CancelTask( EncodingTask task )
       {
          task.Cancel();
 

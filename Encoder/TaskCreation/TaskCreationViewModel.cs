@@ -20,11 +20,15 @@ namespace Encoder.TaskCreation
          IEnumerable<EncodingTaskBase> tasks;
          if ( OperationType == OperationType.Filters )
          {
-            tasks = SelectedFiles.Select( x => new EncodeWithFilters( x, VideoFilter, AudioFilter ) ).ToList();
+            tasks = SelectedFiles.Select( x =>
+            {
+               var filePathProvider = new FilePathProvider( x );
+               return new EncodeWithFilters( VideoFilter, AudioFilter ) { SourceFilePathProvider = filePathProvider };
+            } ).ToList();
          }
          else
          {
-            tasks = SelectedFiles.Select( Operation.ToMultiStepTask ).ToList();
+            tasks = SelectedFiles.SelectMany( Operation.ToAssemblyLines ).ToList();
          }
 
          SelectedFiles.Clear();

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -6,18 +7,12 @@ using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding.Tasks
 {
-   internal abstract class SingleStepTask : EncodingTaskBase, IDisposable
+   internal abstract class EncodingTask : EncodingTaskBase, IDisposable
    {
       protected TimeSpan SourceDuration;
       protected double SourceFrameRate;
-      public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
 
-      protected SingleStepTask( string sourceFile )
-      {
-         SourceFile = sourceFile;
-      }
-
-      ~SingleStepTask()
+      ~EncodingTask()
       {
          Dispose();
       }
@@ -28,8 +23,11 @@ namespace Encoder.Encoding.Tasks
 
       public override void Cancel() => CancelToken.Cancel();
 
+      public override string GetFilePath() => TargetFile;
+
       public virtual bool Initialize()
       {
+         Debug.Assert( SourceFilePathProvider != null );
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
          if ( !success )
          {
@@ -68,10 +66,11 @@ namespace Encoder.Encoding.Tasks
          OnPropertyChanged( nameof( TimeRemainingString ) );
       }
 
+      public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
       public abstract string EncodingArgs { get; }
       public abstract string TargetFileExtension { get; }
       public abstract string TaskName { get; }
-      public string SourceFile { get; }
+      public string SourceFile => SourceFilePathProvider.GetFilePath();
       public string FileName => Path.GetFileName( SourceFile );
       public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
       public string TargetFile { get; private set; }

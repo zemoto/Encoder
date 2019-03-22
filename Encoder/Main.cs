@@ -30,7 +30,7 @@ namespace Encoder
 
          _model = new MainWindowViewModel( _encodingManager.Model, taskCreationModel )
          {
-            CancelTaskCommand = new RelayCommand<SingleStepTask>( _encodingManager.CancelTask )
+            CancelTaskCommand = new RelayCommand<EncodingTask>( _encodingManager.CancelTask )
          };
       }
 
