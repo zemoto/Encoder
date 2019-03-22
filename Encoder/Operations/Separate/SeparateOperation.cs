@@ -4,8 +4,8 @@
    {
       public SeparateOperation()
       {
-         Steps.Add( new OperationStep( 1, new EncodingParams( "Separate into video", "-c:v copy -an", "mp4" ) ) );
-         Steps.Add( new OperationStep( 1, new EncodingParams( "Separate into audio", "-vn -c:a copy", "wmv" ) ) );
+         AddEncodingTask( new EncodingParams( "Separate into video", "-c:v copy -an", "mp4" ), true );
+         AddEncodingTask( new EncodingParams( "Separate into audio", "-vn -c:a copy", "wmv" ), true );
       }
    }
 }
