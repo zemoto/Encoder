@@ -1,35 +1,26 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Encoder.Encoding.Tasks;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Encoder.Operations;
+using Encoder.Operations.ApplyFilters;
+using Encoder.Operations.Separate;
 using ZemotoCommon.UI;
 
-namespace Encoder.TaskCreation
+namespace Encoder.AssemblyLineCreation
 {
-   internal sealed class TaskCreationViewModel : ViewModelBase
+   internal sealed class AssemblyLineCreationViewModel : ViewModelBase
    {
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
 
-      public IEnumerable<EncodingTaskBase> GetTasks()
+      public IEnumerable<AssemblyLine> GetAssemblyLines()
       {
-         IEnumerable<EncodingTaskBase> tasks;
-         if ( OperationType == OperationType.Filters )
-         {
-            tasks = SelectedFiles.Select( x =>
-            {
-               var filePathProvider = new FilePathProvider( x );
-               return new EncodeWithFilters( VideoFilter, AudioFilter ) { SourceFilePathProvider = filePathProvider };
-            } ).ToList();
-         }
-         else
-         {
-            tasks = SelectedFiles.SelectMany( Operation.ToAssemblyLines ).ToList();
-         }
+         var tasks = SelectedFiles.SelectMany( GetOperation().ToAssemblyLines ).ToList();
 
          SelectedFiles.Clear();
          OperationType = OperationType.Filters;
@@ -39,24 +30,24 @@ namespace Encoder.TaskCreation
          return tasks;
       }
 
+      private Operation GetOperation()
+      {
+         switch ( OperationType )
+         {
+            case OperationType.Filters:
+               return new ApplyFiltersOperation( VideoFilter, AudioFilter );
+            case OperationType.Separate:
+               return new SeparateOperation();
+            default:
+               throw new ArgumentOutOfRangeException();
+         }
+      }
+
       private OperationType _operationType;
       public OperationType OperationType
       {
          get => _operationType;
-         set
-         {
-            if ( SetProperty( ref _operationType, value ) )
-            {
-               Operation = Operation.GetOperationForType( value );
-            }
-         }
-      }
-
-      private Operation _operation;
-      public Operation Operation
-      {
-         get => _operation;
-         set => SetProperty( ref _operation, value );
+         set => SetProperty( ref _operationType, value );
       }
 
       private VideoFilterType _videoFilterType = VideoFilterType.Copy;

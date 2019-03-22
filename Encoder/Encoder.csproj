@@ -75,6 +75,7 @@
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Operations\ApplyFilters\ApplyFiltersOperation.cs" />
     <Compile Include="Operations\EncodingParams.cs" />
     <Compile Include="UI\DataTemplateFactory.cs" />
     <Compile Include="UI\ComboBoxWithProperties.xaml.cs">
@@ -111,9 +112,9 @@
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationType.cs" />
     <Compile Include="Operations\Separate\SeparateOperation.cs" />
-    <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
-    <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
-      <DependentUpon>TaskCreationControl.xaml</DependentUpon>
+    <Compile Include="AssemblyLineCreation\AssemblyLineCreationViewModel.cs" />
+    <Compile Include="AssemblyLineCreation\AssemblyLineCreationControl.xaml.cs">
+      <DependentUpon>AssemblyLineCreationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="UI\PropertyAttributes.cs" />
@@ -125,7 +126,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaskCreation\TaskCreationControl.xaml">
+    <Page Include="AssemblyLineCreation\AssemblyLineCreationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

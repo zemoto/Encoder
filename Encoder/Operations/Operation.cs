@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Encoder.Encoding.Tasks;
-using Encoder.Operations.Separate;
 
 namespace Encoder.Operations
 {
@@ -18,18 +17,7 @@ namespace Encoder.Operations
 
       protected void AddEncodingOperation( EncodingTask encodingTask )
       {
-         _steps.Add( new[] { encodingTask } );
-      }
-
-      public static Operation GetOperationForType( OperationType type )
-      {
-         switch ( type )
-         {
-            case OperationType.Separate:
-               return new SeparateOperation();
-            default:
-               return null;
-         }
+         AddEncodingOperationChain( new[] { encodingTask } );
       }
    }
 }

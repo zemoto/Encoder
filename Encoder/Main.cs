@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Encoder.AssemblyLineCreation;
 using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
-using Encoder.TaskCreation;
 using Microsoft.Win32;
 using ZemotoCommon.UI;
 
@@ -20,15 +20,15 @@ namespace Encoder
       {
          _encodingManager = new EncodingManager();
 
-         var taskCreationModel = new TaskCreationViewModel
+         var creationViewModel = new AssemblyLineCreationViewModel
          {
             SelectFilesCommand = new RelayCommand( SelectFiles )
          };
 
-         taskCreationModel.RemoveFileCommand = new RelayCommand<string>( file => taskCreationModel.SelectedFiles.Remove( file ) );
-         taskCreationModel.CreateTasksCommand = new RelayCommand( CreateAndStartNewTasks, taskCreationModel.SelectedFiles.Any );
+         creationViewModel.RemoveFileCommand = new RelayCommand<string>( file => creationViewModel.SelectedFiles.Remove( file ) );
+         creationViewModel.CreateTasksCommand = new RelayCommand( CreateAndStartNewTasks, creationViewModel.SelectedFiles.Any );
 
-         _model = new MainWindowViewModel( _encodingManager.Model, taskCreationModel )
+         _model = new MainWindowViewModel( _encodingManager.Model, creationViewModel )
          {
             CancelTaskCommand = new RelayCommand<EncodingTask>( _encodingManager.CancelTask )
          };
@@ -76,9 +76,9 @@ namespace Encoder
 
       private async void CreateAndStartNewTasks()
       {
-         var tasks = _model.TaskCreationVm.GetTasks();
+         var assemblyLines = _model.AssemblyLineCreationVm.GetAssemblyLines();
 
-         await _encodingManager.EnqueueTasksAsync( tasks.ToList() );
+         await _encodingManager.EnqueueAssemblyLinesAsync( assemblyLines.ToList() );
       }
 
       private void SelectFiles()
@@ -93,9 +93,9 @@ namespace Encoder
          {
             foreach( var file in dlg.FileNames )
             {
-               if ( !_model.TaskCreationVm.SelectedFiles.Contains( file ) )
+               if ( !_model.AssemblyLineCreationVm.SelectedFiles.Contains( file ) )
                {
-                  _model.TaskCreationVm.SelectedFiles.Add( file );
+                  _model.AssemblyLineCreationVm.SelectedFiles.Add( file );
                }
             }
          }

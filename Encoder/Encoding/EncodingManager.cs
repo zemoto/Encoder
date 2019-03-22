@@ -22,10 +22,13 @@ namespace Encoder.Encoding
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
 
-      public async Task EnqueueTasksAsync( List<EncodingTaskBase> tasks )
+      public async Task EnqueueAssemblyLinesAsync( IEnumerable<AssemblyLine> assemblyLines )
       {
-         await EnqueueAssemblyLinesAsync( tasks.OfType<AssemblyLine>() );
-         await EnqueueEncodingTasksAsync( tasks.OfType<EncodingTask>().ToList() );
+         foreach ( var assemblyLine in assemblyLines )
+         {
+            assemblyLine.CurrentStepFinished += OnAssemblyLineCurrentStepFinished;
+            await EnqueueNextStep( assemblyLine );
+         }
       }
 
       private async Task EnqueueEncodingTasksAsync( IReadOnlyCollection<EncodingTask> tasks )
@@ -52,15 +55,6 @@ namespace Encoder.Encoding
          }
 
          _taskStartTimer.Start();
-      }
-
-      private async Task EnqueueAssemblyLinesAsync( IEnumerable<AssemblyLine> assemblyLines )
-      {
-         foreach ( var assemblyLine in assemblyLines )
-         {
-            assemblyLine.CurrentStepFinished += OnAssemblyLineCurrentStepFinished;
-            await EnqueueNextStep( assemblyLine );
-         }
       }
 
       private async Task EnqueueNextStep( AssemblyLine assemblyLine )

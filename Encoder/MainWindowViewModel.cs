@@ -1,20 +1,20 @@
-﻿using Encoder.Encoding;
+﻿using Encoder.AssemblyLineCreation;
+using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
-using Encoder.TaskCreation;
 using ZemotoCommon.UI;
 
 namespace Encoder
 {
    internal sealed class MainWindowViewModel : ViewModelBase
    {
-      public MainWindowViewModel( EncodingManagerViewModel encodingViewModel, TaskCreationViewModel taskCreationVm )
+      public MainWindowViewModel( EncodingManagerViewModel encodingViewModel, AssemblyLineCreationViewModel assemblyLineCreationVm )
       {
          EncodingVm = encodingViewModel;
-         TaskCreationVm = taskCreationVm;
+         AssemblyLineCreationVm = assemblyLineCreationVm;
       }
 
       public EncodingManagerViewModel EncodingVm { get; }
-      public TaskCreationViewModel TaskCreationVm { get; }
+      public AssemblyLineCreationViewModel AssemblyLineCreationVm { get; }
 
       public RelayCommand<EncodingTask> CancelTaskCommand { get; set; }
    }

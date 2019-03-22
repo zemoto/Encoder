@@ -5,8 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Encoder"
-        xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         xmlns:tasks="clr-namespace:Encoder.Encoding.Tasks"
+        xmlns:assemblyLineCreation="clr-namespace:Encoder.AssemblyLineCreation"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
@@ -36,7 +36,7 @@
                  Padding="2"
                  BorderThickness="1"
                  BorderBrush="LightGray">
-            <taskCreation:TaskCreationControl DataContext="{Binding TaskCreationVm}" />
+            <assemblyLineCreation:AssemblyLineCreationControl DataContext="{Binding AssemblyLineCreationVm}" />
          </Border>
          
          <DataGrid Grid.Row="1"
