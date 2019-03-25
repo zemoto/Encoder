@@ -74,11 +74,10 @@ namespace Encoder
          }
       }
 
-      private async void CreateAndStartNewTasks()
+      private void CreateAndStartNewTasks()
       {
          var assemblyLines = _model.AssemblyLineCreationVm.GetAssemblyLines();
-
-         await _encodingManager.EnqueueAssemblyLinesAsync( assemblyLines.ToList() );
+         _encodingManager.EnqueueAssemblyLines( assemblyLines.ToList() );
       }
 
       private void SelectFiles()

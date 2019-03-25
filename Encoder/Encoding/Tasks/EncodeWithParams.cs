@@ -1,18 +1,36 @@
-﻿using Encoder.Operations;
+﻿using System;
+using Encoder.Operations;
 
 namespace Encoder.Encoding.Tasks
 {
    internal sealed class EncodeWithCustomParams : EncodingTask
    {
-      public EncodeWithCustomParams( EncodingParams encodingParams ) 
+      private readonly EncodingParams _encodingParams;
+
+      public EncodeWithCustomParams( EncodingParams encodingParams )
       {
-         EncodingArgs = encodingParams.Arguments;
-         TargetFileExtension = encodingParams.FileType;
-         TaskName = encodingParams.Name;
+         _encodingParams = encodingParams;
       }
 
-      public override string EncodingArgs { get; }
-      public override string TargetFileExtension { get; }
-      public override string TaskName { get; }
+      public override bool Initialize( string directory, int id )
+      {
+         if ( base.Initialize( directory, id ) )
+         {
+            if ( _encodingParams.DurationChanging )
+            {
+               SourceDuration = TimeSpan.Zero;
+               SourceFrameRate = 0;
+               TargetTotalFrames = 0;
+            }
+
+            return true;
+         }
+
+         return false;
+      }
+
+      public override string EncodingArgs => _encodingParams.Arguments;
+      public override string TargetFileExtension => _encodingParams.FileType;
+      public override string TaskName => _encodingParams.Name;
    }
 }

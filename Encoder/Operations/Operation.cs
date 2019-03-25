@@ -6,18 +6,14 @@ namespace Encoder.Operations
 {
    internal abstract class Operation
    {
-      private readonly List<EncodingTask[]> _steps = new List<EncodingTask[]>();
-
-      public IEnumerable<AssemblyLine> ToAssemblyLines( string file ) => _steps.Select( x => new AssemblyLine( file, x ) );
-
-      protected void AddEncodingOperationChain( EncodingTask[] encodingTasks )
+      public IEnumerable<AssemblyLine> GetAssemblyLines( string file )
       {
-         _steps.Add( encodingTasks );
+         var operations =  CreateOperationChains( file );
+         return operations?.Select( x => new AssemblyLine( file, x ) ).ToList();
       }
 
-      protected void AddEncodingOperation( EncodingTask encodingTask )
-      {
-         AddEncodingOperationChain( new[] { encodingTask } );
-      }
+      public AsyncOperation ToAsync() => new AsyncOperation( this );
+
+      public abstract List<EncodingTask[]> CreateOperationChains( string file );
    }
 }

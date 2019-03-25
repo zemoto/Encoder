@@ -49,10 +49,20 @@
             </ScrollViewer>
          </Border>
 
-         <ui:ComboBoxWithProperties Grid.Row="1" 
-                                    Margin="0,4,0,8"
-                                    ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
-                                    SelectedValue="{Binding OperationType}" />
+         <StackPanel Grid.Row="1" 
+                     Orientation="Horizontal"
+                     Margin="0,4,0,8">
+
+            <ui:ComboBoxWithProperties ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
+                                       SelectedValue="{Binding OperationType}" />
+
+            <CheckBox Margin="8,0,0,0" 
+                      Content="Async"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding Async}" />
+
+         </StackPanel>
+         
 
          <StackPanel Grid.Row="2"
                      Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Filters}}">

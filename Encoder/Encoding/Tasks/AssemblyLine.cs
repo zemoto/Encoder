@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Diagnostics;
+using System.IO;
+using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding.Tasks
 {
@@ -10,6 +12,9 @@ namespace Encoder.Encoding.Tasks
       private EncodingTask _currentStep;
       private readonly EncodingTask[] _steps;
       private readonly string _sourceFile;
+      private readonly string _assemblyLineDirectory;
+
+      private readonly string _assemblyLineId = Guid.NewGuid().ToString( "N" ).Substring( 0, 8 );
 
       public event EventHandler<bool> CurrentStepFinished;
 
@@ -17,6 +22,8 @@ namespace Encoder.Encoding.Tasks
       {
          _sourceFile = sourceFile;
          _steps = steps;
+
+         _assemblyLineDirectory = Path.Combine( Path.GetDirectoryName( _sourceFile ), "done", _assemblyLineId );
       }
 
       public EncodingTask GetNextStep()
@@ -28,9 +35,8 @@ namespace Encoder.Encoding.Tasks
          }
 
          _currentStep = _steps[_stepFinished + 1];
-         _currentStep.TaskFinished += OnStepFinished;
 
-         if ( _stepFinished > 0 )
+         if ( _stepFinished >= 0 )
          {
             var previousStep = _steps[_stepFinished];
             _currentStep.SourceFilePathProvider = previousStep;
@@ -40,6 +46,15 @@ namespace Encoder.Encoding.Tasks
             _currentStep.SourceFilePathProvider = this;
          }
 
+         UtilityMethods.CreateDirectory( _assemblyLineDirectory );
+
+         if ( !_currentStep.Initialize( _assemblyLineDirectory, _stepFinished + 1 ) )
+         {
+            _currentStep.SourceFilePathProvider = null;
+            return null;
+         }
+         
+         _currentStep.TaskFinished += OnStepFinished;
          return _currentStep;
       }
 
@@ -62,12 +77,14 @@ namespace Encoder.Encoding.Tasks
 
       public override void Cleanup()
       {
+         Cancel();
+
          foreach( var step in _steps.Take( _stepFinished ) )
          {
             step.Cleanup();
          }
-         Cancel();
-         _steps.ToList().Clear();
+
+         UtilityMethods.SafeDeleteDirectory( _assemblyLineDirectory );
       }
 
       public override void Cancel()

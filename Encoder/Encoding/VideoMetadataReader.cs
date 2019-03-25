@@ -57,7 +57,7 @@ namespace Encoder.Encoding
          }
       }
 
-      public static bool GetKeyframes( string file, out IEnumerable<double> keyFrames )
+      public static bool GetKeyframes( string file, out List<double> keyFrames )
       {
          keyFrames = null;
 
@@ -74,6 +74,7 @@ namespace Encoder.Encoding
             }
 
             keyFrames = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Select( double.Parse ).ToList();
+            keyFrames.Sort();
             return true;
          }
          catch

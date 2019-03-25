@@ -25,7 +25,7 @@ namespace Encoder.Encoding.Tasks
 
       public override string GetFilePath() => TargetFile;
 
-      public virtual bool Initialize()
+      public virtual bool Initialize( string directory, int id )
       {
          Debug.Assert( SourceFilePathProvider != null );
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
@@ -39,14 +39,8 @@ namespace Encoder.Encoding.Tasks
          SourceDuration = sourceDuration;
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
 
-         var dir = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
-         var fullPath = Path.Combine( dir, Path.GetFileName( SourceFile ) );
-         TargetFile = UtilityMethods.MakeUniqueFileName( Path.ChangeExtension( fullPath, TargetFileExtension ) );
-
-         if ( !Directory.Exists( dir ) )
-         {
-            Directory.CreateDirectory( dir );
-         }
+         var targetFileName = $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
+         TargetFile = Path.Combine( directory, targetFileName );      
 
          return true;
       }

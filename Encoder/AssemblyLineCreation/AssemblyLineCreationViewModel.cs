@@ -8,46 +8,54 @@ using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Encoder.Operations;
-using Encoder.Operations.ApplyFilters;
-using Encoder.Operations.Separate;
 using ZemotoCommon.UI;
 
 namespace Encoder.AssemblyLineCreation
 {
    internal sealed class AssemblyLineCreationViewModel : ViewModelBase
    {
-      public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
-
       public IEnumerable<AssemblyLine> GetAssemblyLines()
       {
-         var tasks = SelectedFiles.SelectMany( GetOperation().ToAssemblyLines ).ToList();
-
+         var operation = GetOperation();
+         var assemblyLines = SelectedFiles.SelectMany( x => operation.GetAssemblyLines( x ) ).ToList();
+         
          SelectedFiles.Clear();
-         OperationType = OperationType.Filters;
-         VideoFilterType = VideoFilterType.Copy;
-         AudioFilterType = AudioFilterType.Copy;
 
-         return tasks;
+         return assemblyLines.Any( x => x == null ) ? null : assemblyLines;
       }
 
       private Operation GetOperation()
       {
+         Operation operation;
          switch ( OperationType )
          {
             case OperationType.Filters:
-               return new ApplyFiltersOperation( VideoFilter, AudioFilter );
+               operation = new ApplyFiltersOperation( VideoFilter, AudioFilter );
+               break;
             case OperationType.Separate:
-               return new SeparateOperation();
+               operation = new SeparateOperation();
+               break;
             default:
                throw new ArgumentOutOfRangeException();
          }
+
+         return Async ? operation.ToAsync() : operation;
       }
+
+      public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
 
       private OperationType _operationType;
       public OperationType OperationType
       {
          get => _operationType;
          set => SetProperty( ref _operationType, value );
+      }
+
+      private bool _async;
+      public bool Async
+      {
+         get => _async;
+         set => SetProperty( ref _async, value );
       }
 
       private VideoFilterType _videoFilterType = VideoFilterType.Copy;

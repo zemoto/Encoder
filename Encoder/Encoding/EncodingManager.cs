@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -22,16 +23,16 @@ namespace Encoder.Encoding
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
 
-      public async Task EnqueueAssemblyLinesAsync( IEnumerable<AssemblyLine> assemblyLines )
+      public void EnqueueAssemblyLines( IEnumerable<AssemblyLine> assemblyLines )
       {
          foreach ( var assemblyLine in assemblyLines )
          {
             assemblyLine.CurrentStepFinished += OnAssemblyLineCurrentStepFinished;
-            await EnqueueNextStep( assemblyLine );
+            EnqueueNextStep( assemblyLine );
          }
       }
 
-      private async Task EnqueueEncodingTasksAsync( IReadOnlyCollection<EncodingTask> tasks )
+      private void EnqueueEncodingTasks( IReadOnlyCollection<EncodingTask> tasks )
       {
          if ( !tasks.Any() )
          {
@@ -40,12 +41,6 @@ namespace Encoder.Encoding
 
          foreach ( var task in tasks )
          {
-            if ( !await Task.Run( () => task.Initialize() ) )
-            {
-               task.SetTaskFinished();
-               continue;
-            }
-
             Application.Current.Dispatcher.Invoke( () => Model.Tasks.Add( task ) );
          }
 
@@ -57,7 +52,7 @@ namespace Encoder.Encoding
          _taskStartTimer.Start();
       }
 
-      private async Task EnqueueNextStep( AssemblyLine assemblyLine )
+      private void EnqueueNextStep( AssemblyLine assemblyLine )
       {
          var nextStep = assemblyLine.GetNextStep();
          if ( nextStep == null )
@@ -66,15 +61,15 @@ namespace Encoder.Encoding
             return;
          }
 
-         await EnqueueEncodingTasksAsync( new List<EncodingTask> { nextStep } );
+         EnqueueEncodingTasks( new List<EncodingTask> { nextStep } );
       }
 
-      private async void OnAssemblyLineCurrentStepFinished( object sender, bool success )
+      private void OnAssemblyLineCurrentStepFinished( object sender, bool success )
       {
          var assemblyLine = (AssemblyLine)sender;
          if ( success )
          {
-            await EnqueueNextStep( assemblyLine );
+            EnqueueNextStep( assemblyLine );
          }
          else
          {

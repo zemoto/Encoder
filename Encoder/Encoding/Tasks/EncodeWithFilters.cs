@@ -15,9 +15,9 @@ namespace Encoder.Encoding.Tasks
          _audioFilter = audioFilter;
       }
 
-      public override bool Initialize()
+      public override bool Initialize( string directory, int id )
       {
-         if ( base.Initialize() )
+         if ( base.Initialize( directory, id ) )
          {
             _videoFilter.Initialize( SourceFrameRate, SourceDuration );
             TargetTotalFrames = _videoFilter.TargetTotalFrames;
