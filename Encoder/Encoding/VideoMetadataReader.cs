@@ -57,33 +57,50 @@ namespace Encoder.Encoding
          }
       }
 
-      public static bool GetKeyframes( string file, out List<double> keyFrames )
+      private static readonly object _keyframesLock = new object();
+      private static readonly List<double> _keyframes = new List<double>();
+      public static bool GetKeyframes( string file, out List<double> keyframes )
       {
-         keyFrames = null;
-
-         var process = GetProcess( KeyframeArgs( file ) );
-         process.StartAsChildProcess();
-         process.WaitForExit();
-
-         var output = process.StandardOutput.ReadToEnd();
-         try
+         lock ( _keyframesLock )
          {
-            if ( string.IsNullOrEmpty( output ) )
+            // Sync output redirect fails at large number of keyframes
+            // so use async output (event based) redirect
+            using ( var process = GetProcess( KeyframeArgs( file ) ) )
+            {
+               process.StartAsChildProcess();
+               process.OutputDataReceived += OnKeyframeReceived;
+               process.BeginOutputReadLine();
+               process.WaitForExit();
+
+               process.OutputDataReceived -= OnKeyframeReceived;
+            }
+
+            keyframes = null;
+            try
+            {
+               if ( !_keyframes.Any() )
+               {
+                  return false;
+               }
+
+               keyframes = new List<double>( _keyframes );
+               _keyframes.Clear();
+
+               keyframes.Sort();
+               return true;
+            }
+            catch
             {
                return false;
             }
+         }
+      }
 
-            keyFrames = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Select( double.Parse ).ToList();
-            keyFrames.Sort();
-            return true;
-         }
-         catch
+      private static void OnKeyframeReceived( object sender, DataReceivedEventArgs e )
+      {
+         if ( e.Data != null )
          {
-            return false;
-         }
-         finally
-         {
-            process.Dispose();
+            _keyframes.Add( double.Parse( e.Data ) );
          }
       }
 
