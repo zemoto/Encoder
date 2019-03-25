@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Encoder.AssemblyLineCreation;
+using Encoder.TaskCreation;
 using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
 using Microsoft.Win32;
@@ -20,7 +20,7 @@ namespace Encoder
       {
          _encodingManager = new EncodingManager();
 
-         var creationViewModel = new AssemblyLineCreationViewModel
+         var creationViewModel = new TaskCreationViewModel
          {
             SelectFilesCommand = new RelayCommand( SelectFiles )
          };
@@ -30,7 +30,7 @@ namespace Encoder
 
          _model = new MainWindowViewModel( _encodingManager.Model, creationViewModel )
          {
-            CancelTaskCommand = new RelayCommand<EncodingTask>( _encodingManager.CancelTask )
+            CancelTaskCommand = new RelayCommand<EncodingTaskBase>( _encodingManager.CancelTask )
          };
       }
 
@@ -63,7 +63,7 @@ namespace Encoder
             e.Cancel = true;
             foreach ( var task in _encodingManager.Model.Tasks )
             {
-               task.CancelToken.Cancel();
+               task.Cancel();
             }
             while ( _encodingManager.Model.AnyTasksPending )
             {
@@ -76,8 +76,8 @@ namespace Encoder
 
       private void CreateAndStartNewTasks()
       {
-         var assemblyLines = _model.AssemblyLineCreationVm.GetAssemblyLines();
-         _encodingManager.EnqueueAssemblyLines( assemblyLines.ToList() );
+         var encodingTasks = _model.TaskCreationVm.GetEncodingTasks();
+         _encodingManager.EnqueueTasks( encodingTasks.ToList() );
       }
 
       private void SelectFiles()
@@ -92,9 +92,9 @@ namespace Encoder
          {
             foreach( var file in dlg.FileNames )
             {
-               if ( !_model.AssemblyLineCreationVm.SelectedFiles.Contains( file ) )
+               if ( !_model.TaskCreationVm.SelectedFiles.Contains( file ) )
                {
-                  _model.AssemblyLineCreationVm.SelectedFiles.Add( file );
+                  _model.TaskCreationVm.SelectedFiles.Add( file );
                }
             }
          }

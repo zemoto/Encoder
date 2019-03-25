@@ -10,18 +10,22 @@ using Encoder.Filters.Video.Copy;
 using Encoder.Operations;
 using ZemotoCommon.UI;
 
-namespace Encoder.AssemblyLineCreation
+namespace Encoder.TaskCreation
 {
-   internal sealed class AssemblyLineCreationViewModel : ViewModelBase
+   internal sealed class TaskCreationViewModel : ViewModelBase
    {
-      public IEnumerable<AssemblyLine> GetAssemblyLines()
+      public IEnumerable<EncodingTaskBase> GetEncodingTasks()
       {
          var operation = GetOperation();
-         var assemblyLines = SelectedFiles.SelectMany( x => operation.GetAssemblyLines( x ) ).ToList();
+         var encodingTasks = SelectedFiles.SelectMany( x => operation.GetEncodingTasks( x ) ).ToList();
          
          SelectedFiles.Clear();
+         Async = false;
+         OperationType = OperationType.Filters;
+         VideoFilterType = VideoFilterType.Copy;
+         AudioFilterType = AudioFilterType.Copy;
 
-         return assemblyLines.Any( x => x == null ) ? null : assemblyLines;
+         return encodingTasks.Any( x => x == null ) ? null : encodingTasks;
       }
 
       private Operation GetOperation()

@@ -18,6 +18,7 @@ namespace Encoder.Operations
       {
          Debug.Assert( !(operation is AsyncOperation) );
          _operation = operation;
+         IsMultiStep = true;
       }
 
       public override List<EncodingTask[]> CreateOperationChains( string file )
@@ -32,7 +33,7 @@ namespace Encoder.Operations
          double currentTime = 0;
          while ( currentTime + SecondsBetweenSplits < keyFrames.Last() )
          {
-            var endKeyFrame = GetClosestKeyFrame( currentTime + SecondsBetweenSplits, keyFrames );
+            var endKeyFrame = FfmpegUtils.GetClosestKeyFrame( currentTime + SecondsBetweenSplits, keyFrames );
             operationChains.AddRange( AppendSplitOperationToChains( currentTime, endKeyFrame, file ) );
 
             currentTime = endKeyFrame;
@@ -71,27 +72,6 @@ namespace Encoder.Operations
          }
 
          return finalOperationChains;
-      }
-
-      private static double GetClosestKeyFrame( double target, IEnumerable<double> keyFrames )
-      {
-         double closest = 0.0;
-         double distance = double.PositiveInfinity;
-         foreach ( var keyFrame in keyFrames.Where( x => x >= target ) )
-         {
-            var newDistance = Math.Abs( target - keyFrame );
-            if ( newDistance < distance )
-            {
-               distance = newDistance;
-               closest = keyFrame;
-            }
-            else
-            {
-               break;
-            }
-         }
-
-         return closest;
       }
    }
 }

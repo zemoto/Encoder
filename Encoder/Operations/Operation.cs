@@ -6,10 +6,19 @@ namespace Encoder.Operations
 {
    internal abstract class Operation
    {
-      public IEnumerable<AssemblyLine> GetAssemblyLines( string file )
+      protected bool IsMultiStep;
+
+      public IEnumerable<EncodingTaskBase> GetEncodingTasks( string file )
       {
-         var operations =  CreateOperationChains( file );
-         return operations?.Select( x => new AssemblyLine( file, x ) ).ToList();
+         var operations = CreateOperationChains( file );
+         if ( IsMultiStep )
+         {
+            return operations.Select( x => new AssemblyLine( new FilePathProvider( file ), x ) ).ToList();
+         }
+
+         var tasks = operations.SelectMany( x => x ).ToList();
+         tasks.ForEach( x => x.SourceFilePathProvider = new FilePathProvider( file ) );
+         return tasks;
       }
 
       public AsyncOperation ToAsync() => new AsyncOperation( this );

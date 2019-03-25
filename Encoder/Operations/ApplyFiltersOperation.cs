@@ -20,7 +20,7 @@ namespace Encoder.Operations
       {
          return new List<EncodingTask[]>
          {
-            new EncodingTask[] {new EncodeWithFilters( _videoFilter, _audioFilter )}
+            new EncodingTask[] { new EncodeWithFilters( _videoFilter, _audioFilter ) }
          };
       }
    }

@@ -2,22 +2,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Windows;
+using System.Threading.Tasks;
 using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding.Tasks
 {
-   internal abstract class EncodingTask : EncodingTaskBase, IDisposable
+   internal abstract class EncodingTask : EncodingTaskBase
    {
-      protected TimeSpan SourceDuration;
-      protected double SourceFrameRate;
+      private bool _initialized;
 
-      ~EncodingTask()
-      {
-         Dispose();
-      }
-
-      public void Dispose() => CancelToken?.Dispose();
+      public override void Dispose() => CancelToken?.Dispose();
 
       public override void Cleanup() => UtilityMethods.SafeDeleteFile( TargetFile );
 
@@ -25,13 +19,13 @@ namespace Encoder.Encoding.Tasks
 
       public override string GetFilePath() => TargetFile;
 
-      public virtual bool Initialize( string directory, int id )
+      public virtual bool Initialize( string directory, int id = -1 )
       {
          Debug.Assert( SourceFilePathProvider != null );
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
          if ( !success )
          {
-            MessageBox.Show( $"Could not read video file: {SourceFile}" );
+            Error = $"Could not fully process video file: {SourceFile}";
             return false;
          }
 
@@ -39,83 +33,52 @@ namespace Encoder.Encoding.Tasks
          SourceDuration = sourceDuration;
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
 
-         var targetFileName = $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
-         TargetFile = Path.Combine( directory, targetFileName );      
+         var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" : 
+                                         $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
+         TargetFile = Path.Combine( directory, targetFileName );
 
+         _initialized = true;
          return true;
       }
 
-      public void SetTaskFinished() => RaiseTaskFinished( Started && !CancelToken.IsCancellationRequested );
-
-      private void UpdateTimeRemaining()
+      public override bool DoWork()
       {
-         if ( !Started || HasNoDurationData || FramesDone == 0 )
+         Started = true;
+         if ( CancelToken.IsCancellationRequested )
          {
-            return;
+            return false;
          }
 
-         var ellapsed = DateTime.Now - _startTime;
-         _timeRemaining = TimeSpan.FromSeconds( ellapsed.TotalSeconds / FramesDone * ( TargetTotalFrames - FramesDone ) );
+         if ( !_initialized && !Initialize( Path.Combine( Path.GetDirectoryName( SourceFile ), "done" ) ) )
+         {
+            Error = $"Could not fully process video file: {SourceFile}";
+            return false;
+         }
 
-         OnPropertyChanged( nameof( TimeRemainingString ) );
+         using ( var encoder = new FfmpegEncoder( this ) )
+         {
+            encoder.StartEncoding( CancelToken.Token );
+
+            encoder.AwaitCompletion();
+
+            if ( CancelToken.IsCancellationRequested )
+            {
+               Task.Delay( 300 );
+               UtilityMethods.SafeDeleteFile( TargetFile );
+            }
+
+            if ( !string.IsNullOrEmpty( encoder.Error ) )
+            {
+               Error = $"Error: {encoder.Error}";
+            }
+         }
+
+         return string.IsNullOrEmpty( Error ) && !CancelToken.IsCancellationRequested;
       }
 
       public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
       public abstract string EncodingArgs { get; }
       public abstract string TargetFileExtension { get; }
-      public abstract string TaskName { get; }
-      public string SourceFile => SourceFilePathProvider.GetFilePath();
-      public string FileName => Path.GetFileName( SourceFile );
-      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
       public string TargetFile { get; private set; }
-      public int TargetTotalFrames { get; protected set; }
-
-      private DateTime _startTime;
-      private TimeSpan _timeRemaining = TimeSpan.Zero;
-      public string TimeRemainingString => _timeRemaining == TimeSpan.Zero ? "N/A" : _timeRemaining.ToString( @"hh\:mm\:ss" );
-
-      private int _cpuUsage;
-      public int CpuUsage
-      {
-         get => _cpuUsage;
-         set => SetProperty( ref _cpuUsage, value );
-      }
-
-      private int _framesDone;
-      public int FramesDone
-      {
-         get => _framesDone;
-         set
-         {
-            if ( SetProperty( ref _framesDone, value ) )
-            {
-               if ( TargetTotalFrames != 0 )
-               {
-                  Progress = Math.Round( value / (double)TargetTotalFrames * 100, 2 );
-                  UpdateTimeRemaining();
-               }
-            }
-         }
-      }
-
-      private double _progress;
-      public double Progress
-      {
-         get => _progress;
-         private set => SetProperty( ref _progress, value );
-      }
-
-      private bool _started;
-      public bool Started
-      {
-         get => _started;
-         set
-         {
-            if ( SetProperty( ref _started, value ) && value )
-            {
-               _startTime = DateTime.Now;
-            }
-         }
-      }
    }
 }

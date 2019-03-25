@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -23,16 +22,7 @@ namespace Encoder.Encoding
          _taskStartTimer.Elapsed += OnTaskStartTimerTick;
       }
 
-      public void EnqueueAssemblyLines( IEnumerable<AssemblyLine> assemblyLines )
-      {
-         foreach ( var assemblyLine in assemblyLines )
-         {
-            assemblyLine.CurrentStepFinished += OnAssemblyLineCurrentStepFinished;
-            EnqueueNextStep( assemblyLine );
-         }
-      }
-
-      private void EnqueueEncodingTasks( IReadOnlyCollection<EncodingTask> tasks )
+      public void EnqueueTasks( IReadOnlyCollection<EncodingTaskBase> tasks )
       {
          if ( !tasks.Any() )
          {
@@ -50,51 +40,6 @@ namespace Encoder.Encoding
          }
 
          _taskStartTimer.Start();
-      }
-
-      private void EnqueueNextStep( AssemblyLine assemblyLine )
-      {
-         var nextStep = assemblyLine.GetNextStep();
-         if ( nextStep == null )
-         {
-            assemblyLine.CurrentStepFinished -= OnAssemblyLineCurrentStepFinished;
-            return;
-         }
-
-         EnqueueEncodingTasks( new List<EncodingTask> { nextStep } );
-      }
-
-      private void OnAssemblyLineCurrentStepFinished( object sender, bool success )
-      {
-         var assemblyLine = (AssemblyLine)sender;
-         if ( success )
-         {
-            EnqueueNextStep( assemblyLine );
-         }
-         else
-         {
-            assemblyLine.Cleanup();
-            assemblyLine.CurrentStepFinished -= OnAssemblyLineCurrentStepFinished;
-         }
-      }
-
-      private void CleanupTask( EncodingTask task )
-      {
-         bool taskWasStarted = task.Started;
-         task.SetTaskFinished();
-
-         task.Dispose();
-         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
-
-         if ( !Model.AnyTasksPending )
-         {
-            _taskStartTimer.Stop();
-         }
-
-         if ( taskWasStarted )
-         {
-            CheckIfCanStartNewTask();
-         }
       }
 
       public void Dispose()
@@ -145,45 +90,52 @@ namespace Encoder.Encoding
          Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
-      private void DoTask( EncodingTask task )
+      private void DoTask( EncodingTaskBase task )
       {
          if ( task == null || task.Started )
          {
             return;
          }
 
-         if ( task.CancelToken.IsCancellationRequested )
+         bool success = task.DoWork();
+         if ( !success )
          {
-            CleanupTask( task );
-            return;
+            task.Cleanup();
          }
 
-         var encoder = new FfmpegEncoder( task );
-         encoder.StartEncoding( task.CancelToken.Token );
-
-         encoder.AwaitCompletion();
-
-         if ( task.CancelToken.IsCancellationRequested )
+         if ( !string.IsNullOrEmpty( task.Error ) )
          {
-            Task.Delay( 300 );
-            UtilityMethods.SafeDeleteFile( task.TargetFile );
+            MessageBox.Show( $"Error: {task.Error}", task.SourceFile, MessageBoxButton.OK, MessageBoxImage.Error );
          }
 
-         if ( !string.IsNullOrEmpty( encoder.Error ) )
-         {
-            MessageBox.Show( $"Error: {encoder.Error}", task.SourceFile, MessageBoxButton.OK, MessageBoxImage.Error );
-         }
-
-         CleanupTask( task );
+         DisposeTask( task );
       }
 
-      public void CancelTask( EncodingTask task )
+      public void CancelTask( EncodingTaskBase task )
       {
          task.Cancel();
 
          if ( !task.Started )
          {
-            CleanupTask( task );
+            DisposeTask( task );
+         }
+      }
+
+      private void DisposeTask( EncodingTaskBase task )
+      {
+         bool taskWasStarted = task.Started;
+
+         task.Dispose();
+         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
+
+         if ( !Model.AnyTasksPending )
+         {
+            _taskStartTimer.Stop();
+         }
+
+         if ( taskWasStarted )
+         {
+            CheckIfCanStartNewTask();
          }
       }
    }

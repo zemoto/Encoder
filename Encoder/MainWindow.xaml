@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Encoder"
         xmlns:tasks="clr-namespace:Encoder.Encoding.Tasks"
-        xmlns:assemblyLineCreation="clr-namespace:Encoder.AssemblyLineCreation"
+        xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
@@ -36,7 +36,7 @@
                  Padding="2"
                  BorderThickness="1"
                  BorderBrush="LightGray">
-            <assemblyLineCreation:AssemblyLineCreationControl DataContext="{Binding AssemblyLineCreationVm}" />
+            <taskCreation:TaskCreationControl DataContext="{Binding TaskCreationVm}" />
          </Border>
          
          <DataGrid Grid.Row="1"
@@ -65,7 +65,7 @@
                <DataGridTemplateColumn Header="Progress"
                                        Width="100">
                   <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate DataType="{x:Type tasks:EncodingTask}">
+                     <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
                         <Grid>
                            <ProgressBar Value="{Binding Progress, Mode=OneWay}"
                                         IsIndeterminate="{Binding HasNoDurationData}"
@@ -89,7 +89,7 @@
 
                <DataGridTemplateColumn Width="24">
                   <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate DataType="{x:Type tasks:EncodingTask}">
+                     <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
                         <Button Content="X"
                                 Height="18"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"

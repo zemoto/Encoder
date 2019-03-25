@@ -67,7 +67,6 @@
     <Compile Include="Encoding\Tasks\EncodeWithParams.cs" />
     <Compile Include="Encoding\Tasks\EncodingTaskBase.cs" />
     <Compile Include="Encoding\Tasks\IFilePathProvider.cs" />
-    <Compile Include="Encoding\Tasks\TasksCompletedWatcher.cs" />
     <Compile Include="ffmpeg\FfmpegUtils.cs" />
     <Compile Include="Filters\Audio\AudioFilter.cs" />
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
@@ -114,9 +113,9 @@
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationType.cs" />
     <Compile Include="Operations\SeparateOperation.cs" />
-    <Compile Include="AssemblyLineCreation\AssemblyLineCreationViewModel.cs" />
-    <Compile Include="AssemblyLineCreation\AssemblyLineCreationControl.xaml.cs">
-      <DependentUpon>AssemblyLineCreationControl.xaml</DependentUpon>
+    <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
+    <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
+      <DependentUpon>TaskCreationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="UI\PropertyAttributes.cs" />
@@ -128,7 +127,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AssemblyLineCreation\AssemblyLineCreationControl.xaml">
+    <Page Include="TaskCreation\TaskCreationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

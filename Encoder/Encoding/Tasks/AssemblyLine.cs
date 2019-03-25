@@ -1,85 +1,92 @@
 ﻿using System;
-using System.Linq;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding.Tasks
 {
    internal sealed class AssemblyLine : EncodingTaskBase
    {
-      private int _stepFinished = -1;
-      private EncodingTask _currentStep;
+      private int _stepsFinished;
       private readonly EncodingTask[] _steps;
-      private readonly string _sourceFile;
       private readonly string _assemblyLineDirectory;
 
       private readonly string _assemblyLineId = Guid.NewGuid().ToString( "N" ).Substring( 0, 8 );
 
-      public event EventHandler<bool> CurrentStepFinished;
-
-      public AssemblyLine( string sourceFile, EncodingTask[] steps )
+      public AssemblyLine( IFilePathProvider sourceFilePathProvider, EncodingTask[] steps )
       {
-         _sourceFile = sourceFile;
+         SourceFilePathProvider = sourceFilePathProvider;
          _steps = steps;
-
-         _assemblyLineDirectory = Path.Combine( Path.GetDirectoryName( _sourceFile ), "done", _assemblyLineId );
+         _assemblyLineDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done", _assemblyLineId );
+         CurrentTask = _steps.First(); // So correct information displays before this task gets started
       }
 
-      public EncodingTask GetNextStep()
+      private void OnCurrentTaskPropertyChanged( object sender, PropertyChangedEventArgs e )
       {
-         Debug.Assert( _currentStep == null );
-         if ( _steps.Length <= _stepFinished + 1 )
+         switch ( e.PropertyName )
          {
-            return null;
+            case nameof( CpuUsage ):
+               CpuUsage = CurrentTask.CpuUsage;
+               break;
+            case nameof( FramesDone ):
+               FramesDone = CurrentTask.FramesDone;
+               break;
          }
+      }
 
-         _currentStep = _steps[_stepFinished + 1];
-
-         if ( _stepFinished >= 0 )
-         {
-            var previousStep = _steps[_stepFinished];
-            _currentStep.SourceFilePathProvider = previousStep;
-         }
-         else
-         {
-            _currentStep.SourceFilePathProvider = this;
-         }
-
+      public override bool DoWork()
+      {
+         Started = true;
+         EncodingTask previousTask = null;
          UtilityMethods.CreateDirectory( _assemblyLineDirectory );
-
-         if ( !_currentStep.Initialize( _assemblyLineDirectory, _stepFinished + 1 ) )
+         foreach ( var task in _steps )
          {
-            _currentStep.SourceFilePathProvider = null;
-            return null;
+            if ( !DoTask( task, previousTask ) )
+            {
+               return false;
+            }
+            previousTask = task;
          }
-         
-         _currentStep.TaskFinished += OnStepFinished;
-         return _currentStep;
+
+         return true;
       }
 
-      private void OnStepFinished( object sender, bool success )
+      private bool DoTask( EncodingTask task, IFilePathProvider sourceFilePathProvider )
       {
-         _stepFinished++;
-         _currentStep = null;
-         var step = (EncodingTask)sender;
-         step.TaskFinished -= OnStepFinished;
-         step.SourceFilePathProvider = null;
-         if ( _steps.Length <= _stepFinished )
+         task.SourceFilePathProvider = sourceFilePathProvider ?? this;
+
+         if ( !task.Initialize( _assemblyLineDirectory, _stepsFinished++ ) )
          {
-            RaiseTaskFinished( success );
+            Error = task.Error;
+            return false;
          }
-         else
+
+         CurrentTask = task;
+
+         SourceDuration = CurrentTask.SourceDuration;
+         SourceFrameRate = CurrentTask.SourceFrameRate;
+         TargetTotalFrames = CurrentTask.TargetTotalFrames;
+         FramesDone = 0;
+         CpuUsage = 0;
+         OnPropertyChanged( nameof( TaskName ) );
+         OnPropertyChanged( nameof( HasNoDurationData ) );
+
+         bool success = CurrentTask.DoWork();
+         if ( !success )
          {
-            CurrentStepFinished?.Invoke( this, success );
+            Error = CurrentTask.Error;
+            return false;
          }
+
+         return true;
       }
 
       public override void Cleanup()
       {
          Cancel();
 
-         foreach( var step in _steps.Take( _stepFinished ) )
+         foreach( var step in _steps )
          {
             step.Cleanup();
          }
@@ -87,11 +94,35 @@ namespace Encoder.Encoding.Tasks
          UtilityMethods.SafeDeleteDirectory( _assemblyLineDirectory );
       }
 
-      public override void Cancel()
+      public override void Cancel() => CurrentTask?.Cancel();
+
+      public override string GetFilePath() => SourceFilePathProvider.GetFilePath();
+
+      public override void Dispose()
       {
-         _currentStep?.Cancel();
+         _steps.ForEach( x => x.Dispose() );
       }
 
-      public override string GetFilePath() => _sourceFile;
+      public override string TaskName => CurrentTask.TaskName;
+
+      private EncodingTask _currentTask;
+      public EncodingTask CurrentTask
+      {
+         get => _currentTask;
+         private set
+         {
+            if ( CurrentTask != null )
+            {
+               CurrentTask.PropertyChanged -= OnCurrentTaskPropertyChanged;
+            }
+
+            SetProperty( ref _currentTask, value );
+
+            if ( CurrentTask != null )
+            {
+               CurrentTask.PropertyChanged += OnCurrentTaskPropertyChanged;
+            }
+         }
+      }
    }
 }

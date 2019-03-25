@@ -120,7 +120,6 @@ namespace Encoder.Encoding
 
       public void Dispose()
       {
-         _encodingTask?.Dispose();
          _currentffmpegProcess?.Dispose();
          _cpuUsageMonitor?.Dispose();
       }
