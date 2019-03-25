@@ -18,7 +18,6 @@ namespace Encoder.Operations
       {
          Debug.Assert( !(operation is AsyncOperation) );
          _operation = operation;
-         IsMultiStep = true;
       }
 
       public override List<EncodingTask[]> CreateOperationChains( string file )
@@ -37,6 +36,12 @@ namespace Encoder.Operations
             operationChains.AddRange( AppendSplitOperationToChains( currentTime, endKeyFrame, file ) );
 
             currentTime = endKeyFrame;
+         }
+
+         if ( operationChains.Count == 0 )
+         {
+            // File too small to do async, just return its original operation chains
+            return _operation.CreateOperationChains( file );
          }
 
          // Last cut through to the end
