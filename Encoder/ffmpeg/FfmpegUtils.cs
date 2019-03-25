@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Encoder.ffmpeg
 {
@@ -13,7 +12,7 @@ namespace Encoder.ffmpeg
       {
          var closest = 0.0;
          var distance = double.PositiveInfinity;
-         foreach ( var keyFrame in keyFrames.Where( x => x >= target ) )
+         foreach ( var keyFrame in keyFrames )
          {
             var newDistance = Math.Abs( target - keyFrame );
             if ( newDistance < distance )
