@@ -10,7 +10,7 @@ namespace Encoder.Operations
 {
    internal sealed class AsyncOperation : Operation
    {
-      private const int SecondsBetweenSplits = 10;
+      private const int SecondsBetweenSplits = 300;
 
       private readonly Operation _operation;
 
