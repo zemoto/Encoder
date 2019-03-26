@@ -9,8 +9,9 @@ namespace Encoder.Encoding.Tasks
       public abstract bool DoWork();
       public abstract void Cleanup();
       public abstract void Cancel();
-      public abstract string GetFilePath();
       public abstract void Dispose();
+
+      public virtual string GetFilePath() => FileProvider.GetFilePath();
 
       private void UpdateProgress()
       {
@@ -56,8 +57,8 @@ namespace Encoder.Encoding.Tasks
       private TimeSpan _timeRemaining = TimeSpan.Zero;
       public string TimeRemainingString => _timeRemaining == TimeSpan.Zero ? "N/A" : _timeRemaining.ToString( @"hh\:mm\:ss" );
 
-      public IFilePathProvider SourceFilePathProvider { get; set; }
-      public string SourceFile => SourceFilePathProvider.GetFilePath();
+      public IFilePathProvider FileProvider { get; set; }
+      public string SourceFile => FileProvider.GetFilePath();
 
       public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
 

@@ -24,7 +24,7 @@ namespace Encoder.Operations
          {
             // Only a single task so we don't need an assembly line. Just return the task.
             var task = operationChain.First();
-            task.SourceFilePathProvider = filePathProvider;
+            task.FileProvider = filePathProvider;
             return task;
          }
 

@@ -21,7 +21,7 @@ namespace Encoder.Encoding.Tasks
 
       public virtual bool Initialize( string directory, int id = -1 )
       {
-         Debug.Assert( SourceFilePathProvider != null );
+         Debug.Assert( FileProvider != null );
          bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
          if ( !success )
          {

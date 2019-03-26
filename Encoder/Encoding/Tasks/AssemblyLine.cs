@@ -13,9 +13,9 @@ namespace Encoder.Encoding.Tasks
       private readonly string _assemblyLineWorkingDirectory;
       private readonly string _assemblyLineId;
 
-      public AssemblyLine( IFilePathProvider sourceFilePathProvider, EncodingTask[] steps, int id )
+      public AssemblyLine( IFilePathProvider fileProvider, EncodingTask[] steps, int id )
       {
-         SourceFilePathProvider = sourceFilePathProvider;
+         FileProvider = fileProvider;
          _steps = steps;
          _assemblyLineId = $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}";
          _assemblyLineRootDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
@@ -47,7 +47,7 @@ namespace Encoder.Encoding.Tasks
                return false;
             }
 
-            SourceFilePathProvider = task;
+            FileProvider = task;
          }
 
          var finalFile = GetFilePath();
@@ -55,14 +55,14 @@ namespace Encoder.Encoding.Tasks
          finalFile = PathUtils.RenameFile( finalFile, _assemblyLineId );
          UtilityMethods.SafeDeleteDirectory( _assemblyLineWorkingDirectory );
 
-         SourceFilePathProvider = new FilePathProvider( finalFile );
+         FileProvider = new FilePathProvider( finalFile );
 
          return true;
       }
 
       private bool DoTask( EncodingTask task )
       {
-         task.SourceFilePathProvider = SourceFilePathProvider;
+         task.FileProvider = FileProvider;
 
          if ( !task.Initialize( _assemblyLineWorkingDirectory, _stepsFinished++ ) )
          {
@@ -99,8 +99,6 @@ namespace Encoder.Encoding.Tasks
       }
 
       public override void Cancel() => CurrentTask?.Cancel();
-
-      public override string GetFilePath() => SourceFilePathProvider.GetFilePath();
 
       public override void Dispose()
       {
