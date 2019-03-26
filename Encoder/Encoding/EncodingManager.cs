@@ -114,6 +114,7 @@ namespace Encoder.Encoding
       public void CancelTask( EncodingTaskBase task )
       {
          task.Cancel();
+         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
 
          if ( !task.Started )
          {
