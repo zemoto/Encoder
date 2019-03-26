@@ -39,18 +39,18 @@ namespace Encoder.Encoding.Tasks
       public override bool DoWork()
       {
          Started = true;
-         EncodingTask previousTask = null;
          UtilityMethods.CreateDirectory( _assemblyLineWorkingDirectory );
          foreach ( var task in _steps )
          {
-            if ( !DoTask( task, previousTask ) )
+            if ( !DoTask( task ) )
             {
                return false;
             }
-            previousTask = task;
+
+            SourceFilePathProvider = task;
          }
 
-         var finalFile = previousTask.GetFilePath();
+         var finalFile = GetFilePath();
          finalFile = PathUtils.MoveFileToFolder( finalFile, _assemblyLineRootDirectory );
          finalFile = PathUtils.RenameFile( finalFile, _assemblyLineId );
          UtilityMethods.SafeDeleteDirectory( _assemblyLineWorkingDirectory );
@@ -60,9 +60,9 @@ namespace Encoder.Encoding.Tasks
          return true;
       }
 
-      private bool DoTask( EncodingTask task, IFilePathProvider sourceFilePathProvider )
+      private bool DoTask( EncodingTask task )
       {
-         task.SourceFilePathProvider = sourceFilePathProvider ?? this;
+         task.SourceFilePathProvider = SourceFilePathProvider;
 
          if ( !task.Initialize( _assemblyLineWorkingDirectory, _stepsFinished++ ) )
          {
