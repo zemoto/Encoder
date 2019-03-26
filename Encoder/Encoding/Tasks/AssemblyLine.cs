@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using ZemotoCommon.Utils;
@@ -10,15 +9,17 @@ namespace Encoder.Encoding.Tasks
    {
       private int _stepsFinished;
       private readonly EncodingTask[] _steps;
-      private readonly string _assemblyLineDirectory;
+      private readonly string _assemblyLineRootDirectory;
+      private readonly string _assemblyLineWorkingDirectory;
+      private readonly string _assemblyLineId;
 
-      private readonly string _assemblyLineId = Guid.NewGuid().ToString( "N" ).Substring( 0, 8 );
-
-      public AssemblyLine( IFilePathProvider sourceFilePathProvider, EncodingTask[] steps )
+      public AssemblyLine( IFilePathProvider sourceFilePathProvider, EncodingTask[] steps, int id )
       {
          SourceFilePathProvider = sourceFilePathProvider;
          _steps = steps;
-         _assemblyLineDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done", _assemblyLineId );
+         _assemblyLineId = $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}";
+         _assemblyLineRootDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
+         _assemblyLineWorkingDirectory = Path.Combine( _assemblyLineRootDirectory, _assemblyLineId );
          CurrentTask = _steps.First(); // So correct information displays before this task gets started
       }
 
@@ -39,7 +40,7 @@ namespace Encoder.Encoding.Tasks
       {
          Started = true;
          EncodingTask previousTask = null;
-         UtilityMethods.CreateDirectory( _assemblyLineDirectory );
+         UtilityMethods.CreateDirectory( _assemblyLineWorkingDirectory );
          foreach ( var task in _steps )
          {
             if ( !DoTask( task, previousTask ) )
@@ -49,6 +50,13 @@ namespace Encoder.Encoding.Tasks
             previousTask = task;
          }
 
+         var finalFile = previousTask.GetFilePath();
+         finalFile = PathUtils.MoveFileToFolder( finalFile, _assemblyLineRootDirectory );
+         finalFile = PathUtils.RenameFile( finalFile, _assemblyLineId );
+         UtilityMethods.SafeDeleteDirectory( _assemblyLineWorkingDirectory );
+
+         SourceFilePathProvider = new FilePathProvider( finalFile );
+
          return true;
       }
 
@@ -56,7 +64,7 @@ namespace Encoder.Encoding.Tasks
       {
          task.SourceFilePathProvider = sourceFilePathProvider ?? this;
 
-         if ( !task.Initialize( _assemblyLineDirectory, _stepsFinished++ ) )
+         if ( !task.Initialize( _assemblyLineWorkingDirectory, _stepsFinished++ ) )
          {
             Error = task.Error;
             return false;
@@ -91,7 +99,7 @@ namespace Encoder.Encoding.Tasks
             step.Cleanup();
          }
 
-         UtilityMethods.SafeDeleteDirectory( _assemblyLineDirectory );
+         UtilityMethods.SafeDeleteDirectory( _assemblyLineWorkingDirectory );
       }
 
       public override void Cancel() => CurrentTask?.Cancel();

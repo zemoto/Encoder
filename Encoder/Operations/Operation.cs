@@ -6,9 +6,18 @@ namespace Encoder.Operations
 {
    internal abstract class Operation
    {
-      public IEnumerable<EncodingTaskBase> GetEncodingTasks( string file ) => CreateOperationChains( file ).Select( x => ConvertToAssemblyLineIfNeeded( x, file ) ).ToList();
+      public IEnumerable<EncodingTaskBase> GetEncodingTasks( string file )
+      {
+         var operationChains = CreateOperationChains( file );
+         var tasks = new List<EncodingTaskBase>();
+         for ( int i = 0; i < operationChains.Count; i++ )
+         {
+            tasks.Add( ConvertToAssemblyLineIfNeeded( operationChains[i], file, i ) );
+         }
+         return tasks;
+      }
 
-      private static EncodingTaskBase ConvertToAssemblyLineIfNeeded( EncodingTask[] operationChain, string file )
+      private static EncodingTaskBase ConvertToAssemblyLineIfNeeded( EncodingTask[] operationChain, string file, int index )
       {
          var filePathProvider = new FilePathProvider( file );
          if ( operationChain.Length == 1 )
@@ -19,7 +28,7 @@ namespace Encoder.Operations
             return task;
          }
 
-         return new AssemblyLine( filePathProvider, operationChain );
+         return new AssemblyLine( filePathProvider, operationChain, index );
       }
 
       public AsyncOperation ToAsync() => new AsyncOperation( this );
