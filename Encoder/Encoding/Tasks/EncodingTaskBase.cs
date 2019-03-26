@@ -65,7 +65,13 @@ namespace Encoder.Encoding.Tasks
       public TimeSpan SourceDuration
       {
          get => _sourceDuration;
-         protected set => SetProperty( ref _sourceDuration, value );
+         protected set
+         {
+            if ( SetProperty( ref _sourceDuration, value ) )
+            {
+               OnPropertyChanged( nameof( HasNoDurationData ) );
+            }
+         }
       }
 
       private double _sourceFrameRate;

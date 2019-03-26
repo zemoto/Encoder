@@ -75,10 +75,6 @@ namespace Encoder.Encoding.Tasks
          SourceDuration = CurrentTask.SourceDuration;
          SourceFrameRate = CurrentTask.SourceFrameRate;
          TargetTotalFrames = CurrentTask.TargetTotalFrames;
-         FramesDone = 0;
-         CpuUsage = 0;
-         OnPropertyChanged( nameof( TaskName ) );
-         OnPropertyChanged( nameof( HasNoDurationData ) );
 
          bool success = CurrentTask.DoWork();
          if ( !success )
@@ -124,7 +120,12 @@ namespace Encoder.Encoding.Tasks
                CurrentTask.PropertyChanged -= OnCurrentTaskPropertyChanged;
             }
 
-            SetProperty( ref _currentTask, value );
+            if ( SetProperty( ref _currentTask, value ) )
+            {
+               FramesDone = _currentTask.FramesDone;
+               CpuUsage = _currentTask.CpuUsage;
+               OnPropertyChanged( nameof( TaskName ) );
+            }
 
             if ( CurrentTask != null )
             {
