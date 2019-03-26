@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:video="clr-namespace:Encoder.Filters.Video" 
+             xmlns:video="clr-namespace:Encoder.Filters.Video"
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
              xmlns:operations="clr-namespace:Encoder.Operations"
              xmlns:commonUi="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
@@ -49,20 +49,10 @@
             </ScrollViewer>
          </Border>
 
-         <StackPanel Grid.Row="1" 
-                     Orientation="Horizontal"
-                     Margin="0,4,0,8">
-
-            <ui:ComboBoxWithProperties ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
-                                       SelectedValue="{Binding OperationType}" />
-
-            <CheckBox Margin="8,0,0,0" 
-                      Content="Async"
-                      VerticalAlignment="Center"
-                      IsChecked="{Binding Async}" />
-
-         </StackPanel>
-         
+         <ui:ComboBoxWithProperties Grid.Row="1"
+                                    Margin="0,4,0,8"
+                                    ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
+                                    SelectedValue="{Binding OperationType}" />
 
          <StackPanel Grid.Row="2"
                      Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Filters}}">
@@ -74,14 +64,12 @@
                                        OptionsContext="{Binding VideoFilter.ViewModel}" />
 
             <ui:ComboBoxWithProperties Margin="0,4,0,8"
-                                        Label="Audio Codec:"
-                                        ItemsSource="{commonUi:GetEnumValues {x:Type audio:AudioFilterType}}"
-                                        SelectedValue="{Binding AudioFilterType}"
-                                        OptionsContext="{Binding AudioFilter.ViewModel}" />
+                                       Label="Audio Codec:"
+                                       ItemsSource="{commonUi:GetEnumValues {x:Type audio:AudioFilterType}}"
+                                       SelectedValue="{Binding AudioFilterType}"
+                                       OptionsContext="{Binding AudioFilter.ViewModel}" />
 
          </StackPanel>
-
-         
 
          <Button Grid.Row="3"
                  Height="24"

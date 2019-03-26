@@ -31,8 +31,6 @@ namespace Encoder.Operations
          return new AssemblyLine( filePathProvider, operationChain, index );
       }
 
-      public AsyncOperation ToAsync() => new AsyncOperation( this );
-
       public abstract List<EncodingTask[]> CreateOperationChains( string file );
    }
 }

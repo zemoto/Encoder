@@ -20,7 +20,6 @@ namespace Encoder.TaskCreation
          var encodingTasks = SelectedFiles.SelectMany( x => operation.GetEncodingTasks( x ) ).ToList();
          
          SelectedFiles.Clear();
-         Async = false;
          OperationType = OperationType.Filters;
          VideoFilterType = VideoFilterType.Copy;
          AudioFilterType = AudioFilterType.Copy;
@@ -30,20 +29,15 @@ namespace Encoder.TaskCreation
 
       private Operation GetOperation()
       {
-         Operation operation;
          switch ( OperationType )
          {
             case OperationType.Filters:
-               operation = new ApplyFiltersOperation( VideoFilter, AudioFilter );
-               break;
+               return new ApplyFiltersOperation( VideoFilter, AudioFilter );
             case OperationType.Separate:
-               operation = new SeparateOperation();
-               break;
+               return new SeparateOperation();
             default:
                throw new ArgumentOutOfRangeException();
          }
-
-         return Async ? operation.ToAsync() : operation;
       }
 
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
@@ -53,13 +47,6 @@ namespace Encoder.TaskCreation
       {
          get => _operationType;
          set => SetProperty( ref _operationType, value );
-      }
-
-      private bool _async;
-      public bool Async
-      {
-         get => _async;
-         set => SetProperty( ref _async, value );
       }
 
       private VideoFilterType _videoFilterType = VideoFilterType.Copy;

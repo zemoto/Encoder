@@ -76,7 +76,6 @@
     <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Operations\ApplyFiltersOperation.cs" />
-    <Compile Include="Operations\AsyncOperation.cs" />
     <Compile Include="Operations\EncodingParams.cs" />
     <Compile Include="UI\DataTemplateFactory.cs" />
     <Compile Include="UI\ComboBoxWithProperties.xaml.cs">
