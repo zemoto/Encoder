@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace Encoder.Operations
 
       public override List<EncodingTask[]> CreateOperationChains( string file )
       {
-         if ( !VideoMetadataReader.GetKeyframes( file, out var keyFrames ) )
+         if ( !VideoMetadataReader.GetVideoInfo( file, out _, out var duration ) )
          {
             Debug.Assert( false );
             return null;
@@ -30,12 +30,12 @@ namespace Encoder.Operations
 
          var operationChains = new List<EncodingTask[]>();
          double currentTime = 0;
-         while ( currentTime + SecondsBetweenSplits < keyFrames.Last() )
+         while ( currentTime + SecondsBetweenSplits < duration.TotalSeconds )
          {
-            var endKeyFrame = FfmpegUtils.GetClosestKeyFrame( currentTime + SecondsBetweenSplits, keyFrames );
-            operationChains.AddRange( AppendSplitOperationToChains( currentTime, endKeyFrame, file ) );
+            var endTime = currentTime + SecondsBetweenSplits;
+            operationChains.AddRange( AppendSplitOperationToChains( currentTime, endTime, file ) );
 
-            currentTime = endKeyFrame;
+            currentTime = endTime;
          }
 
          if ( operationChains.Count == 0 )
