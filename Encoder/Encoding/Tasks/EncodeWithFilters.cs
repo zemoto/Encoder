@@ -15,16 +15,16 @@ namespace Encoder.Encoding.Tasks
          _audioFilter = audioFilter;
       }
 
-      public override bool Initialize( string directory, int id )
+      public override bool Initialize( string directory, int id = -1 )
       {
-         if ( base.Initialize( directory, id ) )
+         if ( !base.Initialize( directory, id ) )
          {
-            _videoFilter.Initialize( SourceFrameRate, SourceDuration );
-            TargetTotalFrames = _videoFilter.TargetTotalFrames;
-            return true;
+            return false;
          }
-
-         return false;
+         
+         _videoFilter.Initialize( SourceFrameRate, SourceDuration );
+         TargetTotalFrames = _videoFilter.TargetTotalFrames;
+         return true;
       }
 
       public override string EncodingArgs =>

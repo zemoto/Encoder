@@ -12,21 +12,23 @@ namespace Encoder.Encoding.Tasks
          _encodingParams = encodingParams;
       }
 
-      public override bool Initialize( string directory, int id )
+      public override bool Initialize( string directory, int id = -1 )
       {
-         if ( base.Initialize( directory, id ) )
+         if ( !base.Initialize( directory, id ) )
          {
-            if ( _encodingParams.DurationChanging )
-            {
-               SourceDuration = TimeSpan.Zero;
-               SourceFrameRate = 0;
-               TargetTotalFrames = 0;
-            }
-
-            return true;
+            return false;
          }
 
-         return false;
+         if ( !_encodingParams.DurationChanging )
+         {
+            return true;
+         }
+         
+         SourceDuration = TimeSpan.Zero;
+         SourceFrameRate = 0;
+         TargetTotalFrames = 0;
+
+         return true;
       }
 
       public override string EncodingArgs => _encodingParams.Arguments;
