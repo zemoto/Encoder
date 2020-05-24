@@ -29,6 +29,8 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
+         TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
+
          SourceFrameRate = sourceFrameRate;
          SourceDuration = sourceDuration;
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
@@ -79,7 +81,7 @@ namespace Encoder.Encoding.Tasks
 
       public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
       public abstract string EncodingArgs { get; }
-      public abstract string TargetFileExtension { get; }
+      public string TargetFileExtension { get; protected set; }
       public string TargetFile { get; private set; }
       public int TargetBitrate { get; protected set; }
    }

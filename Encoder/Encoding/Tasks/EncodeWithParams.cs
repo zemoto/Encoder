@@ -19,20 +19,22 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
-         if ( !_encodingParams.DurationChanging )
+         if ( !string.IsNullOrEmpty( _encodingParams.FileType ) )
          {
-            return true;
+            TargetFileExtension = _encodingParams.FileType;
          }
-         
-         SourceDuration = TimeSpan.Zero;
-         SourceFrameRate = 0;
-         TargetTotalFrames = 0;
+
+         if ( _encodingParams.DurationChanging )
+         {
+            SourceDuration = TimeSpan.Zero;
+            SourceFrameRate = 0;
+            TargetTotalFrames = 0;
+         }
 
          return true;
       }
 
       public override string EncodingArgs => _encodingParams.Arguments;
-      public override string TargetFileExtension => _encodingParams.FileType;
       public override string TaskName => _encodingParams.Name;
    }
 }
