@@ -41,21 +41,36 @@ namespace Encoder.Encoding.Tasks
                                          $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
          TargetFile = Path.Combine( directory, targetFileName );
 
+         if ( File.Exists( TargetFile ) )
+         {
+            TargetFile = string.Empty; // To avoid deleting
+            Error = $"\"{targetFileName}\" exists in \"{directory}\"";
+            return false;
+         }
+
          _initialized = true;
          return true;
       }
 
       public override bool DoWork()
       {
+         Error = string.Empty;
          Started = true;
          if ( CancelToken.IsCancellationRequested )
          {
             return false;
          }
 
-         if ( !_initialized && !Initialize( Path.Combine( Path.GetDirectoryName( SourceFile ), "done" ) ) )
+         var targetDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
+         UtilityMethods.CreateDirectory( targetDirectory );
+
+         if ( !_initialized && !Initialize( targetDirectory ) )
          {
-            Error = $"Could not fully process video file: {SourceFile}";
+            if ( string.IsNullOrEmpty( Error ) )
+            {
+               Error = $"Could not fully process video file: {SourceFile}";
+            }
+
             return false;
          }
 
@@ -73,7 +88,7 @@ namespace Encoder.Encoding.Tasks
 
             if ( !string.IsNullOrEmpty( encoder.Error ) )
             {
-               Error = $"Error: {encoder.Error}";
+               Error = $"ffmpeg Error: {encoder.Error}";
             }
          }
 
