@@ -22,7 +22,7 @@ namespace Encoder.Encoding.Tasks
       public virtual bool Initialize( string directory, int id = -1 )
       {
          Debug.Assert( FileProvider != null );
-         bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration );
+         bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration, out var bitRate );
          if ( !success )
          {
             Error = $"Could not fully process video file: {SourceFile}";
@@ -36,6 +36,7 @@ namespace Encoder.Encoding.Tasks
          var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" : 
                                          $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
          TargetFile = Path.Combine( directory, targetFileName );
+         TargetBitrate = bitRate;
 
          _initialized = true;
          return true;
@@ -80,5 +81,6 @@ namespace Encoder.Encoding.Tasks
       public abstract string EncodingArgs { get; }
       public abstract string TargetFileExtension { get; }
       public string TargetFile { get; private set; }
+      public int TargetBitrate { get; protected set; }
    }
 }

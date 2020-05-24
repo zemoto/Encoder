@@ -12,8 +12,8 @@ namespace Encoder.Encoding
    {
       private const string ErrorIndicator = "[error]";
       private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
-      private const string QualityArgs = "-crf 18 -preset slow";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
+      private static string QualityArgs( int bitrate ) => $"-b:v {bitrate} -preset slow";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs( _encodingTask.TargetBitrate )} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string FfmpegExeLocation;
 

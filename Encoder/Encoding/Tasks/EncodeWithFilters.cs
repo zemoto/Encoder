@@ -24,11 +24,11 @@ namespace Encoder.Encoding.Tasks
          
          _videoFilter.Initialize( SourceFrameRate, SourceDuration );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
+         TargetBitrate = (int)( TargetBitrate * _videoFilter.BitRateMultipler );
          return true;
       }
 
-      public override string EncodingArgs =>
-         $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
+      public override string EncodingArgs => $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
 
       public override string TargetFileExtension => "mp4";
       public override string TaskName => _videoFilter.FilterName;
