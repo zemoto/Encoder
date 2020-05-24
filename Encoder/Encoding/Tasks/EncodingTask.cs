@@ -22,23 +22,24 @@ namespace Encoder.Encoding.Tasks
       public virtual bool Initialize( string directory, int id = -1 )
       {
          Debug.Assert( FileProvider != null );
-         bool success = VideoMetadataReader.GetVideoInfo( SourceFile, out var sourceFrameRate, out var sourceDuration, out var bitRate );
-         if ( !success )
+         var sourceMetadata = VideoMetadataReader.GetVideoMetadata( SourceFile );
+         if ( sourceMetadata == null )
          {
-            Error = $"Could not fully process video file: {SourceFile}";
+            Error = $"ffprobe could not read file: {SourceFile}";
             return false;
          }
 
          TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
 
-         SourceFrameRate = sourceFrameRate;
-         SourceDuration = sourceDuration;
+         SourceFrameRate = sourceMetadata.FrameRate;
+         SourceDuration = sourceMetadata.Duration;
+         TargetBitrate = sourceMetadata.BitRate;
+
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
 
          var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" : 
                                          $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
          TargetFile = Path.Combine( directory, targetFileName );
-         TargetBitrate = bitRate;
 
          _initialized = true;
          return true;

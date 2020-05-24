@@ -5,6 +5,20 @@ using ZemotoCommon.Utils;
 
 namespace Encoder.Encoding
 {
+   internal sealed class VideoMetadata
+   {
+      public double FrameRate { get; }
+      public TimeSpan Duration { get; }
+      public int BitRate { get; }
+
+      public VideoMetadata( double frameRate, TimeSpan duration, int bitRate )
+      {
+         FrameRate = frameRate;
+         Duration = duration;
+         BitRate = bitRate;
+      }
+   }
+
    internal static class VideoMetadataReader
    {
       private static readonly string FfprobeExeLocation;
@@ -16,12 +30,8 @@ namespace Encoder.Encoding
          FfprobeExeLocation = EmbeddedFfmpegManager.GetFfprobeExecutableFilePath();
       }
 
-      public static bool GetVideoInfo( string file, out double frameRate, out TimeSpan duration, out int bitRate )
+      public static VideoMetadata GetVideoMetadata( string file )
       {
-         duration = new TimeSpan();
-         frameRate = 0;
-         bitRate = 0;
-
          var process = GetProcess( VideoInfoArgs( file ) );
          process.StartAsChildProcess();
          process.WaitForExit();
@@ -31,31 +41,32 @@ namespace Encoder.Encoding
          {
             if ( string.IsNullOrEmpty( output ) )
             {
-               return false;
+               return null;
             }
 
             var values = output.Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries );
 
             if ( values.Length != 3 )
             {
-               return false;
+               return null;
             }
 
             var fpsFraction = values[0].Split( '/' );
-            frameRate = Math.Round( double.Parse( fpsFraction[0] ) / double.Parse( fpsFraction[1] ), 2 );
+            double frameRate = Math.Round( double.Parse( fpsFraction[0] ) / double.Parse( fpsFraction[1] ), 2 );
 
+            var duration = TimeSpan.Zero;
             if ( double.TryParse( values[1], out double secondsDuration ) )
             {
                duration = TimeSpan.FromSeconds( secondsDuration );
             }
 
-            int.TryParse( values[2], out bitRate );
+            int.TryParse( values[2], out int bitRate );
 
-            return true;
+            return new VideoMetadata( frameRate, duration, bitRate );
          }
          catch
          {
-            return false;
+            return null;
          }
          finally
          {
