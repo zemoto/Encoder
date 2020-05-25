@@ -51,8 +51,8 @@ namespace Encoder.Encoding.Tasks
          }
 
          var finalFile = GetFilePath();
-         finalFile = PathUtils.MoveFileToFolder( finalFile, _assemblyLineRootDirectory );
-         finalFile = PathUtils.RenameFile( finalFile, _assemblyLineId );
+         FileUtils.MoveFileToFolder( finalFile, _assemblyLineRootDirectory, out finalFile );
+         FileUtils.RenameFile( finalFile, _assemblyLineId, out finalFile );
          UtilityMethods.SafeDeleteDirectory( _assemblyLineWorkingDirectory );
 
          FileProvider = new FilePathProvider( finalFile );
