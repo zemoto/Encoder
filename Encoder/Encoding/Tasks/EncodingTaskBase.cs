@@ -13,6 +13,7 @@ namespace Encoder.Encoding.Tasks
 
       public virtual string GetFilePath() => FileProvider.GetFilePath();
 
+      private double _framesProcessedPerSecond = double.NaN;
       private void UpdateProgress()
       {
          if ( !Started || HasNoDurationData || FramesDone == 0 || TargetTotalFrames == 0 )
@@ -20,8 +21,17 @@ namespace Encoder.Encoding.Tasks
             return;
          }
 
+         // Exponential Moving Average
+         const double processingSpeedConstant = 0.005;
          var ellapsed = DateTime.Now - StartTime;
-         _timeRemaining = TimeSpan.FromSeconds( ellapsed.TotalSeconds / FramesDone * ( TargetTotalFrames - FramesDone ) );
+         var currentFramesProcessedPerSecond = FramesDone / ellapsed.TotalSeconds;
+
+         _framesProcessedPerSecond = double.IsNaN( _framesProcessedPerSecond ) 
+            ? currentFramesProcessedPerSecond 
+            : processingSpeedConstant * currentFramesProcessedPerSecond + ( 1 - processingSpeedConstant ) * _framesProcessedPerSecond;
+
+         var framesLeft = TargetTotalFrames - FramesDone;
+         _timeRemaining = TimeSpan.FromSeconds( framesLeft / _framesProcessedPerSecond );
          Progress = Math.Round( FramesDone / (double)TargetTotalFrames * 100, 2 );
 
          OnPropertyChanged( nameof( TimeRemainingString ) );
