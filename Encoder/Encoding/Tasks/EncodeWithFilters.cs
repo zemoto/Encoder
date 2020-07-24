@@ -24,7 +24,7 @@ namespace Encoder.Encoding.Tasks
          
          _videoFilter.Initialize( SourceFrameRate, SourceDuration );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
-         TargetBitrate = (int)( TargetBitrate * _videoFilter.BitRateMultipler );
+         TargetBitRate = _videoFilter.GetFilterTargetBitRate( TargetBitRate );
          return true;
       }
 

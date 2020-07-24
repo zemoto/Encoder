@@ -7,7 +7,8 @@ namespace Encoder.Filters.Video
       protected double SourceFrameRate { get; private set; }
       protected TimeSpan SourceDuration { get; private set; }
       public int TargetTotalFrames { get; protected set; }
-      public virtual double BitRateMultipler { get; } = 1.0;
+      protected virtual double BitRateMultipler { get; } = 1.0;
+      public uint CustomBitRate { get; set; } = 0;
 
       public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
       {
@@ -27,5 +28,7 @@ namespace Encoder.Filters.Video
 
          throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
       }
+
+      public uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter ) => CustomBitRate != 0 ? CustomBitRate : (uint)( targetBitrateBeforeFilter * BitRateMultipler );
    }
 }

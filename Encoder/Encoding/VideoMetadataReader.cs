@@ -9,9 +9,9 @@ namespace Encoder.Encoding
    {
       public double FrameRate { get; }
       public TimeSpan Duration { get; }
-      public int BitRate { get; }
+      public uint BitRate { get; }
 
-      public VideoMetadata( double frameRate, TimeSpan duration, int bitRate )
+      public VideoMetadata( double frameRate, TimeSpan duration, uint bitRate )
       {
          FrameRate = frameRate;
          Duration = duration;
@@ -60,7 +60,7 @@ namespace Encoder.Encoding
                duration = TimeSpan.FromSeconds( secondsDuration );
             }
 
-            int.TryParse( values[2], out int bitRate );
+            uint.TryParse( values[2], out uint bitRate );
 
             return new VideoMetadata( frameRate, duration, bitRate );
          }

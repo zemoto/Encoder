@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -29,6 +29,11 @@ namespace Encoder.TaskCreation
 
       private Operation GetOperation()
       {
+         if ( UseCustomBitRate )
+         {
+            VideoFilter.CustomBitRate = CustomBitRate * 1000; // UI asks for kbps, but encoder wants bps
+         }
+
          switch ( OperationType )
          {
             case OperationType.Filters:
@@ -87,6 +92,20 @@ namespace Encoder.TaskCreation
       {
          get => _audioFilter;
          private set => SetProperty( ref _audioFilter, value );
+      }
+
+      private bool _useCustomBitrate;
+      public bool UseCustomBitRate
+      {
+         get => _useCustomBitrate;
+         set => SetProperty( ref _useCustomBitrate, value );
+      }
+
+      private uint _customBitrate = 1000;
+      public uint CustomBitRate
+      {
+         get => _customBitrate;
+         set => SetProperty( ref _customBitrate, value );
       }
 
       public RelayCommand SelectFilesCommand { get; set; }

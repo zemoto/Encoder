@@ -25,6 +25,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0"
@@ -71,14 +72,30 @@
 
          </StackPanel>
 
-         <Button Grid.Row="3"
+         <StackPanel Grid.Row="3"
+                     Margin="0,0,0,8"
+                     Orientation="Horizontal">
+            <CheckBox x:Name="CustomBitRateCheckBox"
+                      IsChecked="{Binding UseCustomBitRate, Mode=TwoWay}"
+                      Content="Use custom bit rate (kbps):"
+                      VerticalAlignment="Center" />
+            <TextBox Text="{Binding CustomBitRate, Mode=TwoWay}"
+                     Height="24"
+                     Width="60"
+                     Margin="8,0,0,0"
+                     IsEnabled="{Binding ElementName=CustomBitRateCheckBox, Path=IsChecked}"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center" />
+         </StackPanel>
+
+         <Button Grid.Row="4"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="3"
+         <Button Grid.Row="4"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"
