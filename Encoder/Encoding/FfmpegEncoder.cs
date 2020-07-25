@@ -72,9 +72,14 @@ namespace Encoder.Encoding
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data != null && e.Data.StartsWith( ErrorIndicator ) )
+         if ( e.Data != null && e.Data.Contains( ErrorIndicator ) )
          {
-            Error = e.Data.Substring( ErrorIndicator.Length ).Trim();
+            if ( !string.IsNullOrEmpty( Error ) )
+            {
+               Error += Environment.NewLine;
+            }
+
+            Error += e.Data.Replace( ErrorIndicator, string.Empty ).Trim();
             return;
          }
 
