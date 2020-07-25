@@ -18,5 +18,7 @@
          get => _codec;
          set => SetProperty( ref _codec, value );
       }
+
+      public string GetTargetExtension() => "mp4"; // For now mp4 is the only supported extension
    }
 }

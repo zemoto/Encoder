@@ -6,8 +6,9 @@ namespace Encoder.Filters.Video
    {
       protected double SourceFrameRate { get; private set; }
       protected TimeSpan SourceDuration { get; private set; }
-      public int TargetTotalFrames { get; protected set; }
       protected virtual double BitRateMultipler { get; } = 1.0;
+
+      public int TargetTotalFrames { get; protected set; }
       public uint CustomBitRate { get; set; } = 0;
 
       public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
@@ -30,5 +31,7 @@ namespace Encoder.Filters.Video
       }
 
       public uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter ) => CustomBitRate != 0 ? CustomBitRate : (uint)( targetBitrateBeforeFilter * BitRateMultipler );
+
+      public virtual string GetFilterTargetExtension( string currentTargetExtension ) => currentTargetExtension;
    }
 }

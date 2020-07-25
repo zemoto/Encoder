@@ -29,7 +29,10 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
-         TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
+         if ( string.IsNullOrEmpty( TargetFileExtension ) )
+         {
+            TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
+         }
 
          SourceFrameRate = sourceMetadata.FrameRate;
          SourceDuration = sourceMetadata.Duration;

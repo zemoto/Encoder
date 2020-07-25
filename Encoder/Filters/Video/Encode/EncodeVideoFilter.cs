@@ -15,5 +15,7 @@ namespace Encoder.Filters.Video.Encode
             return $"-c:v {codec.GetAttribute<FilterEnumValueAttribute>().ParameterValue}";
          }
       }
+
+      public override string GetFilterTargetExtension( string currentTargetExtension ) => ( (EncodeVideoFilterViewModel)ViewModel ).GetTargetExtension();
    }
 }

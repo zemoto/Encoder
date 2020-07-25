@@ -17,6 +17,8 @@ namespace Encoder.Encoding.Tasks
 
       public override bool Initialize( string directory, int id = -1 )
       {
+         TargetFileExtension = _videoFilter.GetFilterTargetExtension( TargetFileExtension );
+
          if ( !base.Initialize( directory, id ) )
          {
             return false;
