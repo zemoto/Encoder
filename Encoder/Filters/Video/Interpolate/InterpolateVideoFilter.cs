@@ -6,7 +6,6 @@ namespace Encoder.Filters.Video.Interpolate
    {
       public override FilterViewModel ViewModel { get; } = new InterpolateVideoFilterViewModel();
       public override string FilterName { get; } = "Interpolate";
-      protected override double BitRateMultipler => ( (InterpolateVideoFilterViewModel)ViewModel ).TargetFrameRate / SourceFrameRate;
 
       public override bool CanApplyFilter() => Math.Abs( ( (InterpolateVideoFilterViewModel)ViewModel ).TargetFrameRate - SourceFrameRate ) > 0.001;
 
@@ -14,6 +13,11 @@ namespace Encoder.Filters.Video.Interpolate
       {
          base.Initialize( sourceFrameRate, sourceDuration );
          TargetTotalFrames = (int)Math.Ceiling( SourceDuration.TotalSeconds * ( (InterpolateVideoFilterViewModel)ViewModel ).TargetFrameRate );
+      }
+
+      public override uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter )
+      {
+         return (uint)( targetBitrateBeforeFilter * ( ( (InterpolateVideoFilterViewModel)ViewModel ).TargetFrameRate / SourceFrameRate ) );
       }
    }
 }

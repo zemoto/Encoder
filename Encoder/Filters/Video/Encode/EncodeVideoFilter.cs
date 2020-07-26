@@ -16,6 +16,12 @@ namespace Encoder.Filters.Video.Encode
          }
       }
 
+      public override uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter )
+      {
+         var model = ( (EncodeVideoFilterViewModel)ViewModel );
+         return model.UseCustomBitrate ? ( model.CustomBitrate * 1000 ) /*Model has kbps but backend wants bps*/ : targetBitrateBeforeFilter;
+      }
+
       public override string GetFilterTargetExtension( string currentTargetExtension ) => ( (EncodeVideoFilterViewModel)ViewModel ).GetTargetExtension();
    }
 }
