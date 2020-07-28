@@ -71,6 +71,47 @@
 
          </StackPanel>
 
+         <Grid Grid.Row="2"
+               Margin="0,0,0,8"
+               Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Custom}}">
+            <Grid.RowDefinitions>
+               <RowDefinition />
+               <RowDefinition Height="8" />
+               <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+               </Grid.ColumnDefinitions>
+               <TextBlock Grid.Column="0"
+                          VerticalAlignment="Center"
+                          Text="Params:"
+                          Margin="0,0,8,0" />
+               <TextBox Grid.Column="1" 
+                        Text="{Binding CustomParams, Mode=TwoWay}"
+                        VerticalContentAlignment="Center"
+                        Height="24" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+               </Grid.ColumnDefinitions>
+               <TextBlock Grid.Column="0"
+                          VerticalAlignment="Center"
+                          Text="Target Extension:"
+                          Margin="0,0,8,0" />
+               <TextBox Grid.Column="1"
+                        Text="{Binding CustomExtension, Mode=TwoWay}"
+                        VerticalContentAlignment="Center"
+                        Height="24" />
+            </Grid>
+
+         </Grid>
+
          <Button Grid.Row="3"
                  Height="24"
                  Width="80"

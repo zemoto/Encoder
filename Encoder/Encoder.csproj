@@ -111,7 +111,7 @@
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterViewModel.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationType.cs" />
-    <Compile Include="Operations\SeparateOperation.cs" />
+    <Compile Include="Operations\CustomParamsOperation.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>

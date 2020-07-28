@@ -6,7 +6,7 @@ namespace Encoder.Operations
    {
       [Description( "Apply Filters" )]
       Filters,
-      [Description( "Separate Streams" )]
-      Separate
+      [Description( "Apply Custom Params" )]
+      Custom
    }
 }

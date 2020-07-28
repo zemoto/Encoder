@@ -30,8 +30,8 @@ namespace Encoder.TaskCreation
          {
             case OperationType.Filters:
                return new ApplyFiltersOperation( VideoFilter, AudioFilter );
-            case OperationType.Separate:
-               return new SeparateOperation();
+            case OperationType.Custom:
+               return new CustomParamsOperation( CustomParams, CustomExtension );
             default:
                throw new ArgumentOutOfRangeException();
          }
@@ -66,6 +66,8 @@ namespace Encoder.TaskCreation
          OperationType = OperationType.Filters;
          VideoFilterType = VideoFilterType.Copy;
          AudioFilterType = AudioFilterType.Copy;
+         CustomParams = string.Empty;
+         CustomExtension = string.Empty;
 
          if ( !encodingTasks.Any( x => x == null ) )
          {
@@ -120,6 +122,20 @@ namespace Encoder.TaskCreation
       {
          get => _audioFilter;
          private set => SetProperty( ref _audioFilter, value );
+      }
+
+      private string _customParams;
+      public string CustomParams
+      {
+         get => _customParams;
+         set => SetProperty( ref _customParams, value );
+      }
+
+      private string _customExtension;
+      public string CustomExtension
+      {
+         get => _customExtension;
+         set => SetProperty( ref _customExtension, value );
       }
 
       private RelayCommand _selectFileCommand;

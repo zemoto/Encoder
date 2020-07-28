@@ -24,12 +24,10 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
-         if ( _encodingParams.DurationChanging )
-         {
-            SourceDuration = TimeSpan.Zero;
-            SourceFrameRate = 0;
-            TargetTotalFrames = 0;
-         }
+         // Can't be sure if duration is changing or not so don't track progress
+         SourceDuration = TimeSpan.Zero;
+         SourceFrameRate = 0;
+         TargetTotalFrames = 0;
 
          return true;
       }
