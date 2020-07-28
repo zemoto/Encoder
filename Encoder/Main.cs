@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Encoder.TaskCreation;
 using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
-using Microsoft.Win32;
 using ZemotoCommon.UI;
 
 namespace Encoder
@@ -20,13 +18,7 @@ namespace Encoder
       {
          _encodingManager = new EncodingManager();
 
-         var creationViewModel = new TaskCreationViewModel
-         {
-            SelectFilesCommand = new RelayCommand( SelectFiles )
-         };
-
-         creationViewModel.RemoveFileCommand = new RelayCommand<string>( file => creationViewModel.SelectedFiles.Remove( file ) );
-         creationViewModel.CreateTasksCommand = new RelayCommand( CreateAndStartNewTasks, creationViewModel.SelectedFiles.Any );
+         var creationViewModel = new TaskCreationViewModel( _encodingManager );
 
          _model = new MainWindowViewModel( _encodingManager.Model, creationViewModel )
          {
@@ -71,32 +63,6 @@ namespace Encoder
             }
 
             ( (Window)sender ).Close();
-         }
-      }
-
-      private void CreateAndStartNewTasks()
-      {
-         var encodingTasks = _model.TaskCreationVm.GetEncodingTasks();
-         _encodingManager.EnqueueTasks( encodingTasks.ToList() );
-      }
-
-      private void SelectFiles()
-      {
-         var dlg = new OpenFileDialog
-         {
-            Filter = "Video Files (*.mp4;*.wmv;*.webm;*.swf;*.mkv;*.avi)|*.mp4;*.wmv;*.webm;*.swf;*.mkv;*.avi|All files (*.*)|*.*",
-            Multiselect = true
-         };
-
-         if ( dlg.ShowDialog( Application.Current.MainWindow ) == true )
-         {
-            foreach( var file in dlg.FileNames )
-            {
-               if ( !_model.TaskCreationVm.SelectedFiles.Contains( file ) )
-               {
-                  _model.TaskCreationVm.SelectedFiles.Add( file );
-               }
-            }
          }
       }
    }

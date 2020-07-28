@@ -2,29 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Encoder.Operations;
+using Microsoft.Win32;
 using ZemotoCommon.UI;
 
 namespace Encoder.TaskCreation
 {
    internal sealed class TaskCreationViewModel : ViewModelBase
    {
-      public IEnumerable<EncodingTaskBase> GetEncodingTasks()
-      {
-         var operation = GetOperation();
-         var encodingTasks = SelectedFiles.SelectMany( x => operation.GetEncodingTasks( x ) ).ToList();
-         
-         SelectedFiles.Clear();
-         OperationType = OperationType.Filters;
-         VideoFilterType = VideoFilterType.Copy;
-         AudioFilterType = AudioFilterType.Copy;
+      private readonly EncodingManager _encodingManager;
 
-         return encodingTasks.Any( x => x == null ) ? null : encodingTasks;
+      public TaskCreationViewModel( EncodingManager encodingManager )
+      {
+         _encodingManager = encodingManager;
       }
 
       private Operation GetOperation()
@@ -37,6 +34,42 @@ namespace Encoder.TaskCreation
                return new SeparateOperation();
             default:
                throw new ArgumentOutOfRangeException();
+         }
+      }
+
+      private void SelectFiles()
+      {
+         var dlg = new OpenFileDialog
+         {
+            Filter = "Video Files (*.mp4;*.wmv;*.webm;*.swf;*.mkv;*.avi)|*.mp4;*.wmv;*.webm;*.swf;*.mkv;*.avi|All files (*.*)|*.*",
+            Multiselect = true
+         };
+
+         if ( dlg.ShowDialog( Application.Current.MainWindow ) == true )
+         {
+            foreach ( var file in dlg.FileNames )
+            {
+               if ( !SelectedFiles.Contains( file ) )
+               {
+                  SelectedFiles.Add( file );
+               }
+            }
+         }
+      }
+
+      private void CreateAndStartNewTasks()
+      {
+         var operation = GetOperation();
+         var encodingTasks = SelectedFiles.SelectMany( x => operation.GetEncodingTasks( x ) ).ToList();
+
+         SelectedFiles.Clear();
+         OperationType = OperationType.Filters;
+         VideoFilterType = VideoFilterType.Copy;
+         AudioFilterType = AudioFilterType.Copy;
+
+         if ( !encodingTasks.Any( x => x == null ) )
+         {
+            _encodingManager.EnqueueTasks( encodingTasks.ToList() );
          }
       }
 
@@ -89,8 +122,13 @@ namespace Encoder.TaskCreation
          private set => SetProperty( ref _audioFilter, value );
       }
 
-      public RelayCommand SelectFilesCommand { get; set; }
-      public RelayCommand<string> RemoveFileCommand { get; set; }
-      public RelayCommand CreateTasksCommand { get; set; }
+      private RelayCommand _selectFileCommand;
+      public RelayCommand SelectFilesCommand => _selectFileCommand ?? ( _selectFileCommand = new RelayCommand( SelectFiles ) );
+
+      private RelayCommand<string> _removeFileCommand;
+      public RelayCommand<string> RemoveFileCommand => _removeFileCommand ?? ( _removeFileCommand = new RelayCommand<string>( file => SelectedFiles.Remove( file ) ) );
+
+      private RelayCommand _createTasksCommand;
+      public RelayCommand CreateTasksCommand => _createTasksCommand ?? ( _createTasksCommand = new RelayCommand( CreateAndStartNewTasks, SelectedFiles.Any ) );
    }
 }
