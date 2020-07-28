@@ -12,6 +12,9 @@ namespace Encoder.Operations
             new EncodingTask[]
             {
                new EncodeWithCustomParams( new EncodingParams( "Separate into video", "-c:v copy -an" ) ),
+            },
+            new EncodingTask[]
+            {
                new EncodeWithCustomParams( new EncodingParams( "Separate into audio", "-vn -c:a copy", "wmv" ) )
             }
          };

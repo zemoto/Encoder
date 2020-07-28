@@ -14,14 +14,14 @@ namespace Encoder.Encoding.Tasks
 
       public override bool Initialize( string directory, int id = -1 )
       {
-         if ( !base.Initialize( directory, id ) )
-         {
-            return false;
-         }
-
          if ( !string.IsNullOrEmpty( _encodingParams.FileType ) )
          {
             TargetFileExtension = _encodingParams.FileType;
+         }
+
+         if ( !base.Initialize( directory, id ) )
+         {
+            return false;
          }
 
          if ( _encodingParams.DurationChanging )
