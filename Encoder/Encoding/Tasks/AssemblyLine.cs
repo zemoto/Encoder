@@ -13,11 +13,11 @@ namespace Encoder.Encoding.Tasks
       private readonly string _assemblyLineWorkingDirectory;
       private readonly string _assemblyLineId;
 
-      public AssemblyLine( IFilePathProvider fileProvider, EncodingTask[] steps, int id )
+      public AssemblyLine( IFilePathProvider fileProvider, EncodingTask[] steps )
       {
          FileProvider = fileProvider;
          _steps = steps;
-         _assemblyLineId = $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}";
+         _assemblyLineId = $"{Path.GetFileNameWithoutExtension( SourceFile )}";
          _assemblyLineRootDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
          _assemblyLineWorkingDirectory = Path.Combine( _assemblyLineRootDirectory, _assemblyLineId );
          CurrentTask = _steps.First(); // So correct information displays before this task gets started

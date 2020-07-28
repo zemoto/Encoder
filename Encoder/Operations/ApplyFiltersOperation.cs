@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Encoder.Encoding.Tasks;
+﻿using Encoder.Encoding.Tasks;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
 
@@ -7,6 +6,8 @@ namespace Encoder.Operations
 {
    internal sealed class ApplyFiltersOperation : Operation
    {
+      public override string Name => $"Apply Filters - V: {_videoFilter.FilterName}, A: {_audioFilter.FilterName}";
+
       private readonly VideoFilter _videoFilter;
       private readonly AudioFilter _audioFilter;
 
@@ -16,12 +17,6 @@ namespace Encoder.Operations
          _audioFilter = audioFilter;
       }
 
-      public override List<EncodingTask[]> CreateOperationChains( string file )
-      {
-         return new List<EncodingTask[]>
-         {
-            new EncodingTask[] { new EncodeWithFilters( _videoFilter, _audioFilter ) }
-         };
-      }
+      public override EncodingTask CreateEncodingTask() => new EncodeWithFilters( _videoFilter, _audioFilter );
    }
 }

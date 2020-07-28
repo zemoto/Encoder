@@ -59,15 +59,12 @@ namespace Encoder.TaskCreation
 
       private void CreateAndStartNewTasks()
       {
-         var operation = GetOperation();
-         var encodingTasks = SelectedFiles.SelectMany( x => operation.GetEncodingTasks( x ) ).ToList();
+         AddOperation();
+         var encodingTasks = SelectedFiles.Select( x => GetEncodingTasks( x ) ).ToList();
 
+         AddedOperations.Clear();
          SelectedFiles.Clear();
-         OperationType = OperationType.Filters;
-         VideoFilterType = VideoFilterType.Copy;
-         AudioFilterType = AudioFilterType.Copy;
-         CustomParams = string.Empty;
-         CustomExtension = string.Empty;
+         Reset();
 
          if ( !encodingTasks.Any( x => x == null ) )
          {
@@ -75,7 +72,49 @@ namespace Encoder.TaskCreation
          }
       }
 
+      public EncodingTaskBase GetEncodingTasks( string file )
+      {
+         var encodingSteps = new List<EncodingTask>();
+         foreach( var operation in AddedOperations )
+         {
+            var encodingTask = operation.CreateEncodingTask();
+            encodingSteps.Add( encodingTask );
+         }
+
+         return ConvertToAssemblyLineIfNeeded( encodingSteps.ToArray(), file );
+      }
+
+      private static EncodingTaskBase ConvertToAssemblyLineIfNeeded( EncodingTask[] encodingSteps, string file )
+      {
+         var filePathProvider = new FilePathProvider( file );
+         if ( encodingSteps.Length == 1 )
+         {
+            // Only a single task so we don't need an assembly line. Just return the task.
+            var task = encodingSteps.First();
+            task.FileProvider = filePathProvider;
+            return task;
+         }
+
+         return new AssemblyLine( filePathProvider, encodingSteps );
+      }
+
+      private void AddOperation()
+      {
+         AddedOperations.Add( GetOperation() );
+         Reset();
+      }
+
+      private void Reset()
+      {
+         OperationType = OperationType.Filters;
+         VideoFilterType = VideoFilterType.Copy;
+         AudioFilterType = AudioFilterType.Copy;
+         CustomParams = string.Empty;
+         CustomExtension = string.Empty;
+      }
+
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
+      public ObservableCollection<Operation> AddedOperations { get; } = new ObservableCollection<Operation>();
 
       private OperationType _operationType;
       public OperationType OperationType
@@ -146,5 +185,8 @@ namespace Encoder.TaskCreation
 
       private RelayCommand _createTasksCommand;
       public RelayCommand CreateTasksCommand => _createTasksCommand ?? ( _createTasksCommand = new RelayCommand( CreateAndStartNewTasks, SelectedFiles.Any ) );
+
+      private RelayCommand _addOperationCommand;
+      public RelayCommand AddOperationCommand => _addOperationCommand ?? ( _addOperationCommand = new RelayCommand( AddOperation ) );
    }
 }

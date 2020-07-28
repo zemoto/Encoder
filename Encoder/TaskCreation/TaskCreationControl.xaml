@@ -25,6 +25,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0"
@@ -49,12 +50,23 @@
             </ScrollViewer>
          </Border>
 
-         <ui:ComboBoxWithProperties Grid.Row="1"
+         <ItemsControl Grid.Row="1" 
+                       Margin="0,4"
+                       ItemsSource="{Binding AddedOperations}"
+                       DisplayMemberPath="Name">
+            <ItemsControl.ItemsPanel>
+               <ItemsPanelTemplate>
+                  <StackPanel />
+               </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+         </ItemsControl>
+
+         <ui:ComboBoxWithProperties Grid.Row="2"
                                     Margin="0,4,0,8"
                                     ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
                                     SelectedValue="{Binding OperationType}" />
 
-         <StackPanel Grid.Row="2"
+         <StackPanel Grid.Row="3"
                      Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Filters}}">
 
             <ui:ComboBoxWithProperties Margin="0,0,0,4"
@@ -71,7 +83,7 @@
 
          </StackPanel>
 
-         <Grid Grid.Row="2"
+         <Grid Grid.Row="3"
                Margin="0,0,0,8"
                Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Custom}}">
             <Grid.RowDefinitions>
@@ -112,14 +124,21 @@
 
          </Grid>
 
-         <Button Grid.Row="3"
+         <Button Grid.Row="4"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="3"
+         <Button Grid.Row="4"
+                 Height="24"
+                 Width="120"
+                 HorizontalAlignment="Center"
+                 Command="{Binding AddOperationCommand}"
+                 Content="Add Operation" />
+
+         <Button Grid.Row="4"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"
