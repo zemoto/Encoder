@@ -32,6 +32,7 @@ namespace Encoder.Encoding.Tasks
 
       public override string EncodingArgs => $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
 
-      public override string TaskName => _videoFilter.FilterName;
+      public override string TaskName => $"V:{_videoFilter.FilterName}, A:{_audioFilter.FilterName}";
+      public override string DetailedTaskName => $"Filters - {TaskName}";
    }
 }

@@ -1,22 +1,22 @@
 ﻿using System;
-using Encoder.Operations;
 
 namespace Encoder.Encoding.Tasks
 {
    internal sealed class EncodeWithCustomParams : EncodingTask
    {
-      private readonly EncodingParams _encodingParams;
+      private readonly string _targetExtension;
 
-      public EncodeWithCustomParams( EncodingParams encodingParams )
+      public EncodeWithCustomParams( string args, string targetExtension )
       {
-         _encodingParams = encodingParams;
+         EncodingArgs = args;
+         _targetExtension = targetExtension;
       }
 
       public override bool Initialize( string directory, int id = -1 )
       {
-         if ( !string.IsNullOrEmpty( _encodingParams.FileType ) )
+         if ( !string.IsNullOrEmpty( _targetExtension ) )
          {
-            TargetFileExtension = _encodingParams.FileType;
+            TargetFileExtension = _targetExtension;
          }
 
          if ( !base.Initialize( directory, id ) )
@@ -32,7 +32,8 @@ namespace Encoder.Encoding.Tasks
          return true;
       }
 
-      public override string EncodingArgs => _encodingParams.Arguments;
-      public override string TaskName => _encodingParams.Name;
+      public override string EncodingArgs { get; }
+      public override string TaskName => EncodingArgs;
+      public override string DetailedTaskName => $"Custom - \"{TaskName}\"";
    }
 }

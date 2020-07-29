@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:video="clr-namespace:Encoder.Filters.Video"
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
-             xmlns:operations="clr-namespace:Encoder.Operations"
+             xmlns:tasks="clr-namespace:Encoder.Encoding.Tasks"
              xmlns:commonUi="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
              xmlns:ui="clr-namespace:Encoder.UI"
              xmlns:assemblyLineCreation="clr-namespace:Encoder.TaskCreation"
@@ -52,8 +52,8 @@
 
          <ItemsControl Grid.Row="1" 
                        Margin="0,4"
-                       ItemsSource="{Binding AddedOperations}"
-                       DisplayMemberPath="Name">
+                       ItemsSource="{Binding Tasks}"
+                       DisplayMemberPath="DetailedTaskName">
             <ItemsControl.ItemsPanel>
                <ItemsPanelTemplate>
                   <StackPanel />
@@ -63,11 +63,11 @@
 
          <ui:ComboBoxWithProperties Grid.Row="2"
                                     Margin="0,4,0,8"
-                                    ItemsSource="{commonUi:GetEnumValues {x:Type operations:OperationType}}"
-                                    SelectedValue="{Binding OperationType}" />
+                                    ItemsSource="{commonUi:GetEnumValues {x:Type tasks:EncodingType}}"
+                                    SelectedValue="{Binding EncodingType}" />
 
          <StackPanel Grid.Row="3"
-                     Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Filters}}">
+                     Visibility="{Binding EncodingType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static tasks:EncodingType.Filters}}">
 
             <ui:ComboBoxWithProperties Margin="0,0,0,4"
                                        Label="Video Codec:"
@@ -85,7 +85,7 @@
 
          <Grid Grid.Row="3"
                Margin="0,0,0,8"
-               Visibility="{Binding OperationType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static operations:OperationType.Custom}}">
+               Visibility="{Binding EncodingType, Converter={StaticResource VisibleIfEqual}, ConverterParameter={x:Static tasks:EncodingType.Custom}}">
             <Grid.RowDefinitions>
                <RowDefinition />
                <RowDefinition Height="8" />
@@ -133,10 +133,10 @@
 
          <Button Grid.Row="4"
                  Height="24"
-                 Width="120"
+                 Width="80"
                  HorizontalAlignment="Center"
-                 Command="{Binding AddOperationCommand}"
-                 Content="Add Operation" />
+                 Command="{Binding AddTaskCommand}"
+                 Content="Add Task" />
 
          <Button Grid.Row="4"
                  Height="24"

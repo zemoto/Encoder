@@ -66,6 +66,7 @@
     <Compile Include="Encoding\Tasks\EncodeWithFilters.cs" />
     <Compile Include="Encoding\Tasks\EncodeWithParams.cs" />
     <Compile Include="Encoding\Tasks\EncodingTaskBase.cs" />
+    <Compile Include="Encoding\Tasks\EncodingType.cs" />
     <Compile Include="Encoding\Tasks\IFilePathProvider.cs" />
     <Compile Include="ffmpeg\FfmpegUtils.cs" />
     <Compile Include="Filters\Audio\AudioFilter.cs" />
@@ -75,8 +76,6 @@
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
-    <Compile Include="Operations\ApplyFiltersOperation.cs" />
-    <Compile Include="Operations\EncodingParams.cs" />
     <Compile Include="UI\DataTemplateFactory.cs" />
     <Compile Include="UI\ComboBoxWithProperties.xaml.cs">
       <DependentUpon>ComboBoxWithProperties.xaml</DependentUpon>
@@ -109,9 +108,6 @@
     <Compile Include="Filters\Video\Interpolate\InterpolateEnums.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilter.cs" />
     <Compile Include="Filters\Video\Interpolate\InterpolateVideoFilterViewModel.cs" />
-    <Compile Include="Operations\Operation.cs" />
-    <Compile Include="Operations\OperationType.cs" />
-    <Compile Include="Operations\CustomParamsOperation.cs" />
     <Compile Include="TaskCreation\TaskCreationViewModel.cs" />
     <Compile Include="TaskCreation\TaskCreationControl.xaml.cs">
       <DependentUpon>TaskCreationControl.xaml</DependentUpon>

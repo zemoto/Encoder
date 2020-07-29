@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -9,7 +8,6 @@ using Encoder.Filters.Audio;
 using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
-using Encoder.Operations;
 using Microsoft.Win32;
 using ZemotoCommon.UI;
 
@@ -22,19 +20,6 @@ namespace Encoder.TaskCreation
       public TaskCreationViewModel( EncodingManager encodingManager )
       {
          _encodingManager = encodingManager;
-      }
-
-      private Operation GetOperation()
-      {
-         switch ( OperationType )
-         {
-            case OperationType.Filters:
-               return new ApplyFiltersOperation( VideoFilter, AudioFilter );
-            case OperationType.Custom:
-               return new CustomParamsOperation( CustomParams, CustomExtension );
-            default:
-               throw new ArgumentOutOfRangeException();
-         }
       }
 
       private void SelectFiles()
@@ -59,29 +44,17 @@ namespace Encoder.TaskCreation
 
       private void CreateAndStartNewTasks()
       {
-         AddOperation();
-         var encodingTasks = SelectedFiles.Select( x => GetEncodingTasks( x ) ).ToList();
+         var tasks = Tasks.ToArray();
+         var encodingTasks = SelectedFiles.Select( file => ConvertToAssemblyLineIfNeeded( tasks, file ) ).ToList();
 
-         AddedOperations.Clear();
+         Tasks.Clear();
          SelectedFiles.Clear();
          Reset();
 
          if ( !encodingTasks.Any( x => x == null ) )
          {
-            _encodingManager.EnqueueTasks( encodingTasks.ToList() );
+            _encodingManager.EnqueueTasks( encodingTasks );
          }
-      }
-
-      public EncodingTaskBase GetEncodingTasks( string file )
-      {
-         var encodingSteps = new List<EncodingTask>();
-         foreach( var operation in AddedOperations )
-         {
-            var encodingTask = operation.CreateEncodingTask();
-            encodingSteps.Add( encodingTask );
-         }
-
-         return ConvertToAssemblyLineIfNeeded( encodingSteps.ToArray(), file );
       }
 
       private static EncodingTaskBase ConvertToAssemblyLineIfNeeded( EncodingTask[] encodingSteps, string file )
@@ -98,15 +71,28 @@ namespace Encoder.TaskCreation
          return new AssemblyLine( filePathProvider, encodingSteps );
       }
 
-      private void AddOperation()
+      private void AddTask()
       {
-         AddedOperations.Add( GetOperation() );
+         EncodingTask encodingTask;
+         switch ( EncodingType )
+         {
+            case EncodingType.Filters:
+               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter );
+               break;
+            case EncodingType.Custom:
+               encodingTask = new EncodeWithCustomParams( CustomParams, CustomExtension );
+               break;
+            default:
+               throw new ArgumentOutOfRangeException();
+         }
+
+         Tasks.Add( encodingTask );
          Reset();
       }
 
       private void Reset()
       {
-         OperationType = OperationType.Filters;
+         EncodingType = EncodingType.Filters;
          VideoFilterType = VideoFilterType.Copy;
          AudioFilterType = AudioFilterType.Copy;
          CustomParams = string.Empty;
@@ -114,13 +100,13 @@ namespace Encoder.TaskCreation
       }
 
       public ObservableCollection<string> SelectedFiles { get; } = new ObservableCollection<string>();
-      public ObservableCollection<Operation> AddedOperations { get; } = new ObservableCollection<Operation>();
+      public ObservableCollection<EncodingTask> Tasks { get; } = new ObservableCollection<EncodingTask>();
 
-      private OperationType _operationType;
-      public OperationType OperationType
+      private EncodingType _encodingType;
+      public EncodingType EncodingType
       {
-         get => _operationType;
-         set => SetProperty( ref _operationType, value );
+         get => _encodingType;
+         set => SetProperty( ref _encodingType, value );
       }
 
       private VideoFilterType _videoFilterType = VideoFilterType.Copy;
@@ -186,7 +172,7 @@ namespace Encoder.TaskCreation
       private RelayCommand _createTasksCommand;
       public RelayCommand CreateTasksCommand => _createTasksCommand ?? ( _createTasksCommand = new RelayCommand( CreateAndStartNewTasks, SelectedFiles.Any ) );
 
-      private RelayCommand _addOperationCommand;
-      public RelayCommand AddOperationCommand => _addOperationCommand ?? ( _addOperationCommand = new RelayCommand( AddOperation ) );
+      private RelayCommand _addTaskCommand;
+      public RelayCommand AddTaskCommand => _addTaskCommand ?? ( _addTaskCommand = new RelayCommand( AddTask ) );
    }
 }

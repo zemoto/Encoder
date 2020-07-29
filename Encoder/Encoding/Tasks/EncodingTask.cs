@@ -98,6 +98,8 @@ namespace Encoder.Encoding.Tasks
          return string.IsNullOrEmpty( Error ) && !CancelToken.IsCancellationRequested;
       }
 
+      public abstract string DetailedTaskName { get; }
+
       public CancellationTokenSource CancelToken { get; } = new CancellationTokenSource();
       public abstract string EncodingArgs { get; }
       public string TargetFileExtension { get; protected set; }
