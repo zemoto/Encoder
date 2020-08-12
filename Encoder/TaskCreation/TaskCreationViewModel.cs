@@ -44,6 +44,11 @@ namespace Encoder.TaskCreation
 
       private void CreateAndStartNewTasks()
       {
+         if ( Tasks.Count == 0 )
+         {
+            AddTask();
+         }
+
          var tasks = Tasks.ToArray();
          var encodingTasks = SelectedFiles.Select( file => ConvertToAssemblyLineIfNeeded( tasks, file ) ).ToList();
 
