@@ -24,7 +24,7 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
          
-         _videoFilter.Initialize( SourceFrameRate, SourceDuration );
+         _videoFilter.Initialize( SourceFile, SourceFrameRate, SourceDuration );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
          TargetBitRate = _videoFilter.GetFilterTargetBitRate( TargetBitRate );
          return true;

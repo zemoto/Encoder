@@ -4,12 +4,14 @@ namespace Encoder.Filters.Video
 {
    internal abstract class VideoFilter : Filter
    {
+      protected string SourceFile { get; private set; }
       protected double SourceFrameRate { get; private set; }
       protected TimeSpan SourceDuration { get; private set; }
       public int TargetTotalFrames { get; protected set; }
 
-      public virtual void Initialize( double sourceFrameRate, TimeSpan sourceDuration )
+      public virtual void Initialize( string file, double sourceFrameRate, TimeSpan sourceDuration )
       {
+         SourceFile = file;
          SourceFrameRate = sourceFrameRate;
          SourceDuration = sourceDuration;
          TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
