@@ -76,6 +76,7 @@
     <Compile Include="Filters\Audio\Encode\EncodeAudioFilterViewModel.cs" />
     <Compile Include="Filters\Audio\Remove\RemoveAudioFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\Video\RemoveBlackBars\RemoveBlackBarsVideoFilter.cs" />
     <Compile Include="UI\DataTemplateFactory.cs" />
     <Compile Include="UI\ComboBoxWithProperties.xaml.cs">
       <DependentUpon>ComboBoxWithProperties.xaml</DependentUpon>

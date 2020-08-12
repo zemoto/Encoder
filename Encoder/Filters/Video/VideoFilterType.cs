@@ -8,6 +8,7 @@
       Amplify,
       Blur,
       Denoise,
-      Interpolate
+      Interpolate,
+      RemoveBlackBars
    }
 }
