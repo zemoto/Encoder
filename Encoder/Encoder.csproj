@@ -68,6 +68,7 @@
     <Compile Include="Encoding\Tasks\EncodingTaskBase.cs" />
     <Compile Include="Encoding\Tasks\EncodingType.cs" />
     <Compile Include="Encoding\Tasks\IFilePathProvider.cs" />
+    <Compile Include="Encoding\VideoMetadata.cs" />
     <Compile Include="ffmpeg\FfmpegUtils.cs" />
     <Compile Include="Filters\Audio\AudioFilter.cs" />
     <Compile Include="Filters\Audio\AudioFilterType.cs" />
