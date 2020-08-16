@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -10,6 +11,7 @@ using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Microsoft.Win32;
 using ZemotoCommon.UI;
+using ZemotoCommon.Utils;
 
 namespace Encoder.TaskCreation
 {
@@ -49,8 +51,7 @@ namespace Encoder.TaskCreation
             AddTask();
          }
 
-         var tasks = Tasks.ToArray();
-         var encodingTasks = SelectedFiles.Select( file => ConvertToAssemblyLineIfNeeded( tasks, file ) ).ToList();
+         var encodingTasks = GetTasksForSelectedFiles();
 
          Tasks.Clear();
          SelectedFiles.Clear();
@@ -60,6 +61,18 @@ namespace Encoder.TaskCreation
          {
             _encodingManager.EnqueueTasks( encodingTasks );
          }
+      }
+
+      private List<EncodingTaskBase> GetTasksForSelectedFiles()
+      {
+         var tasksForSelectedFiles = new List<EncodingTaskBase>();
+         foreach ( var file in SelectedFiles )
+         {
+            var taskCopies = Tasks.Select( x => DeepCopy.Copy( x ) ).ToArray();
+            tasksForSelectedFiles.Add( ConvertToAssemblyLineIfNeeded( taskCopies, file ) );
+         }
+
+         return tasksForSelectedFiles;
       }
 
       private static EncodingTaskBase ConvertToAssemblyLineIfNeeded( EncodingTask[] encodingSteps, string file )

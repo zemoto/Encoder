@@ -1,6 +1,7 @@
 ﻿using Encoder.Filters;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
+using System;
 
 namespace Encoder.Encoding.Tasks
 {
