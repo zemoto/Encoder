@@ -17,12 +17,10 @@ namespace Encoder.Filters.Video.Encode
          }
       }
 
-      public override void Initialize( string file, VideoMetadata metadata )
+      protected override void InitializeEx()
       {
-         base.Initialize( file, metadata );
-
          var model = ( (EncodeVideoFilterViewModel)ViewModel );
-         TargetBitrate = model.UseCustomBitrate ? ( model.CustomBitrate * 1000 ) /*Model has kbps but backend wants bps*/ : metadata.Bitrate;
+         TargetBitrate = model.UseCustomBitrate ? ( model.CustomBitrate * 1000 ) /*Model has kbps but backend wants bps*/ : SourceMetadata.Bitrate;
       }
 
       public override string GetFilterTargetExtension( string currentTargetExtension ) => ( (EncodeVideoFilterViewModel)ViewModel ).GetTargetExtension();

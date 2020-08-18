@@ -1,5 +1,4 @@
 ﻿using System;
-using Encoder.Encoding;
 
 namespace Encoder.Filters.Video.Interpolate
 {
@@ -11,11 +10,10 @@ namespace Encoder.Filters.Video.Interpolate
 
       public override bool CanApplyFilter() => Math.Abs( InterpolateModel.TargetFrameRate - SourceMetadata.FrameRate ) > 0.001;
 
-      public override void Initialize( string file, VideoMetadata metadata )
+      protected override void InitializeEx()
       {
-         base.Initialize( file, metadata );
-         TargetTotalFrames = (int)Math.Ceiling( metadata.Duration.TotalSeconds * InterpolateModel.TargetFrameRate );
-         TargetBitrate = (uint)( 0.75 * metadata.Bitrate * InterpolateModel.TargetFrameRate / metadata.FrameRate );
+         TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.Duration.TotalSeconds * InterpolateModel.TargetFrameRate );
+         TargetBitrate = (uint)( 0.75 * SourceMetadata.Bitrate * InterpolateModel.TargetFrameRate / SourceMetadata.FrameRate );
       }
    }
 }

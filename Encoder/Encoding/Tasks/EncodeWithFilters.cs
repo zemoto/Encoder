@@ -15,18 +15,12 @@ namespace Encoder.Encoding.Tasks
          _audioFilter = audioFilter;
       }
 
-      public override bool Initialize( string directory, int id = -1 )
+      protected override void InitializeEx()
       {
-         TargetFileExtension = _videoFilter.GetFilterTargetExtension( TargetFileExtension );
-
-         if ( !base.Initialize( directory, id ) )
-         {
-            return false;
-         }
-         
          _videoFilter.Initialize( SourceFile, SourceMetadata );
+
+         TargetFileExtension = _videoFilter.GetFilterTargetExtension( TargetFileExtension );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
-         return true;
       }
 
       public override string EncodingArgs => $"-b:v {_videoFilter.TargetBitrate} {FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";

@@ -19,7 +19,7 @@ namespace Encoder.Encoding.Tasks
 
       public override string GetFilePath() => TargetFile;
 
-      public virtual bool Initialize( string directory, int id = -1 )
+      public bool Initialize( string directory, int id = -1 )
       {
          Debug.Assert( FileProvider != null );
          var sourceMetadata = VideoMetadataReader.GetVideoMetadata( SourceFile );
@@ -29,16 +29,14 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
-         if ( string.IsNullOrEmpty( TargetFileExtension ) )
-         {
-            TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
-         }
-
          SourceMetadata = sourceMetadata;
 
+         TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
          TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
 
-         var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" : 
+         InitializeEx();
+
+         var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" :
                                          $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";
          TargetFile = Path.Combine( directory, targetFileName );
 
@@ -52,6 +50,8 @@ namespace Encoder.Encoding.Tasks
          _initialized = true;
          return true;
       }
+
+      protected virtual void InitializeEx() { }
 
       public override bool DoWork()
       {

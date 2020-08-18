@@ -10,13 +10,17 @@ namespace Encoder.Filters.Video
       public int TargetTotalFrames { get; protected set; }
       public uint TargetBitrate { get; protected set; }
 
-      public virtual void Initialize( string file, VideoMetadata metadata )
+      public void Initialize( string file, VideoMetadata metadata )
       {
          SourceFile = file;
          SourceMetadata = metadata;
          TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
          TargetBitrate = metadata.Bitrate;
+
+         InitializeEx();
       }
+
+      protected virtual void InitializeEx() { }
 
       public static VideoFilter GetFilterForType( VideoFilterType type )
       {
