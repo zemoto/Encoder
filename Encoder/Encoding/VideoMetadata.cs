@@ -7,13 +7,13 @@ namespace Encoder.Encoding
    {
       public double FrameRate { get; }
       public TimeSpan Duration { get; }
-      public uint BitRate { get; }
+      public uint Bitrate { get; }
 
       public VideoMetadata( double frameRate, TimeSpan duration, uint bitRate )
       {
          FrameRate = frameRate;
          Duration = duration;
-         BitRate = bitRate;
+         Bitrate = bitRate;
       }
    }
 

@@ -35,7 +35,6 @@ namespace Encoder.Encoding.Tasks
          }
 
          SourceMetadata = sourceMetadata;
-         TargetBitRate = sourceMetadata.BitRate;
 
          TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
 
@@ -103,6 +102,5 @@ namespace Encoder.Encoding.Tasks
       public abstract string EncodingArgs { get; }
       public string TargetFileExtension { get; protected set; }
       public string TargetFile { get; private set; }
-      public uint TargetBitRate { get; protected set; }
    }
 }

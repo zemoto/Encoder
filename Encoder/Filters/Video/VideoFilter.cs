@@ -8,12 +8,14 @@ namespace Encoder.Filters.Video
       protected string SourceFile { get; private set; }
       protected VideoMetadata SourceMetadata { get; private set; }
       public int TargetTotalFrames { get; protected set; }
+      public uint TargetBitrate { get; protected set; }
 
       public virtual void Initialize( string file, VideoMetadata metadata )
       {
          SourceFile = file;
          SourceMetadata = metadata;
          TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
+         TargetBitrate = metadata.Bitrate;
       }
 
       public static VideoFilter GetFilterForType( VideoFilterType type )
@@ -27,8 +29,6 @@ namespace Encoder.Filters.Video
 
          throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
       }
-
-      public virtual uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter ) => targetBitrateBeforeFilter;
 
       public virtual string GetFilterTargetExtension( string currentTargetExtension ) => currentTargetExtension;
    }

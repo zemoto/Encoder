@@ -26,11 +26,10 @@ namespace Encoder.Encoding.Tasks
          
          _videoFilter.Initialize( SourceFile, SourceMetadata );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
-         TargetBitRate = _videoFilter.GetFilterTargetBitRate( TargetBitRate );
          return true;
       }
 
-      public override string EncodingArgs => $"{FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
+      public override string EncodingArgs => $"-b:v {_videoFilter.TargetBitrate} {FilterArgumentBuilder.GetFilterArguments( _videoFilter )} {FilterArgumentBuilder.GetFilterArguments( _audioFilter )}";
 
       public override string TaskName => $"V:{_videoFilter.FilterName}, A:{_audioFilter.FilterName}";
       public override string DetailedTaskName => $"Filters - {TaskName}";

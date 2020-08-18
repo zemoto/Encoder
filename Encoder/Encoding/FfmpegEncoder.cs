@@ -12,8 +12,8 @@ namespace Encoder.Encoding
    {
       private const string ErrorIndicator = "[error]";
       private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
-      private static string QualityArgs( uint bitrate ) => $"-b:v {bitrate} -preset slow -x264opts colormatrix=bt709";
-      private string EncodingArgs => $"{BasicArgs} {QualityArgs( _encodingTask.TargetBitRate )} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
+      private static string QualityArgs => $"-preset slow -x264opts colormatrix=bt709";
+      private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string FfmpegExeLocation;
 
