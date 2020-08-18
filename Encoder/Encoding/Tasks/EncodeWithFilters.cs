@@ -19,7 +19,11 @@ namespace Encoder.Encoding.Tasks
       {
          _videoFilter.Initialize( SourceFile, SourceMetadata );
 
-         TargetFileExtension = _videoFilter.GetFilterTargetExtension( TargetFileExtension );
+         if ( !string.IsNullOrEmpty( _videoFilter.TargetExtension ) )
+         {
+            TargetFileExtension = _videoFilter.TargetExtension;
+         }
+
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
       }
 

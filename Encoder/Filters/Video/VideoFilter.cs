@@ -9,6 +9,7 @@ namespace Encoder.Filters.Video
       protected VideoMetadata SourceMetadata { get; private set; }
       public int TargetTotalFrames { get; protected set; }
       public uint TargetBitrate { get; protected set; }
+      public string TargetExtension { get; protected set; }
 
       public void Initialize( string file, VideoMetadata metadata )
       {
@@ -33,7 +34,5 @@ namespace Encoder.Filters.Video
 
          throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
       }
-
-      public virtual string GetFilterTargetExtension( string currentTargetExtension ) => currentTargetExtension;
    }
 }

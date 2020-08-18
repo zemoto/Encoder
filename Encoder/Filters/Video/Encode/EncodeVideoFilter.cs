@@ -1,5 +1,4 @@
-﻿using Encoder.Encoding;
-using ZemotoCommon.Utils;
+﻿using ZemotoCommon.Utils;
 
 namespace Encoder.Filters.Video.Encode
 {
@@ -21,8 +20,7 @@ namespace Encoder.Filters.Video.Encode
       {
          var model = ( (EncodeVideoFilterViewModel)ViewModel );
          TargetBitrate = model.UseCustomBitrate ? ( model.CustomBitrate * 1000 ) /*Model has kbps but backend wants bps*/ : SourceMetadata.Bitrate;
+         TargetExtension = model.GetTargetExtension();
       }
-
-      public override string GetFilterTargetExtension( string currentTargetExtension ) => ( (EncodeVideoFilterViewModel)ViewModel ).GetTargetExtension();
    }
 }
