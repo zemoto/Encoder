@@ -16,7 +16,7 @@ namespace Encoder.Encoding.Tasks
       private double _framesProcessedPerSecond = double.NaN;
       private void UpdateProgress()
       {
-         if ( !Started || HasNoDurationData || FramesDone == 0 || TargetTotalFrames == 0 )
+         if ( !Started || UnableToShowProgress || FramesDone == 0 )
          {
             return;
          }
@@ -40,6 +40,19 @@ namespace Encoder.Encoding.Tasks
       public abstract string TaskName { get; }
 
       public string Error { get; protected set; }
+
+      private VideoMetadata _sourceMetadata;
+      public VideoMetadata SourceMetadata
+      {
+         get => _sourceMetadata;
+         protected set
+         {
+            if ( SetProperty( ref _sourceMetadata, value ) )
+            {
+               OnPropertyChanged( nameof( UnableToShowProgress ) );
+            }
+         }
+      }
 
       private int _cpuUsage;
       public int CpuUsage
@@ -70,33 +83,19 @@ namespace Encoder.Encoding.Tasks
       public IFilePathProvider FileProvider { get; set; }
       public string SourceFile => FileProvider.GetFilePath();
 
-      public bool HasNoDurationData => SourceDuration == TimeSpan.Zero;
-
-      private TimeSpan _sourceDuration;
-      public TimeSpan SourceDuration
-      {
-         get => _sourceDuration;
-         protected set
-         {
-            if ( SetProperty( ref _sourceDuration, value ) )
-            {
-               OnPropertyChanged( nameof( HasNoDurationData ) );
-            }
-         }
-      }
-
-      private double _sourceFrameRate;
-      public double SourceFrameRate
-      {
-         get => _sourceFrameRate;
-         protected set => SetProperty( ref _sourceFrameRate, value );
-      }
+      public bool UnableToShowProgress => SourceMetadata == null || SourceMetadata.Duration == TimeSpan.Zero || TargetTotalFrames == 0;
 
       private int _targetTotalFrames;
       public int TargetTotalFrames
       {
          get => _targetTotalFrames;
-         protected set => SetProperty( ref _targetTotalFrames, value );
+         protected set
+         {
+            if ( SetProperty( ref _targetTotalFrames, value ) )
+            {
+               OnPropertyChanged( nameof( UnableToShowProgress ) );
+            }
+         }
       }
 
       private int _framesDone;

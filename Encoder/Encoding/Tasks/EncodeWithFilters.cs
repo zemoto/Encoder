@@ -1,7 +1,6 @@
 ﻿using Encoder.Filters;
 using Encoder.Filters.Audio;
 using Encoder.Filters.Video;
-using System;
 
 namespace Encoder.Encoding.Tasks
 {
@@ -25,7 +24,7 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
          
-         _videoFilter.Initialize( SourceFile, SourceFrameRate, SourceDuration );
+         _videoFilter.Initialize( SourceFile, SourceMetadata );
          TargetTotalFrames = _videoFilter.TargetTotalFrames;
          TargetBitRate = _videoFilter.GetFilterTargetBitRate( TargetBitRate );
          return true;

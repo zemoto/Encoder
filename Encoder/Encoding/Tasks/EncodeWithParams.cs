@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Encoder.Encoding.Tasks
+﻿namespace Encoder.Encoding.Tasks
 {
    internal sealed class EncodeWithCustomParams : EncodingTask
    {
@@ -24,9 +22,7 @@ namespace Encoder.Encoding.Tasks
             return false;
          }
 
-         // Can't be sure if duration is changing or not so don't track progress
-         SourceDuration = TimeSpan.Zero;
-         SourceFrameRate = 0;
+         // Can't be sure how the target will change. This being 0 will cause the UI to not try to track progress.
          TargetTotalFrames = 0;
 
          return true;

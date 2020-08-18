@@ -1,4 +1,5 @@
 ﻿using System;
+using Encoder.Encoding;
 
 namespace Encoder.Filters.Video.Interpolate
 {
@@ -8,17 +9,17 @@ namespace Encoder.Filters.Video.Interpolate
       public override string FilterName { get; } = "Interpolate";
       private InterpolateVideoFilterViewModel InterpolateModel => (InterpolateVideoFilterViewModel)ViewModel;
 
-      public override bool CanApplyFilter() => Math.Abs( InterpolateModel.TargetFrameRate - SourceFrameRate ) > 0.001;
+      public override bool CanApplyFilter() => Math.Abs( InterpolateModel.TargetFrameRate - SourceMetadata.FrameRate ) > 0.001;
 
-      public override void Initialize( string file, double sourceFrameRate, TimeSpan sourceDuration )
+      public override void Initialize( string file, VideoMetadata metadata )
       {
-         base.Initialize( file, sourceFrameRate, sourceDuration );
-         TargetTotalFrames = (int)Math.Ceiling( SourceDuration.TotalSeconds * InterpolateModel.TargetFrameRate );
+         base.Initialize( file, metadata );
+         TargetTotalFrames = (int)Math.Ceiling( metadata.Duration.TotalSeconds * InterpolateModel.TargetFrameRate );
       }
 
       public override uint GetFilterTargetBitRate( uint targetBitrateBeforeFilter )
       {
-         return (uint)( 0.75 * targetBitrateBeforeFilter * InterpolateModel.TargetFrameRate / SourceFrameRate );
+         return (uint)( 0.75 * targetBitrateBeforeFilter * InterpolateModel.TargetFrameRate / SourceMetadata.FrameRate );
       }
    }
 }

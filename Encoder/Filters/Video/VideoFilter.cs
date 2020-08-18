@@ -1,20 +1,19 @@
-﻿using System;
+﻿using Encoder.Encoding;
+using System;
 
 namespace Encoder.Filters.Video
 {
    internal abstract class VideoFilter : Filter
    {
       protected string SourceFile { get; private set; }
-      protected double SourceFrameRate { get; private set; }
-      protected TimeSpan SourceDuration { get; private set; }
+      protected VideoMetadata SourceMetadata { get; private set; }
       public int TargetTotalFrames { get; protected set; }
 
-      public virtual void Initialize( string file, double sourceFrameRate, TimeSpan sourceDuration )
+      public virtual void Initialize( string file, VideoMetadata metadata )
       {
          SourceFile = file;
-         SourceFrameRate = sourceFrameRate;
-         SourceDuration = sourceDuration;
-         TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
+         SourceMetadata = metadata;
+         TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
       }
 
       public static VideoFilter GetFilterForType( VideoFilterType type )

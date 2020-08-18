@@ -34,11 +34,10 @@ namespace Encoder.Encoding.Tasks
             TargetFileExtension = Path.GetExtension( SourceFile ).TrimStart( '.' );
          }
 
-         SourceFrameRate = sourceMetadata.FrameRate;
-         SourceDuration = sourceMetadata.Duration;
+         SourceMetadata = sourceMetadata;
          TargetBitRate = sourceMetadata.BitRate;
 
-         TargetTotalFrames = (int)Math.Ceiling( SourceFrameRate * SourceDuration.TotalSeconds );
+         TargetTotalFrames = (int)Math.Ceiling( SourceMetadata.FrameRate * SourceMetadata.Duration.TotalSeconds );
 
          var targetFileName = id == -1 ? $"{Path.GetFileNameWithoutExtension( SourceFile )}.{TargetFileExtension}" : 
                                          $"{Path.GetFileNameWithoutExtension( SourceFile )}-{id}.{TargetFileExtension}";

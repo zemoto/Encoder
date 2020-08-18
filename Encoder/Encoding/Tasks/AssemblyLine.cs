@@ -72,8 +72,7 @@ namespace Encoder.Encoding.Tasks
 
          CurrentTask = task;
 
-         SourceDuration = CurrentTask.SourceDuration;
-         SourceFrameRate = CurrentTask.SourceFrameRate;
+         SourceMetadata = CurrentTask.SourceMetadata;
          TargetTotalFrames = CurrentTask.TargetTotalFrames;
 
          bool success = CurrentTask.DoWork();
