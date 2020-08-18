@@ -64,7 +64,7 @@ namespace Encoder.Encoding
          _currentffmpegProcess.WaitForExit( 1000 );
 
          // In case the process finished very quickly
-         if ( _currentffmpegProcess?.HasExited == false )
+         if ( _currentffmpegProcess?.HasExited == false && !_encodingTask.CancelToken.IsCancellationRequested )
          {
             _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
          }
