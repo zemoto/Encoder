@@ -9,6 +9,6 @@
       Blur,
       Denoise,
       Interpolate,
-      RemoveBlackBars
+      Crop
    }
 }
