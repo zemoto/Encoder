@@ -8,13 +8,12 @@
         xmlns:tasks="clr-namespace:Encoder.Encoding.Tasks"
         xmlns:taskCreation="clr-namespace:Encoder.TaskCreation"
         mc:Ignorable="d"
-        WindowStyle="ToolWindow"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight"
-        Title="Interpolator"
-        MinWidth="360"
-        Width="500"
+        SizeToContent="Height"
+        Title="FFMPEG Encoder"
+        Width="550"
+        SizeChanged="OnSizeChanged"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
    <Window.Resources>
       <ResourceDictionary>
@@ -31,36 +30,80 @@
             <RowDefinition Height="*" />
          </Grid.RowDefinitions>
 
-         <Border Grid.Row="0" 
+         <Border Grid.Row="0"
                  Margin="0,8"
                  Padding="2"
                  BorderThickness="1"
                  BorderBrush="LightGray">
             <taskCreation:TaskCreationControl DataContext="{Binding TaskCreationVm}" />
          </Border>
-         
+
          <DataGrid Grid.Row="1"
                    ItemsSource="{Binding EncodingVm.Tasks}"
                    AutoGenerateColumns="False"
                    HeadersVisibility="Column"
-                   RowHeight="20">
+                   RowHeight="20"
+                   SelectionUnit="Cell">
             <DataGrid.Columns>
-               <DataGridTextColumn Header="File"
-                                   Binding="{Binding FileName, Mode=OneWay}"
-                                   IsReadOnly="True" />
+               <DataGridTemplateColumn Header="File"
+                                       Width="182">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
+                        <TextBox x:Name="Text"
+                                 Text="{Binding FileName, Mode=OneWay}"
+                                 IsReadOnly="True">
+                           <TextBox.Template>
+                              <ControlTemplate TargetType="{x:Type TextBox}">
+                                 <ScrollViewer x:Name="PART_ContentHost" />
+                              </ControlTemplate>
+                           </TextBox.Template>
+                        </TextBox>
+                        <DataTemplate.Triggers>
+                           <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                        Value="True">
+                              <Setter TargetName="Text"
+                                      Property="Foreground"
+                                      Value="White" />
+                           </DataTrigger>
+                        </DataTemplate.Triggers>
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
 
-               <DataGridTextColumn Header="VideoFilter"
-                                   Binding="{Binding TaskName, Mode=OneWay}"
-                                   IsReadOnly="True"
-                                   MinWidth="100" />
-               
-               <DataGridTextColumn Header="CPU Usage"
+               <DataGridTemplateColumn Header="Task"
+                                       Width="120">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
+                        <TextBox x:Name="Text"
+                                 Text="{Binding TaskName, Mode=OneWay}"
+                                 IsReadOnly="True">
+                           <TextBox.Template>
+                              <ControlTemplate TargetType="{x:Type TextBox}">
+                                 <ScrollViewer x:Name="PART_ContentHost" />
+                              </ControlTemplate>
+                           </TextBox.Template>
+                        </TextBox>
+                        <DataTemplate.Triggers>
+                           <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                        Value="True">
+                              <Setter TargetName="Text"
+                                      Property="Foreground"
+                                      Value="White" />
+                           </DataTrigger>
+                        </DataTemplate.Triggers>
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+
+               <DataGridTextColumn Header="CPU"
                                    Binding="{Binding CpuUsage, Mode=OneWay, StringFormat={}{0}%}"
-                                   IsReadOnly="True" />
-               
-               <DataGridTextColumn Header="Time Remaining"
+                                   IsReadOnly="True"
+                                   Width="35" />
+
+               <DataGridTextColumn Header="Remaining"
                                    Binding="{Binding TimeRemainingString, Mode=OneWay}"
-                                   IsReadOnly="True" />
+                                   IsReadOnly="True"
+                                   Width="65" />
 
                <DataGridTemplateColumn Header="Progress"
                                        Width="100">
@@ -93,7 +136,7 @@
                         <Button Content="X"
                                 Height="18"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}, Path=DataContext.(local:MainWindowViewModel.CancelTaskCommand)}"
-                                CommandParameter="{Binding}"/>
+                                CommandParameter="{Binding}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
