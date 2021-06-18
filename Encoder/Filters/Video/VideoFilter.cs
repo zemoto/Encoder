@@ -21,6 +21,8 @@ namespace Encoder.Filters.Video
          InitializeEx();
       }
 
+      public void SetTargetBitrate( uint bitrate ) => TargetBitrate = bitrate;
+
       protected virtual void InitializeEx() { }
 
       public static VideoFilter GetFilterForType( VideoFilterType type )

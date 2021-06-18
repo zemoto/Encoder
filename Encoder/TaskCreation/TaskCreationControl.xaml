@@ -26,6 +26,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
          </Grid.RowDefinitions>
 
          <Border Grid.Row="0"
@@ -124,21 +125,36 @@
 
          </Grid>
 
-         <Button Grid.Row="4"
+         <StackPanel Grid.Row="4"
+                     Margin="0,0,0,8"
+                     Orientation="Horizontal">
+            <CheckBox VerticalAlignment="Center"
+                      IsChecked="{Binding OverrideBitrate}"
+                      Content="Override bitrate (kbps)" />
+            <TextBox Text="{Binding CustomBitrate}"
+                     IsEnabled="{Binding OverrideBitrate}"
+                     Margin="8,0,0,0"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Width="45"
+                     Height="24" />
+         </StackPanel>
+
+         <Button Grid.Row="5"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Left"
                  Command="{Binding SelectFilesCommand}"
                  Content="Select Files" />
 
-         <Button Grid.Row="4"
+         <Button Grid.Row="5"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Center"
                  Command="{Binding AddTaskCommand}"
                  Content="Add Task" />
 
-         <Button Grid.Row="4"
+         <Button Grid.Row="5"
                  Height="24"
                  Width="80"
                  HorizontalAlignment="Right"

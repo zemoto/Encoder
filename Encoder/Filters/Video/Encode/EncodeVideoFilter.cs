@@ -18,8 +18,8 @@ namespace Encoder.Filters.Video.Encode
 
       protected override void InitializeEx()
       {
-         var model = ( (EncodeVideoFilterViewModel)ViewModel );
-         TargetBitrate = model.UseCustomBitrate ? ( model.CustomBitrate * 1000 ) /*Model has kbps but backend wants bps*/ : SourceMetadata.Bitrate;
+         var model = (EncodeVideoFilterViewModel)ViewModel;
+         TargetBitrate = SourceMetadata.Bitrate;
          TargetExtension = model.GetTargetExtension();
       }
    }

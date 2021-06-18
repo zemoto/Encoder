@@ -9,10 +9,15 @@ namespace Encoder.Encoding.Tasks
       private readonly VideoFilter _videoFilter;
       private readonly AudioFilter _audioFilter;
 
-      public EncodeWithFilters( VideoFilter videoFilter, AudioFilter audioFilter ) 
+      private readonly bool _overrideBitrate;
+      private readonly uint _customBitrate;
+
+      public EncodeWithFilters( VideoFilter videoFilter, AudioFilter audioFilter, bool overrideBitrate, uint customBitrate ) 
       {
          _videoFilter = videoFilter;
          _audioFilter = audioFilter;
+         _overrideBitrate = overrideBitrate;
+         _customBitrate = customBitrate;
       }
 
       protected override void InitializeEx()
@@ -22,6 +27,11 @@ namespace Encoder.Encoding.Tasks
          if ( !string.IsNullOrEmpty( _videoFilter.TargetExtension ) )
          {
             TargetFileExtension = _videoFilter.TargetExtension;
+         }
+
+         if ( _overrideBitrate )
+         {
+            _videoFilter.SetTargetBitrate( _customBitrate );
          }
 
          TargetTotalFrames = _videoFilter.TargetTotalFrames;

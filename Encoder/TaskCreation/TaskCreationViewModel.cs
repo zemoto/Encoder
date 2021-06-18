@@ -95,7 +95,7 @@ namespace Encoder.TaskCreation
          switch ( EncodingType )
          {
             case EncodingType.Filters:
-               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter );
+               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter, OverrideBitrate, CustomBitrate );
                break;
             case EncodingType.Custom:
                encodingTask = new EncodeWithCustomParams( CustomParams, CustomExtension );
@@ -179,6 +179,20 @@ namespace Encoder.TaskCreation
       {
          get => _customExtension;
          set => SetProperty( ref _customExtension, value );
+      }
+
+      private bool _useCustomBitrate;
+      public bool OverrideBitrate
+      {
+         get => _useCustomBitrate;
+         set => SetProperty( ref _useCustomBitrate, value );
+      }
+
+      private uint _customBitrate;
+      public uint CustomBitrate
+      {
+         get => _customBitrate;
+         set => SetProperty( ref _customBitrate, value );
       }
 
       private RelayCommand _selectFileCommand;
