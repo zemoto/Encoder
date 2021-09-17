@@ -1,4 +1,4 @@
-﻿using ZemotoCommon.UI;
+﻿using ZemotoUI;
 
 namespace Encoder.Filters
 {

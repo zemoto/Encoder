@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Encoder.ffmpeg;
-using ZemotoCommon.Utils;
+using ZemotoUtils;
 
 namespace Encoder.Encoding
 {

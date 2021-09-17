@@ -7,7 +7,7 @@
              xmlns:video="clr-namespace:Encoder.Filters.Video"
              xmlns:audio="clr-namespace:Encoder.Filters.Audio"
              xmlns:tasks="clr-namespace:Encoder.Encoding.Tasks"
-             xmlns:commonUi="clr-namespace:ZemotoCommon.UI;assembly=ZemotoCommon"
+             xmlns:commonUi="clr-namespace:ZemotoUI"
              xmlns:ui="clr-namespace:Encoder.UI"
              xmlns:assemblyLineCreation="clr-namespace:Encoder.TaskCreation"
              mc:Ignorable="d"

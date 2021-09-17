@@ -5,7 +5,7 @@ using System.Windows;
 using Encoder.TaskCreation;
 using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
-using ZemotoCommon.UI;
+using ZemotoUI;
 
 namespace Encoder
 {

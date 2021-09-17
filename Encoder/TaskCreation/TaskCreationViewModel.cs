@@ -10,8 +10,8 @@ using Encoder.Filters.Audio.Copy;
 using Encoder.Filters.Video;
 using Encoder.Filters.Video.Copy;
 using Microsoft.Win32;
-using ZemotoCommon.UI;
-using ZemotoCommon.Utils;
+using ZemotoUI;
+using ZemotoUtils;
 
 namespace Encoder.TaskCreation
 {

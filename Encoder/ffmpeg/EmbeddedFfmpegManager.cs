@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using ZemotoCommon.Utils;
+using ZemotoUtils;
 
 namespace Encoder.ffmpeg
 {
@@ -27,8 +27,8 @@ namespace Encoder.ffmpeg
       public static void Cleanup()
       {
          _extractingTask.Wait();
-         UtilityMethods.SafeDeleteFile( FfmpegFileName );
-         UtilityMethods.SafeDeleteFile( FfprobeFileName );
+         FileUtils.SafeDeleteFile( FfmpegFileName );
+         FileUtils.SafeDeleteFile( FfprobeFileName );
       }
 
       private static string GetExecutableFilePath( string executableName )

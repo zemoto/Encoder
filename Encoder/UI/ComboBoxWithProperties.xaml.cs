@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ZemotoCommon.UI;
+using ZemotoUI;
 
 namespace Encoder.UI
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using ZemotoCommon.UI;
+using ZemotoUI;
 
 namespace Encoder.Encoding.Tasks
 {

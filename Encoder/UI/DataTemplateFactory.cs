@@ -9,8 +9,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using ZemotoCommon.UI;
-using ZemotoCommon.Utils;
+using ZemotoUI;
+using ZemotoUtils;
 
 namespace Encoder.UI
 {

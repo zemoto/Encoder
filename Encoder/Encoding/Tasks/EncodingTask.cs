@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using ZemotoCommon.Utils;
+using ZemotoUtils;
 
 namespace Encoder.Encoding.Tasks
 {
@@ -13,7 +13,7 @@ namespace Encoder.Encoding.Tasks
 
       public override void Dispose() => CancelToken?.Dispose();
 
-      public override void Cleanup() => UtilityMethods.SafeDeleteFile( TargetFile );
+      public override void Cleanup() => FileUtils.SafeDeleteFile( TargetFile );
 
       public override void Cancel() => CancelToken.Cancel();
 
@@ -84,7 +84,7 @@ namespace Encoder.Encoding.Tasks
             if ( CancelToken.IsCancellationRequested )
             {
                Task.Delay( 300 );
-               UtilityMethods.SafeDeleteFile( TargetFile );
+               FileUtils.SafeDeleteFile( TargetFile );
             }
 
             if ( !string.IsNullOrEmpty( encoder.Error ) )

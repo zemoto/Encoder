@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Encoder.Encoding.Tasks;
 using Encoder.ffmpeg;
-using ZemotoCommon.Utils;
+using ZemotoUtils;
 
 namespace Encoder.Encoding
 {
