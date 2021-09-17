@@ -37,7 +37,7 @@ namespace Encoder.Filters
             bool dependenciesMet = true;
             foreach ( var dependency in dependencyAttributes )
             {
-               var propertyBeingDependedOn = filterProperties.FirstOrDefault( x => string.Equals( x.Name, dependency.PropertyBeingDependedOn ) );
+               var propertyBeingDependedOn = Array.Find( filterProperties, x => string.Equals( x.Name, dependency.PropertyBeingDependedOn ) );
                if ( !Equals( propertyBeingDependedOn?.GetValue( filter.ViewModel ), dependency.PropertyValueBeingDependedOn ) )
                {
                   dependenciesMet = false;

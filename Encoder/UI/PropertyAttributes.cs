@@ -16,7 +16,7 @@ namespace Encoder.UI
 
       public bool Equals( PropertyDependencyAttribute other )
       {
-         return other != null && 
+         return other != null &&
                 string.Equals( PropertyBeingDependedOn, other.PropertyBeingDependedOn ) &&
                 Equals( PropertyValueBeingDependedOn, other.PropertyValueBeingDependedOn );
       }

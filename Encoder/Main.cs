@@ -59,7 +59,7 @@ namespace Encoder
             }
             while ( _encodingManager.Model.AnyTasksPending )
             {
-               await Task.Delay( 300 );
+               await Task.Delay( 300 ).ConfigureAwait( false );
             }
 
             ( (Window)sender ).Close();

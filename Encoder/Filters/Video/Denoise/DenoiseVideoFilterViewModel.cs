@@ -69,7 +69,7 @@ namespace Encoder.Filters.Video.Denoise
          {
             if ( value % 2 == 0 )
             {
-               value -= 1; // Odd numbers only
+               value--; // Odd numbers only
             }
             SetProperty( ref _framesToAverage, value );
          }

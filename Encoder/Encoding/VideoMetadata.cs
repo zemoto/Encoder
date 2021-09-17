@@ -37,14 +37,14 @@ namespace Encoder.Encoding
 
       public static CropDetect CreateFromString( string value )
       {
-         var cropDetectData = value.Replace( "\r", string.Empty ).Split( '\n' ).Where( x => x.StartsWith( CropDetectFlag ) ).FirstOrDefault();
+         var cropDetectData = Array.Find( value.Replace( "\r", string.Empty ).Split( '\n' ), x => x.StartsWith( CropDetectFlag ) );
          if ( !string.IsNullOrEmpty( cropDetectData ) )
          {
-            var cropData = cropDetectData.Split( ' ' ).Where( x => x.StartsWith( CropFlag ) ).FirstOrDefault();
+            var cropData = Array.Find( cropDetectData.Split( ' ' ), x => x.StartsWith( CropFlag ) );
             if ( !string.IsNullOrEmpty( cropData ) )
             {
                var parameters = cropData.Replace( CropFlag, string.Empty ).Split( ':' );
-               if ( parameters.Count() == 4 )
+               if ( parameters.Length == 4 )
                {
                   int width = int.Parse( parameters[0] );
                   int height = int.Parse( parameters[1] );

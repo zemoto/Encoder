@@ -18,7 +18,7 @@ namespace Encoder.Filters
    internal sealed class FilterPropertyDescriptionAttribute : DescriptionAttribute
    {
       public string ArgumentParam { get; }
-      
+
       public FilterPropertyDescriptionAttribute( string label, string argumentParam )
          : base( label )
       {

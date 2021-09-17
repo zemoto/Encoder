@@ -12,7 +12,7 @@ namespace Encoder.Encoding
    {
       private const string ErrorIndicator = "[error]";
       private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
-      private static string QualityArgs => $"-preset slow -x264opts colormatrix=bt709";
+      private static string QualityArgs => "-preset slow -x264opts colormatrix=bt709";
       private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
       private static readonly string FfmpegExeLocation;
@@ -72,7 +72,7 @@ namespace Encoder.Encoding
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
       {
-         if ( e.Data != null && e.Data.Contains( ErrorIndicator ) )
+         if ( e.Data?.Contains( ErrorIndicator ) == true )
          {
             if ( !string.IsNullOrEmpty( Error ) )
             {

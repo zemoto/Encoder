@@ -12,7 +12,7 @@ namespace Encoder.Encoding.Tasks
       private readonly bool _overrideBitrate;
       private readonly uint _customBitrate;
 
-      public EncodeWithFilters( VideoFilter videoFilter, AudioFilter audioFilter, bool overrideBitrate, uint customBitrate ) 
+      public EncodeWithFilters( VideoFilter videoFilter, AudioFilter audioFilter, bool overrideBitrate, uint customBitrate )
       {
          _videoFilter = videoFilter;
          _audioFilter = audioFilter;

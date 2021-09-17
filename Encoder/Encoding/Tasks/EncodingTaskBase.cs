@@ -26,9 +26,9 @@ namespace Encoder.Encoding.Tasks
          var ellapsed = DateTime.Now - StartTime;
          var currentFramesProcessedPerSecond = FramesDone / ellapsed.TotalSeconds;
 
-         _framesProcessedPerSecond = double.IsNaN( _framesProcessedPerSecond ) 
-            ? currentFramesProcessedPerSecond 
-            : processingSpeedConstant * currentFramesProcessedPerSecond + ( 1 - processingSpeedConstant ) * _framesProcessedPerSecond;
+         _framesProcessedPerSecond = double.IsNaN( _framesProcessedPerSecond )
+            ? currentFramesProcessedPerSecond
+            : ( processingSpeedConstant * currentFramesProcessedPerSecond ) + ( ( 1 - processingSpeedConstant ) * _framesProcessedPerSecond );
 
          var framesLeft = TargetTotalFrames - FramesDone;
          _timeRemaining = TimeSpan.FromSeconds( framesLeft / _framesProcessedPerSecond );

@@ -24,7 +24,7 @@ namespace Encoder.Encoding
 
       public void EnqueueTasks( IReadOnlyCollection<EncodingTaskBase> tasks )
       {
-         if ( !tasks.Any() )
+         if ( tasks.Count == 0 )
          {
             return;
          }
@@ -92,7 +92,7 @@ namespace Encoder.Encoding
 
       private void DoTask( EncodingTaskBase task )
       {
-         if ( task == null || task.Started )
+         if ( task?.Started != false )
          {
             return;
          }

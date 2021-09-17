@@ -81,7 +81,7 @@ namespace Encoder.TaskCreation
          if ( encodingSteps.Length == 1 )
          {
             // Only a single task so we don't need an assembly line. Just return the task.
-            var task = encodingSteps.First();
+            var task = encodingSteps[0];
             task.FileProvider = filePathProvider;
             return task;
          }

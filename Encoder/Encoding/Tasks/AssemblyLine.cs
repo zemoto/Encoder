@@ -20,7 +20,7 @@ namespace Encoder.Encoding.Tasks
          _assemblyLineId = $"{Path.GetFileNameWithoutExtension( SourceFile )}";
          _assemblyLineRootDirectory = Path.Combine( Path.GetDirectoryName( SourceFile ), "done" );
          _assemblyLineWorkingDirectory = Path.Combine( _assemblyLineRootDirectory, _assemblyLineId );
-         CurrentTask = _steps.First(); // So correct information displays before this task gets started
+         CurrentTask = _steps[0]; // So correct information displays before this task gets started
       }
 
       private void OnCurrentTaskPropertyChanged( object sender, PropertyChangedEventArgs e )

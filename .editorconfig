@@ -1,0 +1,19 @@
+﻿[*.cs]
+
+# IDE0008: Use explicit type
+dotnet_diagnostic.IDE0008.severity = none
+
+# IDE0021: Use block body for constructors
+dotnet_diagnostic.IDE0021.severity = none
+
+# IDE0022: Use block body for methods
+dotnet_diagnostic.IDE0022.severity = none
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = none
+
+# RCS1237: Use bitshift operator
+dotnet_diagnostic.RCS1237.severity = none
+
+# RCS1079: Implement the method instead of throwing NotImplementedException
+dotnet_diagnostic.RCS1079.severity = none

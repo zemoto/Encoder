@@ -49,7 +49,6 @@ namespace Encoder.Encoding
          }
       }
 
-
       public static CropDetect GetCropDetect( string file, TimeSpan duration )
       {
          const int numberOfChecks = 5;

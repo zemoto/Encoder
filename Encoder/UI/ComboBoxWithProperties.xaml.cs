@@ -5,7 +5,7 @@ namespace Encoder.UI
 {
    internal partial class ComboBoxWithProperties
    {
-      public static readonly DependencyProperty LabelProperty = DependencyProperty.Register( 
+      public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
          nameof( Label ),
          typeof( string ),
          typeof( ComboBoxWithProperties ),
@@ -17,7 +17,7 @@ namespace Encoder.UI
          set => SetValue( LabelProperty, value );
       }
 
-      public static readonly DependencyProperty OptionsContextProperty = DependencyProperty.Register( 
+      public static readonly DependencyProperty OptionsContextProperty = DependencyProperty.Register(
          nameof( OptionsContext ),
          typeof( ViewModelBase ),
          typeof( ComboBoxWithProperties ),

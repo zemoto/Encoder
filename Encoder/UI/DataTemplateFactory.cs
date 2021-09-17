@@ -33,7 +33,7 @@ namespace Encoder.UI
             mainGridFactory.SetValue( Grid.IsSharedSizeScopeProperty, true );
             template.VisualTree = mainGridFactory;
          }
-         
+
          return template;
       }
 
@@ -87,7 +87,7 @@ namespace Encoder.UI
                elementFactory = ConstructPropertyControl( property );
             }
             elementFactory.SetValue( Grid.RowProperty, row );
-            
+
             gridFactory.AppendChild( elementFactory );
          }
 
@@ -96,10 +96,9 @@ namespace Encoder.UI
 
       private static BindingBase CreateVisibilityBinding( IReadOnlyCollection<PropertyDependencyAttribute> dependencyAttributes )
       {
-         BindingBase visibilityBinding;
          if ( dependencyAttributes.Count > 1 )
          {
-            var multiBinding = new MultiBinding {Converter = new MultiBoolToBoolAndConverter()};
+            var multiBinding = new MultiBinding { Converter = new MultiBoolToBoolAndConverter() };
             foreach ( var dependency in dependencyAttributes )
             {
                multiBinding.Bindings.Add( new Binding( dependency.PropertyBeingDependedOn )
@@ -109,19 +108,17 @@ namespace Encoder.UI
                } );
             }
 
-            visibilityBinding = multiBinding;
+            return multiBinding;
          }
          else
          {
             var dependency = dependencyAttributes.First();
-            visibilityBinding = new Binding( dependency.PropertyBeingDependedOn )
+            return new Binding( dependency.PropertyBeingDependedOn )
             {
                Converter = new EqualityToVisibilityConverter(),
                ConverterParameter = dependency.PropertyValueBeingDependedOn
             };
          }
-
-         return visibilityBinding;
       }
 
       private static FrameworkElementFactory ConstructPropertyControl( PropertyInfo property )
