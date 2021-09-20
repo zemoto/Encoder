@@ -95,7 +95,7 @@ namespace Encoder.TaskCreation
          switch ( EncodingType )
          {
             case EncodingType.Filters:
-               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter, OverrideBitrate, CustomBitrate );
+               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter, OverrideBitrate, CustomBitrate * 1000 );
                break;
             case EncodingType.Custom:
                encodingTask = new EncodeWithCustomParams( CustomParams, CustomExtension );
