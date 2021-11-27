@@ -8,12 +8,9 @@ namespace Encoder.Filters.Audio
       {
          var filterName = type.ToString();
          var filterType = Type.GetType( $"Encoder.Filters.Audio.{filterName}.{filterName}AudioFilter" );
-         if ( filterType != null )
-         {
-            return (AudioFilter)Activator.CreateInstance( filterType );
-         }
-
-         throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
+         return filterType is not null
+             ? (AudioFilter)Activator.CreateInstance( filterType )
+             : throw new NotImplementedException( "Filter not implemented, named incorrectly, or in wrong namespace" );
       }
    }
 }

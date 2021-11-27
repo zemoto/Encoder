@@ -87,7 +87,7 @@ namespace Encoder.Encoding
 
       private void StartNextTask()
       {
-         Task.Run( () => DoTask( Model.NextPendingTask ) );
+         _ = Task.Run( () => DoTask( Model.NextPendingTask ) );
       }
 
       private void DoTask( EncodingTaskBase task )
@@ -105,7 +105,7 @@ namespace Encoder.Encoding
 
          if ( !string.IsNullOrEmpty( task.Error ) )
          {
-            MessageBox.Show( $"Error: {task.Error}", task.SourceFile, MessageBoxButton.OK, MessageBoxImage.Error );
+            _ = MessageBox.Show( $"Error: {task.Error}", task.SourceFile, MessageBoxButton.OK, MessageBoxImage.Error );
          }
 
          DisposeTask( task );
@@ -114,7 +114,7 @@ namespace Encoder.Encoding
       public void CancelTask( EncodingTaskBase task )
       {
          task.Cancel();
-         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
+         _ = Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
 
          if ( !task.Started )
          {
@@ -127,7 +127,7 @@ namespace Encoder.Encoding
          bool taskWasStarted = task.Started;
 
          task.Dispose();
-         Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
+         _ = Application.Current.Dispatcher.Invoke( () => Model.Tasks.Remove( task ) );
 
          if ( !Model.AnyTasksPending )
          {

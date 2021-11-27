@@ -2,9 +2,6 @@
 {
    internal partial class TaskCreationControl
    {
-      public TaskCreationControl()
-      {
-         InitializeComponent();
-      }
+      public TaskCreationControl() => InitializeComponent();
    }
 }

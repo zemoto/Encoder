@@ -91,18 +91,12 @@ namespace Encoder.TaskCreation
 
       private void AddTask()
       {
-         EncodingTask encodingTask;
-         switch ( EncodingType )
+         EncodingTask encodingTask = EncodingType switch
          {
-            case EncodingType.Filters:
-               encodingTask = new EncodeWithFilters( VideoFilter, AudioFilter, OverrideBitrate, CustomBitrate * 1000 );
-               break;
-            case EncodingType.Custom:
-               encodingTask = new EncodeWithCustomParams( CustomParams, CustomExtension );
-               break;
-            default:
-               throw new ArgumentOutOfRangeException();
-         }
+            EncodingType.Filters => new EncodeWithFilters( VideoFilter, AudioFilter, OverrideBitrate, CustomBitrate * 1000 ),
+            EncodingType.Custom => new EncodeWithCustomParams( CustomParams, CustomExtension ),
+            _ => throw new ArgumentOutOfRangeException(),
+         };
 
          Tasks.Add( encodingTask );
          Reset();
@@ -196,15 +190,15 @@ namespace Encoder.TaskCreation
       }
 
       private RelayCommand _selectFileCommand;
-      public RelayCommand SelectFilesCommand => _selectFileCommand ?? ( _selectFileCommand = new RelayCommand( SelectFiles ) );
+      public RelayCommand SelectFilesCommand => _selectFileCommand ??= new RelayCommand( SelectFiles );
 
       private RelayCommand<string> _removeFileCommand;
-      public RelayCommand<string> RemoveFileCommand => _removeFileCommand ?? ( _removeFileCommand = new RelayCommand<string>( file => SelectedFiles.Remove( file ) ) );
+      public RelayCommand<string> RemoveFileCommand => _removeFileCommand ??= new RelayCommand<string>( file => SelectedFiles.Remove( file ) );
 
       private RelayCommand _createTasksCommand;
-      public RelayCommand CreateTasksCommand => _createTasksCommand ?? ( _createTasksCommand = new RelayCommand( CreateAndStartNewTasks, SelectedFiles.Any ) );
+      public RelayCommand CreateTasksCommand => _createTasksCommand ??= new RelayCommand( CreateAndStartNewTasks, SelectedFiles.Any );
 
       private RelayCommand _addTaskCommand;
-      public RelayCommand AddTaskCommand => _addTaskCommand ?? ( _addTaskCommand = new RelayCommand( AddTask ) );
+      public RelayCommand AddTaskCommand => _addTaskCommand ??= new RelayCommand( AddTask );
    }
 }

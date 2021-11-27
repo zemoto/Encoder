@@ -39,7 +39,7 @@ namespace Encoder.Encoding
                duration = TimeSpan.FromSeconds( secondsDuration );
             }
 
-            uint.TryParse( values[2], out uint bitRate );
+            _ = uint.TryParse( values[2], out uint bitRate );
 
             return new VideoMetadata( frameRate, duration, bitRate );
          }
@@ -56,7 +56,7 @@ namespace Encoder.Encoding
          var totalSeconds = duration.TotalSeconds;
          var startEndPadding = totalSeconds / 10;
          var timeToCheck = startEndPadding;
-         var timeBetweenChecks = ( ( totalSeconds - ( startEndPadding * 2 ) ) / numberOfChecks );
+         var timeBetweenChecks = ( totalSeconds - ( startEndPadding * 2 ) ) / numberOfChecks;
 
          CropDetect bestCropDetect = null;
          try

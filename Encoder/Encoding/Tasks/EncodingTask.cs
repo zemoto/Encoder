@@ -83,7 +83,7 @@ namespace Encoder.Encoding.Tasks
 
             if ( CancelToken.IsCancellationRequested )
             {
-               Task.Delay( 300 );
+               Task.Delay( 300 ).Wait();
                FileUtils.SafeDeleteFile( TargetFile );
             }
 

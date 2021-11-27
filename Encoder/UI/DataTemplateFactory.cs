@@ -110,15 +110,14 @@ namespace Encoder.UI
 
             return multiBinding;
          }
-         else
+
+         var firstDependency = dependencyAttributes.First();
+
+         return new Binding( firstDependency.PropertyBeingDependedOn )
          {
-            var dependency = dependencyAttributes.First();
-            return new Binding( dependency.PropertyBeingDependedOn )
-            {
-               Converter = new EqualityToVisibilityConverter(),
-               ConverterParameter = dependency.PropertyValueBeingDependedOn
-            };
-         }
+            Converter = new EqualityToVisibilityConverter(),
+            ConverterParameter = firstDependency.PropertyValueBeingDependedOn
+         };
       }
 
       private static FrameworkElementFactory ConstructPropertyControl( PropertyInfo property )

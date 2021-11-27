@@ -29,9 +29,6 @@ namespace Encoder.UI
          set => SetValue( OptionsContextProperty, value );
       }
 
-      public ComboBoxWithProperties()
-      {
-         InitializeComponent();
-      }
+      public ComboBoxWithProperties() => InitializeComponent();
    }
 }

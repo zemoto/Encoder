@@ -56,12 +56,12 @@ namespace Encoder.Encoding
          _currentffmpegProcess.Exited += CleanupProcessInfo;
          _currentffmpegProcess.StartAsChildProcess();
          _currentffmpegProcess.BeginErrorReadLine();
-         token.Register( () => _currentffmpegProcess?.Kill() );
+         _ = token.Register( () => _currentffmpegProcess?.Kill() );
 
          _encodingTask.Started = true;
 
          // Give the process time to spool up
-         _currentffmpegProcess.WaitForExit( 1000 );
+         _ = _currentffmpegProcess.WaitForExit( 1000 );
 
          // In case the process finished very quickly
          if ( _currentffmpegProcess?.HasExited == false && !_encodingTask.CancelToken.IsCancellationRequested )

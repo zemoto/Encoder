@@ -46,13 +46,10 @@ namespace Encoder.ffmpeg
 
          var assembly = Assembly.GetExecutingAssembly();
          string fullResourceName = assembly.GetManifestResourceNames().First( s => s.EndsWith( resourceName ) );
-         using ( var stream = assembly.GetManifestResourceStream( fullResourceName ) )
-         {
-            using ( var file = File.OpenWrite( resourceName ) )
-            {
-               stream?.CopyTo( file );
-            }
-         }
+
+         using var stream = assembly.GetManifestResourceStream( fullResourceName );
+         using var file = File.OpenWrite( resourceName );
+         stream?.CopyTo( file );
       }
    }
 }

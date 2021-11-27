@@ -2,8 +2,8 @@
 {
    internal enum AudioFilterType
    {
-      Copy,
-      Remove,
-      Encode
+      Copy = 0,
+      Remove = 1,
+      Encode = 2
    }
 }
