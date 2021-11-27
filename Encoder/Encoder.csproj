@@ -12,13 +12,12 @@
 	<Import Project="..\ZemotoCommon\ZemotoUtils\ZemotoUtils.projitems" Label="Shared" />
 
 	<ItemGroup>
-		<None Remove="ffmpeg\ffmpeg.exe" />
-		<None Remove="ffmpeg\ffprobe.exe" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="ffmpeg\ffmpeg.exe" />
-		<EmbeddedResource Include="ffmpeg\ffprobe.exe" />
+	  <None Update="ffmpeg\ffmpeg.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ffmpeg\ffprobe.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

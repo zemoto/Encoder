@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         Title="FFMPEG Encoder"
-        Width="550"
+        Width="560"
         SizeChanged="OnSizeChanged"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}">
    <Window.Resources>
@@ -42,7 +42,7 @@
                    ItemsSource="{Binding EncodingVm.Tasks}"
                    AutoGenerateColumns="False"
                    HeadersVisibility="Column"
-                   RowHeight="20"
+                   RowHeight="21"
                    SelectionUnit="Cell">
             <DataGrid.Columns>
                <DataGridTemplateColumn Header="File"

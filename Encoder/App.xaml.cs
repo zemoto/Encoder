@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Encoder.ffmpeg;
 using ZemotoUtils;
 
 namespace Encoder
@@ -10,17 +9,12 @@ namespace Encoder
 
       protected override void OnStartup( StartupEventArgs e )
       {
-         EmbeddedFfmpegManager.BeginExtracting();
          ChildProcessWatcher.Initialize();
 
          _main = new Main();
          _main.Show();
       }
 
-      protected override void OnExit( ExitEventArgs e )
-      {
-         _main.Dispose();
-         EmbeddedFfmpegManager.Cleanup();
-      }
+      protected override void OnExit( ExitEventArgs e ) => _main.Dispose();
    }
 }

@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Encoder.ffmpeg;
+using System;
 using System.Diagnostics;
-using Encoder.ffmpeg;
 using ZemotoUtils;
 
 namespace Encoder.Encoding
 {
    internal static class VideoMetadataReader
    {
-      private static string FFprobeExeLocation;
-      private static string FFmpegExeLocation;
-
       private static string VideoInfoArgs( string fileName ) => $"-v error -select_streams v:0 -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate,duration,bit_rate \"{fileName}\"";
       private static string CropDetectArgs( string fileName, double frameTime ) => $"-hide_banner -ss {frameTime} -i \"{fileName}\" -vframes 2 -vf cropdetect -f null -";
 
@@ -85,16 +82,11 @@ namespace Encoder.Encoding
 
       private static string RunFFProbeProcess( string args )
       {
-         if ( string.IsNullOrEmpty( FFprobeExeLocation ) )
-         {
-            FFprobeExeLocation = EmbeddedFfmpegManager.GetFfprobeExecutableFilePath();
-         }
-
          var process = new Process
          {
             StartInfo = new ProcessStartInfo
             {
-               FileName = FFprobeExeLocation,
+               FileName = FfmpegUtils.FfprobeFilePath,
                Arguments = args,
                UseShellExecute = false,
                RedirectStandardOutput = true,
@@ -114,16 +106,11 @@ namespace Encoder.Encoding
 
       private static string RunFFmpegProcess( string args )
       {
-         if ( string.IsNullOrEmpty( FFmpegExeLocation ) )
-         {
-            FFmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
-         }
-
          var process = new Process
          {
             StartInfo = new ProcessStartInfo
             {
-               FileName = FFmpegExeLocation,
+               FileName = FfmpegUtils.FfmpegFilePath,
                Arguments = args,
                UseShellExecute = false,
                RedirectStandardOutput = true,

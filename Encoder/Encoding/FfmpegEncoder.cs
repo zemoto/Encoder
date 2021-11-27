@@ -15,19 +15,12 @@ namespace Encoder.Encoding
       private static string QualityArgs => "-preset slow -x264opts colormatrix=bt709";
       private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
-      private static readonly string FfmpegExeLocation;
-
       private readonly EncodingTask _encodingTask;
 
       private Process _currentffmpegProcess;
       private ProcessCpuMonitor _cpuUsageMonitor;
 
       public string Error { get; private set; }
-
-      static FfmpegEncoder()
-      {
-         FfmpegExeLocation = EmbeddedFfmpegManager.GetFfmpegExecutableFilePath();
-      }
 
       public FfmpegEncoder( EncodingTask encodingTask )
       {
@@ -42,7 +35,7 @@ namespace Encoder.Encoding
          {
             StartInfo = new ProcessStartInfo
             {
-               FileName = FfmpegExeLocation,
+               FileName = FfmpegUtils.FfmpegFilePath,
                Arguments = arguments,
                UseShellExecute = false,
                RedirectStandardError = true,
