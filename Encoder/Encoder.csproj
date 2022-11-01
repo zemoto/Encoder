@@ -7,10 +7,6 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
-	<Import Project="..\ZemotoCommon\ZemotoUI\ZemotoUI.projitems" Label="Shared" />
-
-	<Import Project="..\ZemotoCommon\ZemotoUtils\ZemotoUtils.projitems" Label="Shared" />
-
 	<ItemGroup>
 	  <None Update="ffmpeg\ffmpeg.exe">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -19,5 +15,7 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
+
+	<Import Project="..\ZemotoCommon\ZemotoCommon\ZemotoCommon.projitems" Label="Shared" />
 
 </Project>

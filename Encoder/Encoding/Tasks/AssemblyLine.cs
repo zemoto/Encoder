@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using ZemotoUtils;
+using ZemotoCommon;
 
 namespace Encoder.Encoding.Tasks
 {

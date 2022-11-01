@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using ZemotoUI;
+using ZemotoCommon.UI;
 
 namespace Encoder.UI
 {

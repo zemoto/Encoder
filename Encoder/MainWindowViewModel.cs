@@ -1,7 +1,7 @@
 ﻿using Encoder.TaskCreation;
 using Encoder.Encoding;
 using Encoder.Encoding.Tasks;
-using ZemotoUI;
+using ZemotoCommon.UI;
 
 namespace Encoder
 {
