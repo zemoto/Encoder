@@ -12,7 +12,7 @@ namespace Encoder.Encoding
    {
       private const string ErrorIndicator = "[error]";
       private string BasicArgs => $"-hide_banner -loglevel level -i \"{_encodingTask.SourceFile}\"";
-      private static string QualityArgs => "-crf 18 -preset slow -x264opts colormatrix=bt709";
+      private static string QualityArgs => "-crf 18 -preset slow -pix_fmt yuv420p -x264opts colormatrix=bt709";
       private string EncodingArgs => $"{BasicArgs} {QualityArgs} {_encodingTask.EncodingArgs} \"{_encodingTask.TargetFile}\"";
 
       private readonly EncodingTask _encodingTask;
