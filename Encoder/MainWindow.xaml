@@ -46,7 +46,7 @@
                    SelectionUnit="Cell">
             <DataGrid.Columns>
                <DataGridTemplateColumn Header="File"
-                                       Width="182">
+                                       Width="190">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
                         <TextBox x:Name="Text"
@@ -71,7 +71,7 @@
                </DataGridTemplateColumn>
 
                <DataGridTemplateColumn Header="Task"
-                                       Width="120">
+                                       Width="130">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
                         <TextBox x:Name="Text"
@@ -95,18 +95,13 @@
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
 
-               <DataGridTextColumn Header="CPU"
-                                   Binding="{Binding CpuUsage, Mode=OneWay, StringFormat={}{0}%}"
-                                   IsReadOnly="True"
-                                   Width="35" />
-
                <DataGridTextColumn Header="Remaining"
                                    Binding="{Binding TimeRemainingString, Mode=OneWay}"
                                    IsReadOnly="True"
-                                   Width="65" />
+                                   Width="72" />
 
                <DataGridTemplateColumn Header="Progress"
-                                       Width="100">
+                                       Width="110">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate DataType="{x:Type tasks:EncodingTaskBase}">
                         <Grid>

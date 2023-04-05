@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using ZemotoCommon;
 
 namespace Encoder.Encoding.Tasks
@@ -25,14 +24,9 @@ namespace Encoder.Encoding.Tasks
 
       private void OnCurrentTaskPropertyChanged( object sender, PropertyChangedEventArgs e )
       {
-         switch ( e.PropertyName )
+         if ( e.PropertyName == nameof( FramesDone ) )
          {
-            case nameof( CpuUsage ):
-               CpuUsage = CurrentTask.CpuUsage;
-               break;
-            case nameof( FramesDone ):
-               FramesDone = CurrentTask.FramesDone;
-               break;
+            FramesDone = CurrentTask.FramesDone;
          }
       }
 
@@ -120,7 +114,6 @@ namespace Encoder.Encoding.Tasks
             if ( SetProperty( ref _currentTask, value ) )
             {
                FramesDone = _currentTask.FramesDone;
-               CpuUsage = _currentTask.CpuUsage;
                OnPropertyChanged( nameof( TaskName ) );
             }
 

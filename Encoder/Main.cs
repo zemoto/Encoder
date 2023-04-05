@@ -9,7 +9,7 @@ using ZemotoCommon.UI;
 
 namespace Encoder
 {
-   internal sealed class Main : IDisposable
+   internal sealed class Main
    {
       private readonly MainWindowViewModel _model;
       private readonly EncodingManager _encodingManager;
@@ -24,11 +24,6 @@ namespace Encoder
          {
             CancelTaskCommand = new RelayCommand<EncodingTaskBase>( _encodingManager.CancelTask )
          };
-      }
-
-      public void Dispose()
-      {
-         _encodingManager?.Dispose();
       }
 
       public void Show()

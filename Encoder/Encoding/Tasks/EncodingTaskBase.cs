@@ -54,13 +54,6 @@ namespace Encoder.Encoding.Tasks
          }
       }
 
-      private int _cpuUsage;
-      public int CpuUsage
-      {
-         get => _cpuUsage;
-         set => SetProperty( ref _cpuUsage, value );
-      }
-
       protected DateTime StartTime;
       private bool _started;
       public bool Started

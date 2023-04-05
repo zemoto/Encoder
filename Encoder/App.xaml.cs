@@ -14,7 +14,5 @@ namespace Encoder
          _main = new Main();
          _main.Show();
       }
-
-      protected override void OnExit( ExitEventArgs e ) => _main.Dispose();
    }
 }

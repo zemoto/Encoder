@@ -18,7 +18,6 @@ namespace Encoder.Encoding
       private readonly EncodingTask _encodingTask;
 
       private Process _currentffmpegProcess;
-      private ProcessCpuMonitor _cpuUsageMonitor;
 
       public string Error { get; private set; }
 
@@ -52,15 +51,6 @@ namespace Encoder.Encoding
          _ = token.Register( () => _currentffmpegProcess?.Kill() );
 
          _encodingTask.Started = true;
-
-         // Give the process time to spool up
-         _ = _currentffmpegProcess.WaitForExit( 1000 );
-
-         // In case the process finished very quickly
-         if ( _currentffmpegProcess?.HasExited == false && !_encodingTask.CancelToken.IsCancellationRequested )
-         {
-            _cpuUsageMonitor = new ProcessCpuMonitor( _currentffmpegProcess );
-         }
       }
 
       private void OnEncodingProgress( object sender, DataReceivedEventArgs e )
@@ -76,7 +66,7 @@ namespace Encoder.Encoding
             return;
          }
 
-         if ( !_encodingTask.Started || _encodingTask.CancelToken.IsCancellationRequested || _cpuUsageMonitor == null )
+         if ( !_encodingTask.Started || _encodingTask.CancelToken.IsCancellationRequested )
          {
             return;
          }
@@ -90,17 +80,10 @@ namespace Encoder.Encoding
                _encodingTask.FramesDone = int.Parse( numMatch.Groups[0].Value );
             }
          }
-
-         _encodingTask.CpuUsage = _cpuUsageMonitor.GetCpuUsage();
       }
 
       private void CleanupProcessInfo( object sender, EventArgs e )
       {
-         if ( _cpuUsageMonitor != null )
-         {
-            _cpuUsageMonitor.Dispose();
-            _cpuUsageMonitor = null;
-         }
          if ( _currentffmpegProcess != null )
          {
             _currentffmpegProcess.ErrorDataReceived -= OnEncodingProgress;
@@ -119,7 +102,6 @@ namespace Encoder.Encoding
       public void Dispose()
       {
          _currentffmpegProcess?.Dispose();
-         _cpuUsageMonitor?.Dispose();
       }
    }
 }
